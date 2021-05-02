@@ -12,7 +12,7 @@
 #'
 #' @return This function returns a list containing a matrix of genotypes, causal SNPs, the enteties liabilities and the phenotypes
 #'
-#' @import stats
+#' @importFrom stats qnorm rnorm runif rbinom
 #'
 #' @export
 #' @examples

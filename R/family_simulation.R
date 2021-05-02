@@ -13,11 +13,12 @@
 #' at the place of the working directory. Use getwd() to see your working directory
 #' @param sib is number of siblings per individual.
 #'
-#' @import data.table
+#' @importFrom data.table data.table as.data.table fwrite :=
 #' @import future.apply
 #' @import flock
 #' @import dplyr
 #' @import future
+#' @importFrom stats rbinom
 #'
 #' @return This function returns five files: Three txt files: Beta, MAFs and phenotypes, a genotypes MAP file and a genotypes PED file.
 #'
@@ -105,7 +106,7 @@ family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0){
 
     if(sib != 0){
 
-      sibtable <- data.table("start" = numeric(splits[i]))
+      sibtable <- data.table("begin" = numeric(splits[i]))
 
       for(k in 1:sib){
         sibs <- t(future.apply::future_sapply(seq(1, ncol(parentmatrix), 2), function(j){ # In the same way as the children SNPs are created we can create the siblings SNPs
@@ -122,7 +123,7 @@ family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0){
 
       }
 
-      sibtable <- sibtable[,start := NULL] # Remove the start column in the table.
+      sibtable <- sibtable[,"begin" := NULL] # Remove the begin column in the table.
 
     }
 
