@@ -12,11 +12,12 @@
 #' @param path is the file path, where the files will be stored
 #'
 #' @import parallel
-#' @import data.table
+#' @importFrom data.table as.data.table fwrite
 #' @import future.apply
 #' @import flock
 #' @import dplyr
 #' @import future
+#' @importFrom stats rbinom
 #'
 #' @return This function returns five files: Three txt files: Beta, MAFs and phenotypes, a genotypes MAP file and a genotypes PED file.
 #'
