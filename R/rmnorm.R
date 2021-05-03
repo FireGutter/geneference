@@ -1,19 +1,18 @@
 #'
 #' @title rmnorm
-#' @description Simulate random values form a multi-variate normal distribution.
+#' @description Simulate random values from a multivariate normal distribution.
 #'
 #'
-#' @param S is a valid covariance matrix.
-#' @param n is the amount of random vectors that is to be simulated.
+#' @param S a valid covariance matrix.
+#' @param n number of random vectors that is to be simulated.
 #'
-#' @return This function returns a matrix with n rows and i columns according to the amount of columns in S.
+#' @return Returns a matrix with n rows and i columns, where i is determined by
+#' the size of the specified covariance matrix.
 #'
 #' @export
 
-rmnorm <- function(n, S){
-  #output is of shape  individuals x liabilities
+rmnorm <- function(n, S) {
 
-  #assumes that the given S is a valid covariance matrix
   n_liab <- nrow(S)
   C <- chol(S)
   emptytest <- matrix(n, nrow = n_liab)
