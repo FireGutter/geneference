@@ -12,7 +12,7 @@ cov_tester(file, sib = 0)
 \item{sib}{number of siblings. Default is 0}
 }
 \value{
-A covariance matrix using the data from the selected file. All 
+A covariance matrix using the data from the selected file. All
 entries in the matrix are multiplied by 100.
 }
 \description{
