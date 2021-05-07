@@ -7,25 +7,59 @@
 family_simulation(n, m, q, hsq, k, path = "", sib = 0)
 }
 \arguments{
-\item{n}{is the amount of enteties (humans)}
+\item{n}{number of genotypes (individuals).}
 
-\item{m}{is the amount of SNPS per entety}
+\item{m}{number of SNPS per genotype.}
 
-\item{q}{is the amount of causal SNPs}
+\item{q}{number of causal SNPs, i.e. SNPs that effect chances of having
+the phenotype.}
 
-\item{hsq}{heritability parameter that is squard}
+\item{hsq}{squared heritability parameter.}
 
-\item{k}{is the prevalence of trait parameter}
+\item{k}{prevalence of phenotype.}
 
-\item{path}{is the file path, where the files will be stored. If nothing is added, the function will place the function
-at the place of the working directory. Use getwd() to see your working directory}
+\item{path}{directory where the files will be stored. If nothing is
+specified, \code{family_simulation} writes its files in the current
+working directory.}
 
-\item{sib}{is number of siblings per individual.}
+\item{sib}{number of siblings per individual.}
 }
 \value{
-This function returns five files: Three txt files: Beta, MAFs and phenotypes, a genotypes MAP file and a genotypes PED file.
+Does not return any value, but prints the following five files to
+the \code{path} parameter specified in the function call:
+\itemize{
+\item Three text files:
+\itemize{
+\item beta.txt - a file of \code{m} rows with one column. The i'th row is
+the true effect of the i'th SNP.
+\item MAFs.txt - a file of \code{m} rows with one column. The i'th row is
+the true Minor Allelle Frequence of the i'th SNP.
+\item phenotypes.txt - a file of \code{n} rows, number of columns depend on
+number of siblings. The file contains the phenotype and liability of
+each individual as well as information on the liabilities and phenotype
+status of their parents and siblings.
+}
+\item genotypes.map - a file created such that PLINK will work with the genotype
+data.
+\item genotypes.ped - the simulated genotypes in a PLINK-readable format.
+}
 }
 \description{
-This function simulate data for individual enteties with specefic family history. both the liability and
-pheno types of both siblings and parents are known to the subjects.
+Simulate genotypes for individuals with family history, where
+each individual has a fixed number of siblings. Parents' genotypes are
+simulated and used for simulating the genotypes of individuals and their
+siblings.
+\code{family_simulation} makes use of parallel computation in order to
+decrease the running time.
 }
+\section{Warning}{
+
+Simulating large datasets lead to very large files (eg. in the order of 100k
+genotypes with 100k SNPs takes up approximately 40GB of space).
+Please ensure that you have sufficient disk space at the disk where
+\code{path} resides prior to running the simulation.
+See FUNCTION-NAME DOCUMENTATION REFERENCE(this is a placeholder until
+function is implemented) in order to convert the generated .ped to the
+smaller .bed format.
+}
+
