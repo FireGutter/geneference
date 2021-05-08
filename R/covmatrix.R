@@ -8,8 +8,8 @@
 #' vector.
 #'
 #'
-#' @param hsq squared heritability parameter
-#' @param sib number of siblings
+#' @param hsq squared heritability parameter.
+#' @param sib number of siblings.
 #'
 #' @return A covariance matrix for an individual with sib number of siblings,
 #' such that the number of rows and columns are equal to 4 + number of

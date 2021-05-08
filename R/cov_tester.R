@@ -5,8 +5,8 @@
 #' validate that covariances of data are as expected.
 #'
 #'
-#' @param file path to the file that should be read
-#' @param sib number of siblings. Default is 0
+#' @param file path to the file that should be read.
+#' @param sib number of siblings. Default is 0.
 #'
 #' @importFrom data.table as.data.table fread
 #' @importFrom stats cov
