@@ -1,25 +1,25 @@
 #'
 #' @title to_ped
-#' @description turns a binary matrix into a PLINK-friendly format
+#' @description Converts our format to PLINK's .bed-format.
 #'
-#' @param df input of binary matrix
-#' @param part is the amount of parts, any given function splits the data in
+#' @param df genotypes in our simulated format.
+#' @param part amount of parts any given function splits the data in.
 #'
-#' @return This function retruns a n x m matrix
+#' @return Returns a n x (6 + 2 * m) matrix so it follows PLINK's .ped format.
 
-#This function should be looked at again to make it smarter
-to_ped <- function(df, part){
+to_ped <- function(df, part) {
   n <- dim(df)[1]
-  m1 <- dim(df)[2]
-  m2 <- m1 * 2 + 6
-  tmp <- matrix(NA, 3, 2)
-  tmp[ ,1] <- matrix(c("a", "c", "c"), 1, 3)
-  tmp[ ,2] <- matrix(c("a", "a", "c"), 1, 3)
-  tmp2 <- matrix(NA, n, m2)
-  tmp2[ ,2:6] <- 1
-  for (i in 1:dim(df)[1]) {
-    tmp2[i,1] <- i + part
-    tmp2[i, 7:m2] <- as.vector(t(tmp[unlist(df[i, ]) + 1, ][1:m1, ]))
+  m <- dim(df)[2]
+  m_ped_out <- m * 2 + 6
+  base_pair_convert <- matrix(NA, 3, 2)
+  base_pair_convert[, 1] <- matrix(c("a", "c", "c"), 1, 3)
+  base_pair_convert[, 2] <- matrix(c("a", "a", "c"), 1, 3)
+  out_matrix <- matrix(NA, n, m_ped_out)
+  out_matrix[, 2:6] <- 1
+  for (i in 1:n) {
+    out_matrix[i, 1] <- i + part
+    out_matrix[i, 7:m_ped_out] <- as.vector(
+      t(base_pair_convert[unlist(df[i, ]) + 1, ][1:m, ]))
   }
-  return(tmp2)
+  return(out_matrix)
 }

@@ -1,23 +1,23 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# geneference
+# geneference <img src="man/figures/logo.png" align="right" width="120"/>
 
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/FireGutter/geneference/workflows/R-CMD-check/badge.svg)](https://github.com/FireGutter/geneference/actions)
+[![CodeFactor](https://www.codefactor.io/repository/github/firegutter/geneference/badge?s=d63fc08844421c6003bc29b6e159ab5051f1f619)](https://www.codefactor.io/repository/github/firegutter/geneference)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT/)
+![Status](https://img.shields.io/badge/status-not%20released-orange)
 <!-- badges: end -->
 
-The goal of geneference is to …
+geneference is an R package for simulating and analysing genetic data.
+
+The package was developed during the Data Project course, which is part
+of the Data Science bachelor programme at Aarhus University.
 
 ## Installation
-
-You can install the released version of geneference from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("geneference")
-```
 
 You can install the development version from
 [GitHub](https://github.com/) with:
@@ -26,49 +26,3 @@ You can install the development version from
 # install.packages("devtools")
 devtools::install_github("FireGutter/geneference")
 ```
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-``` r
-library(geneference)
-#> Warning: replacing previous import 'data.table::last' by 'dplyr::last' when
-#> loading 'geneference'
-#> Warning: replacing previous import 'data.table::first' by 'dplyr::first' when
-#> loading 'geneference'
-#> Warning: replacing previous import 'data.table::between' by 'dplyr::between'
-#> when loading 'geneference'
-#> Warning: replacing previous import 'dplyr::filter' by 'stats::filter' when
-#> loading 'geneference'
-#> Warning: replacing previous import 'dplyr::lag' by 'stats::lag' when loading
-#> 'geneference'
-## basic example code
-```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/master/examples>.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
