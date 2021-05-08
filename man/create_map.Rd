@@ -7,15 +7,16 @@
 create_map(n, path)
 }
 \arguments{
-\item{n}{is the amount of sequenced enteties.}
+\item{n}{number of sequenced genotypes.}
 
-\item{path}{The path where the file is going to be stored.}
+\item{path}{location where the file is going to be stored.}
 }
 \value{
-This function creates a map file
+Does not return anything, but creates a file with the name
+"genotypes.map" in the folder specified with 'path'-parameter.
 }
 \description{
-This function creates a map file that is necessary for PLINK.
-
-Note change the first entry "data_map[, 1]" to have cromosones in the analysis.
+As PLINK requires a .map-file in order to run its analysis,
+we create such a file and fill it with some arbitrary information, since
+it is not actually used for the analysis.
 }

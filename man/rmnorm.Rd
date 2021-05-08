@@ -7,13 +7,14 @@
 rmnorm(n, S)
 }
 \arguments{
-\item{n}{is the amount of random vectors that is to be simulated.}
+\item{n}{number of random vectors that is to be simulated.}
 
-\item{S}{is a valid covariance matrix.}
+\item{S}{a valid covariance matrix.}
 }
 \value{
-This function returns a matrix with n rows and i columns according to the amount of columns in S.
+Returns a matrix with n rows and i columns, where i is determined by
+the size of the specified covariance matrix.
 }
 \description{
-Simulate random values form a multi-variate normal distribution.
+Simulate random values from a multivariate normal distribution.
 }

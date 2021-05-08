@@ -1,24 +1,25 @@
 #'
 #' @title cov_tester
 #'
-#' @description This function simulate data for individual enteties (the data for the parents)
-#' is unknown.
+#' @description Compute a sample covariance matrix. This can be used to
+#' validate that covariances of data are as expected.
 #'
-#' @param read the path to the file that should be read
-#' @param sib is the amount of siblings
+#'
+#' @param file path to the file that should be read.
+#' @param sib number of siblings. Default is 0.
 #'
 #' @importFrom data.table as.data.table fread
 #' @importFrom stats cov
 #'
-#' @return A covariance matrix using th data from the selected file
+#' @return A covariance matrix using the data from the selected file. All
+#' entries in the matrix are multiplied by 100.
 #'
 #' @export
 
 
-cov_tester <- function(read, sib = 0){
-  ph <- fread(read)
+cov_tester <- function(file, sib = 0) {
+  ph <- fread(file)
   ph <- as.data.frame(ph)
-  ind <- c(c(4:5, 8), c(seq(11, 11 + sib*3, by = 3)))
-  round(100*cov(ph[, ind]))
+  indexes <- c(c(4:5, 8), c(seq(11, 11 + sib * 3, by = 3)))
+  round(100 * cov(ph[, indexes]))
 }
-

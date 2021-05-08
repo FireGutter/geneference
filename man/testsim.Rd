@@ -7,24 +7,32 @@
 testsim(n, m, q, hsq, k, to_ped = T)
 }
 \arguments{
-\item{n}{is the amount of enteties (humans)}
+\item{n}{number of genotypes (individuals).}
 
-\item{m}{is the amount of SNPS per entety}
+\item{m}{number of SNPS per genotype.}
 
-\item{q}{is the amount of causal SNPs}
+\item{q}{number of causal SNPs, i.e. SNPs that effect chances of having
+the phenotype.}
 
-\item{hsq}{heritability parameter that is squard}
+\item{hsq}{squared heritability parameter.}
 
-\item{k}{is the prevalence of trait parameter}
+\item{k}{prevalence of phenotype.}
 
-\item{to_ped}{is a T/F parameter indicatating if the output should be in a plink-friendly format or in binary}
+\item{to_ped}{TRUE/FALSE indicating if the output should be in a
+PLINK-friendly format or not.}
 }
 \value{
-This function returns a list containing a matrix of genotypes, causal SNPs, the enteties liabilities and the phenotypes
+Returns a list of 4 entries, containing a matrix of genotypes, a
+vector specifying indexes of causal SNPs, a vector the liability of
+individual i, and a vector specifying whether individual i has the
+phenotype.
 }
 \description{
-A quick way of simulating a small amount of data in the R-session. Note that this function
-only simulate data for individuals. So the simulation should not be used in a study with siblings/parents.
+A quick way of simulating a small amount of data to be stored
+in the R-session. Note that this function only simulates data for
+individuals without family history, i.e. they are not simulated as
+offspring. Hence, the simulation cannot be used in a study of family
+history.
 }
 \examples{
 testsim(10, 15, 5, 0.5, 0.05, TRUE)

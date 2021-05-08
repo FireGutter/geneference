@@ -7,17 +7,22 @@
 covmatrix(sib = 0, hsq)
 }
 \arguments{
-\item{sib}{is the amount siblings to the entety}
+\item{sib}{number of siblings}
 
-\item{hsq}{heritability parameter that is squard}
+\item{hsq}{squared heritability parameter}
 }
 \value{
-This function returns the covariance matrix for an entety with sib - siblings.
+A covariance matrix for an individual with sib number of siblings,
+such that the number of rows and columns are equal to 4 + number of
+siblings.
 }
 \description{
-This function create a covariance matrix for a entety regarding the heritability.
-The first row is full liability for a entety, next is genetic liability.
-Row 3 and 4 is the entetys parents liability.
+Design the theoretical covariance matrix for the multivariate
+normal used to model the distribution of liabilities.
+The first entry in the vector of liabilities is the genetic liability, the
+next is the full liability and the two following are the liabilities of the
+parents. Liabilities of siblings constitute the remaining entries in the
+vector.
 }
 \examples{
 covmatrix(2, 0.5)

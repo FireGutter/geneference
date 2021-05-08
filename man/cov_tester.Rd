@@ -4,17 +4,18 @@
 \alias{cov_tester}
 \title{cov_tester}
 \usage{
-cov_tester(read, sib = 0)
+cov_tester(file, sib = 0)
 }
 \arguments{
-\item{read}{the path to the file that should be read}
+\item{file}{path to the file that should be read}
 
-\item{sib}{is the amount of siblings}
+\item{sib}{number of siblings. Default is 0}
 }
 \value{
-A covariance matrix using th data from the selected file
+A covariance matrix using the data from the selected file. All
+entries in the matrix are multiplied by 100.
 }
 \description{
-This function simulate data for individual enteties (the data for the parents)
-is unknown.
+Compute a sample covariance matrix. This can be used to
+validate that covariances of data are as expected.
 }
