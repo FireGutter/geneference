@@ -7,13 +7,13 @@
 to_ped(df, part)
 }
 \arguments{
-\item{df}{input of binary matrix}
+\item{df}{genotypes in our simulated format}
 
-\item{part}{is the amount of parts, any given function splits the data in}
+\item{part}{amount of parts any given function splits the data in}
 }
 \value{
-This function retruns a n x m matrix
+Returns a n x (6 + 2 * m) matrix so it follows PLINK's .ped format.
 }
 \description{
-turns a binary matrix into a PLINK-friendly format
+Converts our format to PLINK's .bed-format.
 }
