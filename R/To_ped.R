@@ -2,8 +2,8 @@
 #' @title to_ped
 #' @description Converts our format to PLINK's .bed-format.
 #'
-#' @param df genotypes in our simulated format
-#' @param part amount of parts any given function splits the data in
+#' @param df genotypes in our simulated format.
+#' @param part amount of parts any given function splits the data in.
 #'
 #' @return Returns a n x (6 + 2 * m) matrix so it follows PLINK's .ped format.
 
