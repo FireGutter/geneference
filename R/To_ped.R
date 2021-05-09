@@ -1,5 +1,5 @@
 #'
-#' @title to_ped
+#' @title Format conversion
 #' @description Converts our format to PLINK's .bed-format.
 #'
 #' @param df genotypes in our simulated format.

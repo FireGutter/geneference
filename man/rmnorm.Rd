@@ -2,7 +2,7 @@
 % Please edit documentation in R/rmnorm.R
 \name{rmnorm}
 \alias{rmnorm}
-\title{rmnorm}
+\title{Multivariate normal distributions}
 \usage{
 rmnorm(n, S)
 }

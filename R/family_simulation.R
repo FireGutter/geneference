@@ -1,5 +1,5 @@
 #'
-#' @title family_simulation
+#' @title Simulate genotypes with family history
 #' @md
 #' @description Simulate genotypes for individuals with family history, where
 #' each individual has a fixed number of siblings. Parents' genotypes are

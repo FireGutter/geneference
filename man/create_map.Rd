@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_map.R
 \name{create_map}
 \alias{create_map}
-\title{create_map}
+\title{Create .map-file for PLINK}
 \usage{
 create_map(n, path)
 }

@@ -1,5 +1,6 @@
 #'
-#' @title covmatrix
+#' @title Create covariance matrix for liabilities
+#' 
 #' @description Design the theoretical covariance matrix for the multivariate
 #' normal used to model the distribution of liabilities.
 #' The first entry in the vector of liabilities is the genetic liability, the

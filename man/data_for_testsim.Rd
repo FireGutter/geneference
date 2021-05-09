@@ -3,7 +3,7 @@
 \docType{data}
 \name{data_for_testsim}
 \alias{data_for_testsim}
-\title{simulated data}
+\title{Small dataset of simulated genotypes}
 \format{
 A list of 4 elements.
 }

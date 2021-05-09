@@ -1,5 +1,5 @@
 #'
-#' @title cov_tester
+#' @title Test covariances between liabilities
 #'
 #' @description Compute a sample covariance matrix. This can be used to
 #' validate that covariances of data are as expected.
