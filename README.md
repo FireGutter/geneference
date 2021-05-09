@@ -17,12 +17,31 @@ geneference is an R package for simulating and analysing genetic data.
 The package was developed during the Data Project course, which is part
 of the Data Science bachelor programme at Aarhus University.
 
-## Installation
+## Usage
 
 You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
+if (!require("devtools")) {
+  install.packages("devtools")
+}
 devtools::install_github("FireGutter/geneference")
 ```
+
+Many of the functions implemented with geneference rely on the software
+PLINK. Here we link to the relevant site at PLINK and maybe write one or
+two words about how and why we use it.
+
+First-time users should read our guide which we link to **here**. Other
+of our vignettes might also be of interest, see for instance
+`vignette("gibbs")`.
+
+## References
+
+-   Hujoel-citation
+-   Cite the paper we used in rmnorm
+
+Additionally, the open source software Inkscape was used together with
+the hexSticker package to create the logo for geneference. Check how/if
+to cite these.
