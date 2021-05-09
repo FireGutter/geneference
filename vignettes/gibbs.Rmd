@@ -14,10 +14,10 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/gibbs-",
+  fig.path = "../man/figures/gibbs-",
   out.width = "100%"
 )
-library(tidyverse)
+library(ggplot2)
 ```
 
 This document is at the moment just a test. Once the Gibbs functions have been implemented to the package, we can begin doing stuff here.
