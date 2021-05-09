@@ -2,11 +2,20 @@ Package: geneference
 Type: Package
 Title: LT-FH analysis and data simulation
 Version: 0.1.0
-Author: Jacob
-        Rasmus B.
-        Magnus C.
-        Marc J.
-Maintainer: Any problems or suggested changed can be emailed to: <yourself@somewhere.net>
+Authors@R: c(
+    person("Jacob",
+            "Birkeland Steenstrup",
+            role = c("aut", "cre")
+            email = "jbsteenstrup@post.au.dk"),
+    person("Rasmus",
+            "Brostrøm Jensen",
+            role = "aut"),
+    person("Magnus",
+            "Conradsen",
+            role = "aut"),
+    person("Marc",
+            "Timmer Jensen",
+            role = "aut"))
 Description: This package has the purpose of opening the door to the world of GWAS
     and the new tehnique of LT-FH. This package can be used to simulate data.
     Some of the backbone of this package is PLINK, which is a hole other program.
