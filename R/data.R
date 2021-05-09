@@ -1,4 +1,4 @@
-#' @title simulated data
+#' @title Small dataset of simulated genotypes
 #'
 #' @description A simulated dataset using the testsim function with seed 42.
 #' The code for this is: testsim(10, 15, 5, 0.5, 0.05, TRUE)

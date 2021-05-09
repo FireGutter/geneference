@@ -1,5 +1,5 @@
 #'
-#' @title cov_tester
+#' @title Calculate covariances between liabilities
 #'
 #' @description Compute a sample covariance matrix. This can be used to
 #' validate that covariances of data are as expected.
@@ -17,7 +17,7 @@
 #' @export
 
 
-cov_tester <- function(file, sib = 0) {
+calculate_cov <- function(file, sib = 0) {
   ph <- fread(file)
   ph <- as.data.frame(ph)
   indexes <- c(c(4:5, 8), c(seq(11, 11 + sib * 3, by = 3)))

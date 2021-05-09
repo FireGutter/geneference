@@ -2,7 +2,7 @@
 % Please edit documentation in R/family_simulation.R
 \name{family_simulation}
 \alias{family_simulation}
-\title{family_simulation}
+\title{Simulate genotypes with family history}
 \usage{
 family_simulation(n, m, q, hsq, k, path = "", sib = 0)
 }

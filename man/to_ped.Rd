@@ -2,14 +2,14 @@
 % Please edit documentation in R/To_ped.R
 \name{to_ped}
 \alias{to_ped}
-\title{to_ped}
+\title{Format conversion}
 \usage{
 to_ped(df, part)
 }
 \arguments{
-\item{df}{genotypes in our simulated format}
+\item{df}{genotypes in our simulated format.}
 
-\item{part}{amount of parts any given function splits the data in}
+\item{part}{amount of parts any given function splits the data in.}
 }
 \value{
 Returns a n x (6 + 2 * m) matrix so it follows PLINK's .ped format.

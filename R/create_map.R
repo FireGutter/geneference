@@ -1,5 +1,5 @@
 #'
-#' @title create_map
+#' @title Create .map-file for PLINK
 #' @description As PLINK requires a .map-file in order to run its analysis,
 #' we create such a file and fill it with some arbitrary information, since
 #' it is not actually used for the analysis.

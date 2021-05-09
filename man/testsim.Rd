@@ -2,7 +2,7 @@
 % Please edit documentation in R/Testsim.R
 \name{testsim}
 \alias{testsim}
-\title{testsim}
+\title{Simulate genotypes in the R session}
 \usage{
 testsim(n, m, q, hsq, k, to_ped = T)
 }

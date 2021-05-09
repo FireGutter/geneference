@@ -1,0 +1,36 @@
+---
+title: "Documentation for our Gibbs sampling process"
+description: >
+  This vignette provides some details on the Gibbs sampler we use as part of
+  computing the LT-FH phenotype.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Gibbs sampling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/gibbs-",
+  out.width = "100%"
+)
+library(tidyverse)
+```
+
+This document is at the moment just a test. Once the Gibbs functions have been implemented to the package, we can begin doing stuff here.
+I will probably speak with Rasmus tomorrow to try some stuff out.
+For now, I just want to check that I can run a code chunk generating a plot without including the code, and that the figure is saved as expected.
+
+```{r plottest, echo=FALSE}
+x <- c(1, 2, 3, 4)
+y <- c(5, 10, 15, 20)
+mydata <- data.frame(x, y)
+ggplot(mydata, aes(x, y))+
+  geom_point()+
+  theme_light()+
+  NULL
+```
+What a beautiful plot that is.

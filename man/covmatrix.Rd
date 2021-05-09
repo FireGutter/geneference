@@ -2,14 +2,14 @@
 % Please edit documentation in R/covmatrix.R
 \name{covmatrix}
 \alias{covmatrix}
-\title{covmatrix}
+\title{Create covariance matrix for liabilities}
 \usage{
 covmatrix(sib = 0, hsq)
 }
 \arguments{
-\item{sib}{number of siblings}
+\item{sib}{number of siblings.}
 
-\item{hsq}{squared heritability parameter}
+\item{hsq}{squared heritability parameter.}
 }
 \value{
 A covariance matrix for an individual with sib number of siblings,

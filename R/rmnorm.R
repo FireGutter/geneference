@@ -1,5 +1,5 @@
 #'
-#' @title rmnorm
+#' @title Multivariate normal distributions
 #' @description Simulate random values from a multivariate normal distribution.
 #'
 #'
