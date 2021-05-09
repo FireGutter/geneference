@@ -3,18 +3,25 @@ template:
 
 reference:
   - title: Simulation
-    desc: Simulate individuals and their genotypes, either including or excluding family history.
+    desc: >
+      Simulate individuals and their genotypes, either including or excluding
+      family history.
     contents:
     - testsim
     - family_simulation
 
   - title: Analysis
-    desc: Perform statistical analysis to discover what can be causally inferred from data. Note: covmatrix should not be here
+    desc: >
+      Perform statistical analysis to discover what can be causally inferred
+      from data. Note, covmatrix should not be here, this is just for testing.
     contents:
     - cov_tester
 
   - title: Helper functions
-    desc: Miscellaneous functions used in the package. Note: not all functions are stated here. Want to see what pkgdown does with functions not named in this file
+    desc: >
+      Miscellaneous functions used in the package. Note, not all functions are
+      stated here. Want to see what pkgdown does with functions not named in
+      this file.
     contents:
     - rmnorm
     - to_ped
