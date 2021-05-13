@@ -33,9 +33,9 @@ Many of the functions implemented with geneference rely on the software
 PLINK. Here we link to the relevant site at PLINK and maybe write one or
 two words about how and why we use it.
 
-First-time users should read our guide which we link to **here**. Other
-of our vignettes might also be of interest, see for instance
-`vignette("gibbs")`.
+First-time users should walk through our see `vignette("geneference")`.
+For a briefer overview of what geneference is capable of, you might be
+interested in `vignette("geneference-overview")`.
 
 ## References
 

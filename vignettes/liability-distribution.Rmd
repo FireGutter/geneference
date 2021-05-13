@@ -1,0 +1,19 @@
+---
+title: "Liability distributions with LT-FH"
+output: rmarkdown::html_vignette
+description: >
+  An overview and explanation of the methodology used for drawing liabilities.
+vignette: >
+  %\VignetteIndexEntry{liability-distribution}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette shows how we model the liability distributions based on the work by Hujoel et al (2020).

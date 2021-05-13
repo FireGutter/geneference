@@ -1,0 +1,19 @@
+---
+title: "Introduction to geneference"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{geneference}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+geneference aims to ...
+
+This is a detailed walkthrough of how to use the functions implemented in the package. For a more condensed overview of what the package can do, see `vignette("geneference-overview")`.

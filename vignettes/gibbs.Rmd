@@ -5,7 +5,7 @@ description: >
   computing the LT-FH phenotype.
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Gibbs sampling}
+  %\VignetteIndexEntry{Gibbs-sampling-burn-in}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,7 +14,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "../man/figures/gibbs-",
+  #fig.path = "../man/figures/gibbs-", #removing this line should fix figures
   out.width = "100%"
 )
 library(ggplot2)
