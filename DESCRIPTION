@@ -20,6 +20,8 @@ Description: This package has the purpose of opening the door to the world of GW
     and the new tehnique of LT-FH. This package can be used to simulate data.
     Some of the backbone of this package is PLINK, which is a hole other program.
     Use four spaces when indenting paragraphs within the Description.
+URL: https://firegutter.github.io/geneference/
+BugReports: https://github.com/FireGutter/geneference/issues/
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
