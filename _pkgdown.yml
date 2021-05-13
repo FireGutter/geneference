@@ -1,3 +1,6 @@
+development:
+  mode: devel
+
 template:
   package: preferably
 
@@ -13,9 +16,10 @@ reference:
   - title: Analysis
     desc: >
       Perform statistical analysis to discover what can be causally inferred
-      from data. Note, covmatrix should not be here, this is just for testing.
+      from data. Note, calculate_cov should not be here, this is just for
+      testing.
     contents:
-    - cov_tester
+    - calculate_cov
 
   - title: Helper functions
     desc: >
@@ -26,3 +30,15 @@ reference:
     - rmnorm
     - to_ped
     - covmatrix
+
+articles:
+  - title: Using geneference
+    navbar: ~
+    desc: What is geneference (tmp desc)
+    contents:
+      - geneference-overview
+  - title: Detailed background
+    desc: this is for nerds (people interested in source code)
+    contents:
+      - gibbs
+      - liability-distribution
