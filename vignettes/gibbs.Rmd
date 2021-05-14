@@ -25,6 +25,7 @@ library(cowplot)
 
 ```{r conditional, echo=FALSE}
 Condition <- function(S, a, person) {
+  # DETTE KAN UDELADES NÅR CONDITION ER I PAKKEN. OMSKRIV SENERE KALD MED geneference:::
   #Denne funktion tager som input kovarians matricen og en kolonne vektor (a) af værdier for de nuværende liabilities og person, som er et tal der indikerer hvilken person vi gerne vil have fordelingen for betinget på alle andre.
 
   #Funktionen returnerer den betinget middelværdi og varians.
@@ -44,6 +45,9 @@ Condition <- function(S, a, person) {
 
 ```{r gibbs_sampler, echo=FALSE}
 Gibbs <- function(conf, start_value, samples) {
+  # This implementation is very similar to the one in HENVISNING, with the
+  # only difference being the number of values we save. We save all values
+  # to be able to make the traceplots.
   conf_list <- strsplit(conf, "")
   n <- length(conf_list[[1]]) + 1
   liabs <- matrix(start_value, nrow = n, ncol = 1)
@@ -81,6 +85,8 @@ Gibbs <- function(conf, start_value, samples) {
 
 ```{r burn_in, echo=FALSE}
 #Test to see if they gibbs sampler converges at the same rate for different starting values and different configurations with no siblings
+#Test to see if they gibbs sampler converges at the same rate for different
+# starting values and different configurations with no siblings
 start_values <- c(-3, -2, -1, 0, 1, 2, 3)
 confs <- c("111", "112", "121", "211", "122", "212", "221", "222")
 samples <- 1000
