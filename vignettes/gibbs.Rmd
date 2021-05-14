@@ -23,7 +23,7 @@ library(cowplot)
 ```
 
 
-```{r}
+```{r conditional, echo=FALSE}
 Condition <- function(S, a, person) {
   #Denne funktion tager som input kovarians matricen og en kolonne vektor (a) af værdier for de nuværende liabilities og person, som er et tal der indikerer hvilken person vi gerne vil have fordelingen for betinget på alle andre.
 
@@ -42,7 +42,7 @@ Condition <- function(S, a, person) {
 }
 ```
 
-```{r}
+```{r gibbs_sampler, echo=FALSE}
 Gibbs <- function(conf, start_value, samples) {
   conf_list <- strsplit(conf, "")
   n <- length(conf_list[[1]]) + 1
@@ -79,7 +79,7 @@ Gibbs <- function(conf, start_value, samples) {
 }
 ```
 
-```{r no siblings burn-in data}
+```{r burn_in, echo=FALSE}
 #Test to see if they gibbs sampler converges at the same rate for different starting values and different configurations with no siblings
 start_values <- c(-3, -2, -1, 0, 1, 2, 3)
 confs <- c("111", "112", "121", "211", "122", "212", "221", "222")
@@ -100,6 +100,9 @@ for (value in start_values) {
     i <- i + 1
   }
 }
+```
+
+```{r plot_function, echo=FALSE}
 plotter <- function(p, start, conf, liabilities) {
   t <- length(table(conf))
   v <- ceiling(p / t)
@@ -123,6 +126,7 @@ plotter <- function(p, start, conf, liabilities) {
 After creating the data for the Gibbs sampler with 1000 samples for different starting values and families with no siblings, then we can plot how the liabilities develop over time to see when they are no longer dependent on the starting value.
 
 ```{r looking at different starting values}
+```{r plots, echo=FALSE, warning = FALSE}
 #Genetic liability burn-in
 g1 <- plotter(1, start_values, confs, data_g)
 g25 <- plotter(25, start_values, confs, data_g) +
