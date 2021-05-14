@@ -6,8 +6,8 @@ description: >
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Gibbs-sampling-burn-in}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r, include = FALSE}
@@ -18,9 +18,8 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 library(ggplot2)
-library(tidyverse)
-library(ggpubr)
 library(geneference)
+library(cowplot)
 ```
 
 
@@ -109,18 +108,15 @@ plotter <- function(p, start, conf, liabilities) {
     c <- length(conf)
   }
 
-  label_text <- paste(paste("Start =", start[v]), paste("Conf =", conf[c]))
+  label_text <- paste(paste("Start:", start[v]), paste("Configuration:", conf[c]), sep = ", ")
 
   ggplot(data = liabilities, mapping = aes_string(1:nrow(liabilities), y = names(liabilities)[p]))+
-    geom_point(color = "black") +
+    geom_point(color = "cornflowerblue", size = 0.3) +
     ylim(-4, 4) +
-    labs(x = "Iteration", y = "Liability") +
+    labs(x = "Iteration", y = "Liability", title = label_text) +
     theme_light() +
-    annotate(geom = "text", label = label_text, x = nrow(liabilities) / 2,
-             y = -3.5, fontface = 2)
-
-  #plot(data[,p], xlab = "Iteration", ylab = "Liability", main = title, ylim = c(-4,4))
-  #legend("bottomright",legend = paste(paste("start = ", start[v]), paste("conf = ", conf[c])))
+    theme(plot.title = element_text(size = 9), axis.title = element_text(size = 8)) +
+    NULL
 }
 ```
 
@@ -146,10 +142,13 @@ g56 <- plotter(56, start_values, confs, data_g) +
                                  theme(axis.text.y = element_blank(),
                                        axis.ticks.y = element_blank(),
                                        axis.title.y = element_blank())
-genetic_liability <- ggarrange(g1, g25, g49, g8, g32, g56,
+genetic_liability <- plot_grid(g1, g25, g49, g8, g32, g56,
                     ncol = 3, nrow = 2)
-annotate_figure(genetic_liability,
-                top = text_grob("Genetic Liability", face = "bold", size = 14))
+gen_liab_title <- ggdraw() + draw_label("Genetic Liability", fontface='bold',
+                                        color = "cornflowerblue")
+plot_grid(gen_liab_title, genetic_liability, ncol=1, rel_heights=c(0.1, 1))
+
+
 #Full liability burn-in
 f1 <- plotter(1, start_values, confs, data_f)
 f25 <- plotter(25, start_values, confs, data_f) +
@@ -169,10 +168,13 @@ f56 <- plotter(56, start_values, confs, data_f) +
                                  theme(axis.text.y = element_blank(),
                                        axis.ticks.y = element_blank(),
                                        axis.title.y = element_blank())
-full_liability <- ggarrange(f1, f25, f49, f8, f32, f56,
+full_liability <- plot_grid(f1, f25, f49, f8, f32, f56,
                     ncol = 3, nrow = 2)
-annotate_figure(full_liability,
-                top = text_grob("Full Liability", face = "bold", size = 14))
+full_liab_title <- ggdraw() + draw_label("Full Liability", fontface='bold',
+                                         color = "cornflowerblue")
+plot_grid(full_liab_title, full_liability, ncol=1, rel_heights=c(0.1, 1))
+
+
 #Parent 1 full liability burn-in
 p1_1 <- plotter(1, start_values, confs, data_p1)
 p1_25 <- plotter(25, start_values, confs, data_p1) +
@@ -192,10 +194,14 @@ p1_56 <- plotter(56, start_values, confs, data_p1) +
                                  theme(axis.text.y = element_blank(),
                                        axis.ticks.y = element_blank(),
                                        axis.title.y = element_blank())
-parent1_liability <- ggarrange(p1_1, p1_25, p1_49, p1_8, p1_32, p1_56,
+parent1_liability <- plot_grid(p1_1, p1_25, p1_49, p1_8, p1_32, p1_56,
                     ncol = 3, nrow = 2)
-annotate_figure(parent1_liability,
-                top = text_grob("Parent 1 Full Liability", face = "bold", size = 14))
+p1_liab_title <- ggdraw() + draw_label("Parent 1 Full Liability",
+                                        fontface='bold',
+                                        color = "cornflowerblue")
+plot_grid(p1_liab_title, parent1_liability, ncol=1, rel_heights=c(0.1, 1))
+
+
 #Parent 2 full liability burn-in
 p2_1 <- plotter(1, start_values, confs, data_p2)
 p2_25 <- plotter(25, start_values, confs, data_p2) +
@@ -215,10 +221,12 @@ p2_56 <- plotter(56, start_values, confs, data_p2) +
                                  theme(axis.text.y = element_blank(),
                                        axis.ticks.y = element_blank(),
                                        axis.title.y = element_blank())
-parent2_liability <- ggarrange(p2_1, p2_25, p2_49, p2_8, p2_32, p2_56,
+parent2_liability <- plot_grid(p2_1, p2_25, p2_49, p2_8, p2_32, p2_56,
                     ncol = 3, nrow = 2)
-annotate_figure(parent2_liability,
-                top = text_grob("Parent 2 Full Liability", face = "bold", size = 14))
+p2_liab_title <- ggdraw() + draw_label("Parent 2 Full Liability",
+                                        fontface='bold',
+                                        color = "cornflowerblue")
+plot_grid(p2_liab_title, parent2_liability, ncol=1, rel_heights=c(0.1, 1))
 ```
 
 The plots show that all liabilities are independent of their starting value after just a couple of samples, and that it doesn't matter which starting value is chosen. Furthermore, the plots show that the liabilities are quickly independent of their starting value both when the configuration is "111", meaning nobody has the phenotype and "222", meaning everybody has the phenotype. Therefore, we can conclude that there is no difference in the burn-in iterations for different starting values and the burn-in is done after just a couple of iterations. 

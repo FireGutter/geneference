@@ -43,5 +43,6 @@ Imports:
     stats,
     future,
     ggplot2,
-    qpdf
+    qpdf,
+    cowplot
 VignetteBuilder: knitr
