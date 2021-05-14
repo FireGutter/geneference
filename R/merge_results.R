@@ -6,23 +6,27 @@
 #' @param m 
 #'
 #' @importFrom magrittr %>% 
-#' @importFrom tibble tibble
-#' @return 
+#' @import tibble
+#' @import dplyr
+#' @importFrom data.table fread
+#' @return something
 #' @export
 #'
-#' @examples
-merge_results <- function(folder_path, assoc, true_effects = "beta.txt", m=10000) {
-  results <- tibble(read.table(file=(paste(folder_path, assoc, sep="/")),
-                               header = TRUE))
-  snp_effects <- tibble(read.table(file=(paste(folder_path, true_effects, sep="/")),
-                                   col.names = "true_effect")) %>% 
-    rowid_to_column("SNP") %>% 
+
+merge_results <- function(folder_path, assoc, true_effects = "beta.txt", m) {
+  results <- tibble::tibble(
+    data.table::fread(file = (paste(folder_path, assoc, sep = "/")),
+    header = TRUE))
+  snp_effects <- tibble::tibble(
+    data.table::fread(file = (paste(folder_path, true_effects, sep = "/")),
+               col.names = "true_effect")) %>% 
+    tibble::rowid_to_column("SNP") %>% 
     {.}
   
-  merged_tbl <- merge(results, snp_effects) %>% 
-    mutate(causal = true_effect != 0,
-           signif = P < 0.05,
-           bonferroni = P < 0.05/m) %>%
+  merged_tbl <- base::merge(results, snp_effects) %>% 
+    dplyr::mutate(causal = true_effect != 0,
+                  signif = P < 0.05,
+                  bonferroni = P < 0.05/m) %>%
     {.}
   
   return(merged_tbl)
