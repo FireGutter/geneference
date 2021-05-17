@@ -1,5 +1,20 @@
+development:
+  mode: devel
+
 template:
   package: preferably
+
+navbar:
+  title: "geneference"
+  left:
+    - icon: fa-home fa-lg
+      href: index.html
+    - text: "Example study"
+      href: articles/geneference.html
+    - text: "Functions"
+      href: reference/index.html
+    - text: "Vignettes"
+      href: articles/index.html
 
 reference:
   - title: Simulation
@@ -13,9 +28,10 @@ reference:
   - title: Analysis
     desc: >
       Perform statistical analysis to discover what can be causally inferred
-      from data. Note, covmatrix should not be here, this is just for testing.
+      from data. Note, calculate_cov should not be here, this is just for
+      testing.
     contents:
-    - cov_tester
+    - calculate_cov
 
   - title: Helper functions
     desc: >
@@ -26,3 +42,10 @@ reference:
     - rmnorm
     - to_ped
     - covmatrix
+
+articles:
+  - title: Detailed background
+    desc: this is for nerds
+    contents:
+      - gibbs
+      - liability-distribution
