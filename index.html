@@ -71,22 +71,27 @@
   </a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="articles/geneference.html">Example study</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/gibbs.html">Documentation for our Gibbs sampling process</a>
-    </li>
-  </ul>
+  <a href="reference/index.html">Functions</a>
+</li>
+<li>
+  <a href="articles/index.html">Vignettes</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/FireGutter/geneference/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+        
+        
+
+
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -102,10 +107,17 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#geneference-" class="anchor"></a>geneference <img src="reference/figures/logo.png" align="right" width="120">
 </h1></div>
+<div id="causal-inference-with-simulated-genetic-data" class="section level4">
+<h4 class="hasAnchor">
+<a href="#causal-inference-with-simulated-genetic-data" class="anchor"></a>Causal inference with simulated genetic data</h4>
 <!-- badges: start -->
 
-<p>geneference is an R package for simulating and analysing genetic data.</p>
-<p>The package was developed during the Data Project course, which is part of the Data Science bachelor programme at Aarhus University.</p>
+<p>geneference is an R package for simulating genetic data for genome wide association studies.<br>
+The implementations are primarily based on the work by Hujoel et al (2020), in which the authors propose a method of including family history in a representation of a case-control phenotype. The authors show that their method, named Liability Threshold conditional on Family History, or LT-FH in short, leads to a significant increase in association power in genome wide association studies.<br>
+geneference aims to provide a basis for investigating the merits of LT-FH compared to traditional approaches in genome wide association studies. With geneference, the user can control several parameters in the simulations, carry out statistical analysis with different association methods and use plotting functions to visualise certain aspects of the analyses.<br>
+geneference can be used as a stand-alone package, but those interested in diving deeper and/or using geneference as a starting point for their own implementations can freely browse our source code at our <a href="https://github.com/FireGutter/geneference/">repository on Github</a>.</p>
+<p>geneference was developed as an exam project for the Data Project course, which is part of the Data Science bachelor programme at Aarhus University.</p>
+</div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
@@ -115,8 +127,8 @@
   <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
 <span class="op">}</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"FireGutter/geneference"</span><span class="op">)</span></code></pre></div>
-<p>Many of the functions implemented with geneference rely on the software PLINK. Here we link to the relevant site at PLINK and maybe write one or two words about how and why we use it.</p>
-<p>First-time users should read our guide which we link to <strong>here</strong>. Other of our vignettes might also be of interest, see for instance <code><a href="articles/gibbs.html">vignette("gibbs")</a></code>.</p>
+<p>Some of the functions implemented in geneference rely on the software PLINK, which the user will need to install. However, geneference handles the calls to PLINK, meaning that besides installation the user will not need to interact directly with PLINK.</p>
+<p>If you are interested in seeing what geneference is capable of, you can read through the example analysis in <code><a href="articles/geneference.html">vignette("geneference")</a></code>. For a complete overview of the functions in geneference, see our <a href="https://firegutter.github.io/geneference/reference/index.html">package documentation</a>.</p>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
@@ -131,7 +143,16 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/FireGutter/geneference/">https://​github.com/​FireGutter/​geneference/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/FireGutter/geneference/issues/">https://​github.com/​FireGutter/​geneference/​issues/​</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li>
