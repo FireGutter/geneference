@@ -15,9 +15,6 @@ navbar:
       href: reference/index.html
     - text: "Vignettes"
       href: articles/index.html
-  right:
-    - icon: fa-github
-      href: https://github.com/FireGutter/geneference
 
 reference:
   - title: Simulation
