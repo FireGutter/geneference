@@ -4,6 +4,21 @@ development:
 template:
   package: preferably
 
+navbar:
+  title: "geneference"
+  left:
+    - icon: fa-home fa-lg
+      href: index.html
+    - text: "Example study"
+      href: articles/geneference.html
+    - text: "Functions"
+      href: reference/index.html
+    - text: "Vignettes"
+      href: articles/index.html
+  right:
+    - icon: fa-github
+      href: https://github.com/FireGutter/geneference
+
 reference:
   - title: Simulation
     desc: >
@@ -32,13 +47,8 @@ reference:
     - covmatrix
 
 articles:
-  - title: Using geneference
-    navbar: ~
-    desc: What is geneference (tmp desc)
-    contents:
-      - geneference-overview
   - title: Detailed background
-    desc: this is for nerds (people interested in source code)
+    desc: this is for nerds
     contents:
       - gibbs
       - liability-distribution
