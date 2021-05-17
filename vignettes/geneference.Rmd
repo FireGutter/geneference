@@ -16,4 +16,16 @@ knitr::opts_chunk$set(
 
 geneference aims to ...
 
-This is a detailed walkthrough of how to use the functions implemented in the package. For a more condensed overview of what the package can do, see `vignette("geneference-overview")`.
+In this vignette, we show an example of how one might go about conducting a simulation study relying solely on the functionalities implemented in geneference.
+
+## Simulation
+We start out by simulating a dataset of x genotypes, each having y SNPs.
+
+
+As we will see in the next part, geneference relies on PLINK for efficient computation of  ... . This also means that we use their fileformats.
+
+## Analysis
+
+An overview of expected running times can be seen in INSERT VIGNETTE.
+#### Visualisation
+Examples of plots.
