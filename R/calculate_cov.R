@@ -18,6 +18,7 @@
 
 
 calculate_cov <- function(file, sib = 0) {
+  stopifnot("Sib needs to be a positive integer" = (sib>=0 && class(sib) == "numeric" && round(sib) == sib))
   ph <- fread(file)
   ph <- as.data.frame(ph)
   indexes <- c(c(4:5, 8), c(seq(11, 11 + sib * 3, by = 3)))
