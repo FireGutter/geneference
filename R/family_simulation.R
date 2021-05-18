@@ -64,6 +64,9 @@ family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
               (hsq >= 0 && hsq <= 1 && class(hsq) == "numeric"))
   stopifnot("k needs to be a number between 0 and 1" = 
               (k > 0 && k < 1 && class(k) == "numeric"))
+  stopifnot("path needs to default or a valid path that ends with '/'" = 
+              (path == "" || (dir.exists(path)) 
+               && substr(path, nchar(path), nchar(path)) == "/"))
   stopifnot("Sib needs to be a positive integer" =
               (sib >= 0 && class(sib) == "numeric" && round(sib) == sib))
 
