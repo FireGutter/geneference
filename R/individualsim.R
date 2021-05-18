@@ -26,6 +26,19 @@
 
 
 individualsim <- function(n, m, q, hsq, k, path){
+  stopifnot("n needs to be an integer greater than 0" =
+              (n > 0 && class(n) == "numeric" && n == round(n)))
+  stopifnot("m needs to be an integer greater than 0" =
+              (m > 0 && class(m) == "numeric" && m == round(m)))
+  stopifnot("q needs to be an integer equal to 0 or greather and smaller than m"
+            = (q >= 0 && class(q) == "numeric" && q == round(q) && q <= m))
+  stopifnot("hsq needs to be a number equal to or between 0 and 1" =
+              (hsq >= 0 && hsq <= 1 && class(hsq) == "numeric"))
+  stopifnot("k needs to be a number between 0 and 1" =
+              (k > 0 && k < 1 && class(k) == "numeric"))
+  stopifnot("path needs to default or a valid path that ends with '/'" =
+              (path == "" || (dir.exists(path))
+               && substr(path, nchar(path), nchar(path)) == "/"))
 
   #Function that ties everything together (one function to rule them all)
 
