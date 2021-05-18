@@ -39,6 +39,7 @@ testsim <- function(n, m, q, hsq, k, to_ped = T) {
               (hsq >= 0 && hsq <= 1 && class(hsq) == "numeric"))
   stopifnot("k needs to be a number between 0 and 1" =
               (k > 0 && k < 1 && class(k) == "numeric"))
+  stopifnot("to_ped needs to be logical" = class(to_ped) == "logical")
 
   n <- as.numeric(n)
   m <- as.numeric(m)
