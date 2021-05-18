@@ -41,12 +41,6 @@ testsim <- function(n, m, q, hsq, k, to_ped = T) {
               (k > 0 && k < 1 && class(k) == "numeric"))
   stopifnot("to_ped needs to be logical" = class(to_ped) == "logical")
 
-  n <- as.numeric(n)
-  m <- as.numeric(m)
-  q <- as.numeric(q)
-  hsq <- as.numeric(hsq)
-  k <- as.numeric(k)
-
   h <- sqrt(hsq)
 
   # Calculate the Minor Allele Frequency. All individuals have the same MAFs.
