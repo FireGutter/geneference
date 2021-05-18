@@ -12,6 +12,8 @@
 #' @export
 
 rmnorm <- function(n, S) {
+  stopifnot("n needs to be an integer greater than 0" =
+              (n > 0 && class(n) == "numeric" && n == round(n)))
 
   n_liab <- nrow(S)
   C <- chol(S)
