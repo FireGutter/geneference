@@ -53,7 +53,7 @@
 #' @export
 
 
-family_simulation <- function(n, m, q, hsq, k, path = ".", sib = 0) {
+family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
   stopifnot("n needs to be an integer greater than 0" = 
               (n > 0 && class(n) == "numeric" && n == round(n)))
   stopifnot("m needs to be an integer greater than 0" = 
