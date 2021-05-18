@@ -59,7 +59,7 @@ family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
   stopifnot("m needs to be an integer greater than 1" = 
               (m > 0 && class(m) == "numeric" && m == round(m)))
   stopifnot("q needs to be an integer greater than 1 and smaller than m" = 
-              (q > 0 && class(q) == "numeric" && q == round(q) && q < m))
+              (q > 0 && class(q) == "numeric" && q == round(q) && q <= m))
   stopifnot("hsq needs to be a number between 0 and 1" =
               (hsq >= 0 && hsq <= 1 && class(hsq) == "numeric"))
 
