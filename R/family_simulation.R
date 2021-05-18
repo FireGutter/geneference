@@ -54,6 +54,8 @@
 
 
 family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
+  stopifnot("n needs to be an integer greater than 1" = 
+              (n > 0 && class(n) == "numeric" && n == round(n)))
 
   # Defining a function that creates genotypes for parents
   parent_maker <- function(m, number, MAFs) {
