@@ -23,6 +23,8 @@
 #' @export
 
 covmatrix <- function(sib = 0, hsq) {
+  stopifnot("Sib needs to be a positive integer" =
+              (sib >= 0 && class(sib) == "numeric" && round(sib) == sib))
   s <- matrix(c(hsq, hsq, rep(0.5 * hsq, sib + 2),
                 hsq, 1, rep(0.5 * hsq, sib + 2),
                 0.5 * hsq, 0.5 * hsq, 1, 0, rep(0.5 * hsq, sib),
