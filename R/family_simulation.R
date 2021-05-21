@@ -127,8 +127,9 @@ family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
       sib_header[3 * i + 2] <- paste0("sib", i + 1, "_lg", sep = "")
       sib_header[3 * i + 3] <- paste0("sib", i + 1, "_liab", sep = "")
     }
+    header <- c(header, sib_header)
   }
-  header <- c(header, sib_header)
+  
   # Create the header for the phenofile:
   fwrite(as.data.table(rbind(header)),
          paste0(path, "phenotypes.txt", sep = ""),
