@@ -18,7 +18,7 @@
 
 
 calculate_cov <- function(file, sib = 0) {
-  stopifnot("sib needs to be a positive integer" =
+  stopifnot("sib needs to be a non-negative integer" =
             (sib >= 0 && class(sib) == "numeric" && round(sib) == sib))
   ph <- fread(file)
   ph <- as.data.frame(ph)

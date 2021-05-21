@@ -23,7 +23,7 @@
 #' @export
 
 covmatrix <- function(sib = 0, hsq) {
-  stopifnot("sib needs to be a positive integer" =
+  stopifnot("sib needs to be a non-negative integer" =
               (sib >= 0 && class(sib) == "numeric" && round(sib) == sib),
             "hsq needs to be a number between 0 and 1" =
               (hsq > 0 && hsq < 1 && class(hsq) == "numeric"))

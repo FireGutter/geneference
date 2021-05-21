@@ -55,19 +55,20 @@
 
 family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
   stopifnot("n needs to be an integer greater than 0" =
-              (n > 0 && class(n) == "numeric" && n == round(n)))
-  stopifnot("m needs to be an integer greater than 0" =
-              (m > 0 && class(m) == "numeric" && m == round(m)))
-  stopifnot("q needs to be an integer equal to 0 or greather and smaller than m"
-            = (q >= 0 && class(q) == "numeric" && q == round(q) && q <= m))
-  stopifnot("hsq needs to be a number equal to or between 0 and 1" =
-              (hsq >= 0 && hsq <= 1 && class(hsq) == "numeric"))
-  stopifnot("k needs to be a number between 0 and 1" =
-              (k > 0 && k < 1 && class(k) == "numeric"))
-  stopifnot("path needs to default or a valid path that ends with '/'" =
-              (path == "" || (dir.exists(path))
-               && substr(path, nchar(path), nchar(path)) == "/"))
-  stopifnot("Sib needs to be a positive integer" =
+              (n > 0 && class(n) == "numeric" && n == round(n)),
+            "m needs to be an integer greater than 0" =
+              (m > 0 && class(m) == "numeric" && m == round(m)),
+            "q needs to be an integer greater than 0 and smaller than m" =
+              (q > 0 && class(q) == "numeric" && q == round(q) && q <= m),
+            "hsq needs to be a number between 0 and 1" =
+              (hsq > 0 && hsq < 1 && class(hsq) == "numeric"),
+            "k needs to be a number between 0 and 1" =
+              (k > 0 && k < 1 && class(k) == "numeric"),
+            "path needs to be default or a valid path ending with '/' or '\\\\'"
+            = (path == "" || (dir.exists(path))
+               && (substr(path, nchar(path), nchar(path)) == "/" ||
+                     substr(path, nchar(path), nchar(path)) == "\\")),
+            "sib needs to be a non-negative integer" =
               (sib >= 0 && class(sib) == "numeric" && round(sib) == sib))
 
   # Defining a function that creates genotypes for parents
