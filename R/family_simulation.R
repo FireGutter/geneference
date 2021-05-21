@@ -71,12 +71,12 @@ family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
             "sib needs to be a non-negative integer" =
               (sib >= 0 && class(sib) == "numeric" && round(sib) == sib))
 
+  # Set worker nodes:
+  plan(multiprocess, workers = max(availableCores(logical = F) - 1, 1))
+  
   # Defining a function that creates genotypes for parents
   parent_maker <- function(m, number, MAFs) {
-    future.apply::future_sapply(1:number,
-                                function(i) {
-                                  rbinom(m, 2, MAFs)},
-                                future.seed = T)
+    sapply(1:number, function(i) {rbinom(m, 2, MAFs)})
   }
 
   # Here we hard code the function to simulate 10 million SNPs per session
@@ -145,11 +145,13 @@ family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
     parentmatrix <- parent_maker(m = m, number = 2 * splits[i], MAFs)
 
     # Using the parents' genotypes the genotypes can be calculated for children
-    child <- t(future.apply::future_sapply(seq(1, ncol(parentmatrix), 2),
-                                           function(j) {
-        child <- rowSums(parentmatrix[, j:(j + 1), drop = FALSE]) / 2
-        round(child + runif(m, min = -0.0001, max = 0.0001), 0)},
-      future.seed = T))
+    child <- t(sapply(seq(1, ncol(parentmatrix), 2), function(i){
+      child_mean <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
+      round_vec <- rbinom(n = m, 1, 1/2)
+      snps_for_child <- rbinom(n = m, 2, 1/2)
+      vals <- ifelse(child_mean == 1, 1, 0)
+      child_mean[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_child, 1)
+      return(if_else(round_vec == 1, ceiling(child_mean), floor(child_mean)))}))
 
     if (sib != 0) {
 
@@ -157,11 +159,13 @@ family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
 
       for (k in 1:sib) {
         # We create genotypes for siblings in same way as for the individuals
-        sibs <- t(future.apply::future_sapply(seq(1, ncol(parentmatrix), 2),
-                                              function(j) {
-            sibs <- rowSums(parentmatrix[, j:(j + 1), drop = FALSE]) / 2
-            round(sibs + runif(m, min = -0.0001, max = 0.0001), 0)},
-          future.seed = T))
+        sibs <- t(sapply(seq(1, ncol(parentmatrix), 2), function(i){
+          sibs <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
+          round_vec <- rbinom(n = m, 1, 1/2)
+          snps_for_sibs <- rbinom(n = m, 2, 1/2)
+          vals <- ifelse(sibs == 1, 1, 0)
+          sibs[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_sibs, 1)
+          return(if_else(round_vec == 1, ceiling(sibs), floor(sibs)))}))
 
         # Find the genetic liability, liability and phenotype for the
         # siblings and add this to the "sibtable"
@@ -211,19 +215,37 @@ family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
            append = T)
 
 
-    fwrite(as.data.table(cbind(id, rep(1, splits[i]), c_pheno, c_lg, c_liab,
-                               p_pheno[seq(1, 2 * splits[i], 2)],
-                               parlg[seq(1, 2 * splits[i], 2)],
-                               parliab[seq(1, 2 * splits[i], 2)],
-                               p_pheno[seq(2, 2 * splits[i], 2)],
-                               parlg[seq(2, 2 * splits[i], 2)],
-                               parliab[seq(2, 2 * splits[i], 2)],
-                               sibtable)),
-           paste0(path, "phenotypes.txt", sep = ""),
-           quote = F,
-           sep = " ",
-           col.names = F,
-           append = T)
+    if(sib != 0) {
+      fwrite(as.data.table(cbind(id, rep(1, splits[i]), c_pheno, c_lg, c_liab,
+                                 p_pheno[seq(1, 2 * splits[i], 2)],
+                                 parlg[seq(1, 2 * splits[i], 2)],
+                                 parliab[seq(1, 2 * splits[i], 2)],
+                                 p_pheno[seq(2, 2 * splits[i], 2)],
+                                 parlg[seq(2, 2 * splits[i], 2)],
+                                 parliab[seq(2, 2 * splits[i], 2)],
+                                 sibtable)),
+             paste0(path, "phenotypes.txt", sep = ""),
+             quote = F,
+             sep = " ",
+             col.names = F,
+             append = T)
+    }
+    else {
+      fwrite(as.data.table(cbind(id, rep(1, splits[i]), c_pheno, c_lg, c_liab,
+                                 p_pheno[seq(1, 2 * splits[i], 2)],
+                                 parlg[seq(1, 2 * splits[i], 2)],
+                                 parliab[seq(1, 2 * splits[i], 2)],
+                                 p_pheno[seq(2, 2 * splits[i], 2)],
+                                 parlg[seq(2, 2 * splits[i], 2)],
+                                 parliab[seq(2, 2 * splits[i], 2)])),
+             paste0(path, "phenotypes.txt", sep = ""),
+             quote = F,
+             sep = " ",
+             col.names = F,
+             append = T)
+    }
+    
+    
     flock::unlock(locked) #unlocks file
 
   }, future.seed = T)
