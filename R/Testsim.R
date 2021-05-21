@@ -29,31 +29,19 @@
 #'
 
 testsim <- function(n, m, q, hsq, k, to_ped = T) {
-
-  n <- as.numeric(n)
-  m <- as.numeric(m)
-  q <- as.numeric(q)
-  hsq <- as.numeric(hsq)
-  k <- as.numeric(k)
+  stopifnot("n needs to be an integer greater than 0" =
+              (n > 0 && class(n) == "numeric" && n == round(n)),
+            "m needs to be an integer greater than 0" =
+              (m > 0 && class(m) == "numeric" && m == round(m)),
+            "q needs to be an integer greater than 0 and smaller than m" =
+              (q > 0 && class(q) == "numeric" && q == round(q) && q <= m),
+            "hsq needs to be a number between 0 and 1" =
+              (hsq > 0 && hsq < 1 && class(hsq) == "numeric"),
+            "k needs to be a number between 0 and 1" =
+              (k > 0 && k < 1 && class(k) == "numeric"),
+            "to_ped needs to be logical" = class(to_ped) == "logical")
 
   h <- sqrt(hsq)
-
-  if (n != as.integer(n) | n <= 0) {
-    stop("The input of n must be a positive integer!")
-  }
-  else if (m != as.integer(m) | m <= 0) {
-    stop("The input of m must be a positive integer!")
-  }
-  else if (q != as.integer(q) | q < 1 | q > m) {
-    stop("The input of q must be a positive integer between 1 and m!")
-  }
-
-  if (hsq < 0 | hsq > 1) {
-    stop("The heritability parameter 'hsq' must be between 0 and 1")
-  }
-  else if (k < 0 | k > 1) {
-    stop("the prevalence of trait 'k' must be between 0 and 1")
-  }
 
   # Calculate the Minor Allele Frequency. All individuals have the same MAFs.
   MAFs <- runif(m, 0.01, 0.49)
