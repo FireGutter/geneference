@@ -41,6 +41,8 @@ Imports:
     data.table,
     future.apply,
     stats,
+    tools,
+    utils,
     future,
     ggplot2,
     qpdf,
