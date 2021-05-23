@@ -14,7 +14,7 @@ geneference.}
 \item{sibs}{number of siblings in the families. If family size varies,
 specify the number of siblings in the largest family.}
 
-\item{output_file}{path of output file. This can be the same as
+\item{output_file}{path of output file. This is by default the same as
 \code{pheno_file}.}
 
 \item{alpha}{significance level used for deciding phenotype status based on

@@ -18,10 +18,6 @@
 #' liability is appended to the end of \code{pheno_file}.
 #'
 #' @importFrom magrittr `%>%`
-#' @import dplyr
-#' @import tidyr
-#' @import tibble
-#' @import data.table
 #' @import utils
 #'
 #' @export
@@ -115,9 +111,7 @@ assign_ltfh_phenotype <- function(pheno_file,
 #'
 #'
 #' @return Does not return anything, but writes \code{output_file} to disk,
-#' where the GWAX phenotype column is appended to the end of \code{pheno_file}.
-#'
-#' @import data.table
+#' where the GWAX phenotype column is appended to the end of \code{pheno_file}. 
 #'
 #' @export
 assign_GWAX_phenotype <- function(pheno_file,
