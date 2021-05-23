@@ -158,7 +158,7 @@ family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
 
       sibtable <- data.table("begin" = numeric(splits[i]))
 
-      for (k in 1:sib) {
+      for (j in 1:sib) {
         # We create genotypes for siblings in same way as for the individuals
         sibs <- t(sapply(seq(1, ncol(parentmatrix), 2), function(i){
           sibs <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
