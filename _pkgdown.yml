@@ -26,19 +26,18 @@ reference:
   - title: Analysis
     desc: >
       Perform statistical analysis to discover what can be causally inferred
-      from data. Note, calculate_cov should not be here, this is just for
-      testing.
+      from data.
     contents:
+    - starts_with("assign")
+    - starts_with("analysis")
     - calculate_cov
 
   - title: Helper functions
     desc: >
-      Miscellaneous functions used in the package. Note, not all functions are
-      stated here. Want to see what pkgdown does with functions not named in
-      this file.
+      These are miscellaneous helper functions also exported by the package.
     contents:
     - rmnorm
-    - to_ped
+    - p_2_b
     - covmatrix
 
 articles:
