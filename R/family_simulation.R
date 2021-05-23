@@ -33,7 +33,7 @@
 #' @import flock
 #' @import dplyr
 #' @import future
-#' @importFrom stats rbinom
+#' @importFrom stats rbinom qnorm rnorm runif
 #'
 #' @return Does not return any value, but prints the following five files to
 #' the \code{path} parameter specified in the function call:
