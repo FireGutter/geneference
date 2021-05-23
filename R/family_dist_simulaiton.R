@@ -169,7 +169,7 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
       sibtable <- data.table("start" = numeric(splits[i]))
 
       if (amount_of_sibs[i] != 0) {
-        for(k in 1:amount_of_sibs[i]){
+        for(j in 1:amount_of_sibs[i]){
           sibs <- t(sapply(seq(1, ncol(parentmatrix), 2), function(i){
             sibs <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
             round_vec <- rbinom(n = m, 1, 1/2)
