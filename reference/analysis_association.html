@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>Function reference • geneference</title>
+<title>Run association analysis — analysis_association • geneference</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -72,7 +72,13 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Run association analysis — analysis_association" />
+<meta property="og:description" content="to be written. calls PLINK.
+(include specifying pheno_names from simulation:
+GWAS use pheno, for LTFH use LTFH_pheno, GWAX use GWAX_pheno)
+NOTE: creates a temporary .bed file if bed is FALSE. This
+takes some additional time.
+Also: File extension will be .assoc or .qassoc depending on the used model." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -95,7 +101,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -153,122 +159,72 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Run association analysis</h1>
+    <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/plink_calls.R'><code>R/plink_calls.R</code></a></small>
+    <div class="hidden name"><code>analysis_association.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>to be written. calls PLINK.
+(include specifying pheno_names from simulation:
+GWAS use pheno, for LTFH use LTFH_pheno, GWAX use GWAX_pheno)
+NOTE: creates a temporary .bed file if <code>bed</code> is <code>FALSE</code>. This
+takes some additional time.
+Also: File extension will be .assoc or .qassoc depending on the used model.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>analysis_association</span><span class='op'>(</span>
+  <span class='va'>geno_file</span>,
+  <span class='va'>pheno_file</span>,
+  <span class='va'>pheno_name</span>,
+  <span class='va'>out_file</span>,
+  bed <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  plink_path <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-simulation" class="hasAnchor"><a href="#section-simulation" class="anchor"></a>Simulation</h2>
-          <p class="section-desc"><p>Simulate individuals and their genotypes, either including or excluding family history.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="testsim.html">testsim()</a></code> </p>
-        </td>
-        <td><p>Simulate genotypes in the R session</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="family_simulation.html">family_simulation()</a></code> </p>
-        </td>
-        <td><p>Simulate genotypes with family history</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-analysis" class="hasAnchor"><a href="#section-analysis" class="anchor"></a>Analysis</h2>
-          <p class="section-desc"><p>Perform statistical analysis to discover what can be causally inferred from data.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="assign_GWAX_phenotype.html">assign_GWAX_phenotype()</a></code> </p>
-        </td>
-        <td><p>Create case-control status by proxy</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="assign_ltfh_phenotype.html">assign_ltfh_phenotype()</a></code> </p>
-        </td>
-        <td><p>Calculate posterior mean genetic liabilities</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="analysis_association.html">analysis_association()</a></code> </p>
-        </td>
-        <td><p>Run association analysis</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="analysis_lasso.html">analysis_lasso()</a></code> </p>
-        </td>
-        <td><p>Run Lasso analysis</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="calculate_cov.html">calculate_cov()</a></code> </p>
-        </td>
-        <td><p>Calculate covariances between liabilities</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-helper-functions" class="hasAnchor"><a href="#section-helper-functions" class="anchor"></a>Helper functions</h2>
-          <p class="section-desc"><p>These are miscellaneous helper functions also exported by the package.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="rmnorm.html">rmnorm()</a></code> </p>
-        </td>
-        <td><p>Multivariate normal distributions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="p_2_b.html">p_2_b()</a></code> </p>
-        </td>
-        <td><p>Convert .ped files to .bed</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="covmatrix.html">covmatrix()</a></code> </p>
-        </td>
-        <td><p>Create covariance matrix for liabilities</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>geno_file</th>
+      <td><p>string specifying path to genotypes file, including file
+extension.</p></td>
+    </tr>
+    <tr>
+      <th>pheno_file</th>
+      <td><p>string specifying path to phenotypes file, including file
+extension.</p></td>
+    </tr>
+    <tr>
+      <th>pheno_name</th>
+      <td><p>column name of phenotype to be used in analysis.</p></td>
+    </tr>
+    <tr>
+      <th>out_file</th>
+      <td><p>string specifying path and name of the resulting output
+file, excluding file extension.</p></td>
+    </tr>
+    <tr>
+      <th>bed</th>
+      <td><p>logical indicating whether or not the genotypes file is a .bed
+file. <code>FALSE</code> if the file is .ped.</p></td>
+    </tr>
+    <tr>
+      <th>plink_path</th>
+      <td><p><code>TRUE</code> if user has added PLINK to the system
+variable "Path". Otherwise a string specifying the path to PLINK.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Does not return anything, but PLINK writes <code>out_file</code> to disk,
+containing results of the performed analysis. The columns in the printed
+dataset depends on which phenotype is used for the analysis.</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
