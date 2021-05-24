@@ -22,7 +22,8 @@
   }
 </script>
 
-<title>Simulation with random family sizes — randomized_familiy_simulation • geneference</title>
+<title>Plot true genetic liabilities against posterior mean genetic
+liabilities — plot_pmgl_vs_true • geneference</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -72,14 +73,11 @@
 
 
 
-<meta property="og:title" content="Simulation with random family sizes — randomized_familiy_simulation" />
-<meta property="og:description" content="Simulate genotypes for individuals with family history, where
-each individual is given a random number of siblings. Parents' genotypes are
-simulated and used for simulating the genotypes of individuals and their
-siblings. This function call the family_dist_simulaiton with the randomized
-input.
-family_dist_simulaiton makes use of parallel computation in order to
-decrease the running time." />
+<meta property="og:title" content="Plot true genetic liabilities against posterior mean genetic
+liabilities — plot_pmgl_vs_true" />
+<meta property="og:description" content="write description.
+vignette(&quot;ggplot2-specs&quot;, package = &quot;ggplot2&quot;) details the usage of
+aesthetic parameters in ggplot2." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -162,110 +160,51 @@ decrease the running time." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Simulation with random family sizes</h1>
-    <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/randomized_familiy_simulation.R'><code>R/randomized_familiy_simulation.R</code></a></small>
-    <div class="hidden name"><code>randomized_familiy_simulation.Rd</code></div>
+    <h1>Plot true genetic liabilities against posterior mean genetic
+liabilities</h1>
+    <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/visualisations.R'><code>R/visualisations.R</code></a></small>
+    <div class="hidden name"><code>plot_pmgl_vs_true.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Simulate genotypes for individuals with family history, where
-each individual is given a random number of siblings. Parents' genotypes are
-simulated and used for simulating the genotypes of individuals and their
-siblings. This function call the family_dist_simulaiton with the randomized
-input.
-<code>family_dist_simulaiton</code> makes use of parallel computation in order to
-decrease the running time.</p>
+    <p>write description.
+<code>vignette("ggplot2-specs", package = "ggplot2")</code> details the usage of
+aesthetic parameters in ggplot2.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>randomized_familiy_simulation</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>m</span>, <span class='va'>q</span>, <span class='va'>hsq</span>, <span class='va'>k</span>, <span class='va'>sib_fert</span>, dist <span class='op'>=</span> <span class='fl'>0</span>, path <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plot_pmgl_vs_true</span><span class='op'>(</span>
+  <span class='va'>dataset</span>,
+  line_color <span class='op'>=</span> <span class='st'>"black"</span>,
+  save_plot_path <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  plot_filename <span class='op'>=</span> <span class='st'>"posterior_liabilities.png"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>n</th>
-      <td><p>number of genotypes (individuals).</p></td>
+      <th>dataset</th>
+      <td><p>data imported to R by <code><a href='load_assoc_results.html'>load_assoc_results()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>m</th>
-      <td><p>number of SNPS per genotype.</p></td>
+      <th>line_color</th>
+      <td><p>color of identity line.</p></td>
     </tr>
     <tr>
-      <th>q</th>
-      <td><p>number of causal SNPs, i.e. SNPs that effect chances of having
-the phenotype.</p></td>
+      <th>save_plot_path</th>
+      <td><p>if <code>FALSE</code>, return the function returns a ggplot
+object. Else a path of the directory to save the plot to.</p></td>
     </tr>
     <tr>
-      <th>hsq</th>
-      <td><p>squared heritability parameter.</p></td>
-    </tr>
-    <tr>
-      <th>k</th>
-      <td><p>prevalence of phenotype.</p></td>
-    </tr>
-    <tr>
-      <th>sib_fert</th>
-      <td><p>either the distribution-vector of siblings-fertility rate.
-See meaning below.</p></td>
-    </tr>
-    <tr>
-      <th>dist</th>
-      <td><p>if sib_fert is a distribution-vector then dist can be used to
-specify how many siblings the different individuals get.</p></td>
-    </tr>
-    <tr>
-      <th>path</th>
-      <td><p>directory where the files will be stored. If nothing is
-specified, <code>family_simulation</code> writes its files in the current
-working directory.</p></td>
+      <th>plot_filename</th>
+      <td><p>name of the file to be saved, including file extension.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list where first entry is the distribution of the simulated individuals
-and the second entry is the number of siblings (dist) for these individuals.
-the function also call family_dist_simulaiton that prints the following five files to
-the <code>path</code> parameter specified in the function call:</p><ul>
-<li><p>Three text files:</p><ul>
-<li><p>beta.txt - a file of <code>m</code> rows with one column. The i'th row is
-the true effect of the i'th SNP.</p></li>
-<li><p>MAFs.txt - a file of <code>m</code> rows with one column. The i'th row is
-the true Minor Allelle Frequence of the i'th SNP.</p></li>
-<li><p>phenotypes.txt - a file of <code>n</code> rows, number of columns depend on
-number of siblings. Note that some individuals has fewer siblings as
-others. Thus we fill the empty value-slots with "-9". The file
-contains the phenotype and liability of
-each individual as well as information on the liabilities and phenotype
-status of their parents and siblings.</p></li>
-</ul></li>
-<li><p>genotypes.map - a file created such that PLINK will work with the genotype
-data.</p></li>
-<li><p>genotypes.ped - the simulated genotypes in a PLINK-readable format.</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Note that there are two types of input to sib_fert:
-distribution-vector or siblings-fertility. If a distribution-vector is used
-a dist vector must also be specified. E.g. sib_fert = c(1/6, 1/6, 2/3)
-and dist = c(0, 1, 2). In this case the function is asked to randomly choose
-1/6 individuals to have 0 siblings and 2/3 to have 2 siblings. The other case
-a value is given to sib_fert. E.g. sib_fert = 2. Here the function use the
-poisson distribution to randomly select how many siblings the different
-individuals has. Note that in this case, no dist has to be specified, since
-the function overwrites it with the range of the simulated siblings.</p>
-    <h2 class="hasAnchor" id="warning"><a class="anchor" href="#warning"></a>Warning</h2>
-
-    
-
-<p>Simulating large datasets lead to very large files (eg. in the order of 100k
-genotypes with 100k SNPs takes up approximately 40GB of space).
-Please ensure that you have sufficient disk space at the disk where
-<code>path</code> resides prior to running the simulation.
-See FUNCTION-NAME DOCUMENTATION REFERENCE(this is a placeholder until
-function is implemented) in order to convert the generated .ped to the
-smaller .bed format.</p>
+    <p>Either returns a <code>ggplot</code> object or saves the plot to
+<code>save_plot_path</code> and returns NULL.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
