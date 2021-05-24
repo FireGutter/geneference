@@ -17,10 +17,13 @@
 #'
 #' @export
 p_2_b <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=TRUE) {
-  stopifnot("ped_file needs to be a valid file" = file.exists(paste0(ped_file, ".ped")),
-            "bed_file needs to be a valid file" = TRUE,  # fix det Rasmus
-            "del needs to be either TRUE or FALSE" = class(del) == "logical",
-            "plink_path needs to be a valid path to plink" = (plink_path == TRUE || file.exists(paste0(plink_path, "/plink.exe"))))
+  stopifnot("ped_file needs to be a valid file without extension" =
+              file.exists(paste0(ped_file, ".ped")),
+            "bed_file needs to be a valid file" =
+              (tools::file_ext(output_file) == ""),
+            "del needs to be either TRUE or FALSE" = class(bed) == "logical",
+            "plink_path needs to be a valid path to plink" =
+              (plink_path == TRUE || file.exists(paste0(plink_path, "/plink.exe"))))
 
   if (plink_path != TRUE) {
     tmp_path <- paste0("set PATH=%PATH%;", plink_path, ";")
@@ -128,7 +131,7 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
             "bed needs to be either TRUE or FALSE" = class(bed) == "logical",
             "plink_path needs to be a valid path to plink" = (plink_path == TRUE || file.exists(paste0(plink_path, "/plink.exe"))),
             "h2 needs to a numeric between 0 and 1" = (class(h2) == "numeric" && 0 < h2 && h2 < 1))
-  
+
   if (plink_path != TRUE) {
     tmp_path <- paste0("set PATH=%PATH%;", plink_path, ";")
   } else{
@@ -141,7 +144,7 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
   }
   geno_file <- file_path_sans_ext(geno_file)
   plink_command <- paste(tmp_path, "plink", file_type, geno_file,
-                         "--pheno", pheno_file, 
+                         "--pheno", pheno_file,
                          "--pheno-name", pheno_name,
                          "--out", out_file,
                          "--lasso", h2)
