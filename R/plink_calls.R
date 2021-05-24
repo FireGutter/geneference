@@ -21,7 +21,7 @@ p_2_b <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=TRUE) {
               file.exists(paste0(ped_file, ".ped")),
             "bed_file needs to be a valid file" =
               (tools::file_ext(output_file) == ""),
-            "del needs to be either TRUE or FALSE" = class(bed) == "logical",
+            "del needs to be either TRUE or FALSE" = is.logical(del),
             "plink_path needs to be a valid path to plink" =
               (plink_path == TRUE || file.exists(paste0(plink_path, "/plink.exe"))))
 
@@ -81,7 +81,7 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
               (pheno_name %in% colnames(data.table::fread(pheno_file))),
             "out_file needs to be a valid file path without file extension" =
               tools::file_ext(output_file) == "",
-            "bed needs to be either TRUE or FALSE" = class(bed) == "logical",
+            "bed needs to be either TRUE or FALSE" = is.logical(bed),
             "plink_path needs to be a valid path to plink" =
               (plink_path == TRUE ||
                  file.exists(paste0(plink_path, "/plink.exe"))))
@@ -146,12 +146,12 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
               (pheno_name %in% colnames(data.table::fread(pheno_file))),
             "out_file needs to be a valid file path without file extension" =
               tools::file_ext(output_file) == "",
-            "bed needs to be either TRUE or FALSE" = class(bed) == "logical",
+            "bed needs to be either TRUE or FALSE" = is.logical(bed),
             "plink_path needs to be a valid path to plink" =
               (plink_path == TRUE ||
                  file.exists(paste0(plink_path, "/plink.exe"))),
             "hsq needs to a number between 0 and 1" =
-              (class(hsq) == "numeric" && 0 < hsq && hsq < 1))
+              (is.numeric(hsq) && 0 < hsq && hsq < 1))
 
   if (plink_path != TRUE) {
     tmp_path <- paste0("set PATH=%PATH%;", plink_path, ";")

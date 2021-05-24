@@ -61,13 +61,13 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
             "n needs to be a vector of positive integers" =
               (all(n > 0) && is.numeric(n) && all(n == round(n))),
             "m needs to be an integer greater than 0" =
-              (m > 0 && class(m) == "numeric" && m == round(m)),
+              (m > 0 && is.numeric(m) && m == round(m)),
             "q needs to be an integer greater than 0 and smaller than m" =
-              (q > 0 && class(q) == "numeric" && q == round(q) && q <= m),
+              (q > 0 && is.numeric(q) && q == round(q) && q <= m),
             "hsq needs to be a number between 0 and 1" =
-              (hsq > 0 && hsq < 1 && class(hsq) == "numeric"),
+              (hsq > 0 && hsq < 1 && is.numeric(hsq)),
             "k needs to be a number between 0 and 1" =
-              (k > 0 && k < 1 && class(k) == "numeric"),
+              (k > 0 && k < 1 && is.numeric(k)),
             "dist needs to be a vector of non-negative integers" =
               (all(dist >= 0) && is.numeric(dist) && all(dist == round(dist))),
             "path needs to be default or a valid path ending with '/' or '\\\\'"

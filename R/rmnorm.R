@@ -16,7 +16,7 @@
 
 rmnorm <- function(n, S) {
   stopifnot("n needs to be an integer greater than 0" =
-              (n > 0 && class(n) == "numeric" && n == round(n)),
+              (n > 0 && is.numeric(n) && n == round(n)),
             "S needs to be a valid covariance matrix" =
               (nrow(S) == ncol(S) && all(is.numeric(S)) &&
                   all(S == t(S)) && all(eigen(S)$values >= 0)))

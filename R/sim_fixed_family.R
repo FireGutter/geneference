@@ -50,29 +50,29 @@
 
 
 sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
-  
+
   stopifnot("n needs to be an integer greater than 0" =
-              (n > 0 && class(n) == "numeric" && n == round(n)),
+              (n > 0 && is.numeric(n) && n == round(n)),
             "m needs to be an integer greater than 0" =
-              (m > 0 && class(m) == "numeric" && m == round(m)),
+              (m > 0 && is.numeric(m) && m == round(m)),
             "q needs to be an integer greater than 0 and smaller than m" =
-              (q > 0 && class(q) == "numeric" && q == round(q) && q <= m),
+              (q > 0 && is.numeric(q) && q == round(q) && q <= m),
             "hsq needs to be a number between 0 and 1" =
-              (hsq > 0 && hsq < 1 && class(hsq) == "numeric"),
+              (hsq > 0 && hsq < 1 && is.numeric(hsq)),
             "k needs to be a number between 0 and 1" =
-              (k > 0 && k < 1 && class(k) == "numeric"),
-            "sib needs to be a non-negative integer" =
-              (sib >= 0 && class(sib) == "numeric" && round(sib) == sib),
+              (k > 0 && k < 1 && is.numeric(k)),
             "path needs to be default or a valid path ending with '/' or '\\\\'"
             = (path == "" || (dir.exists(path))
                && (substr(path, nchar(path), nchar(path)) == "/" ||
-                     substr(path, nchar(path), nchar(path)) == "\\")))
+                     substr(path, nchar(path), nchar(path)) == "\\")),
+            "sib needs to be a non-negative integer" =
+              (sib >= 0 && is.numeric(sib) && round(sib) == sib))
 
   path = path_validation(path)
-  
+
   # Set worker nodes:
   future::plan(future::multiprocess, workers = max(future::availableCores(logical = F) - 1, 1))
-  
+
   # Defining a function that creates genotypes for parents
   parent_maker <- function(m, number, MAFs) {
     sapply(1:number, function(i) {rbinom(m, 2, MAFs)})
@@ -131,7 +131,7 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
   else {
     header <- c(header, "line_pheno")
   }
-  
+
   # Create the header for the phenofile:
   data.table::fwrite(data.table::as.data.table(rbind(header)),
          paste0(path, "phenotypes.txt", sep = ""),
@@ -203,7 +203,7 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
     c_pheno <- sapply(c_liab, function(x) ifelse(x > critical, 2, 1))
     p_pheno <- sapply(parliab, function(x) ifelse(x > critical, 2, 1))
     c_line_pheno <- c_pheno + 1
-    
+
     # Create the ID per individual
     id <- matrix(c((cusplits[i] + 1):cusplits[i + 1]))
 
@@ -249,8 +249,8 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
              col.names = F,
              append = T)
     }
-    
-    
+
+
     flock::unlock(locked) #unlocks file
 
   }, future.seed = T)
