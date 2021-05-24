@@ -10,6 +10,10 @@
 #'
 #' @export
 calculate_error_types <- function(dataset, alpha, analysis_name) {
+  stopifnot("alpha needs to be a number between 0 and 1" =
+              (is.numeric(alpha) && 0 < alpha && alpha < 1),
+            "analysis_name needs to be a string" = is.character(analysis_name))
+  
   # standard significance level
   errors_tbl <- tibble::tibble(
     Analysis = paste(analysis_name,
