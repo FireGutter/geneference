@@ -73,6 +73,9 @@ load_assoc_results <- function(plink_file,
 #'
 #' @export
 load_phenotypes <- function(pheno_file) {
+  stopifnot("pheno_file needs to a valid file with extension '.txt'" =
+              (file.exists(pheno_file) &&
+                 tools::file_ext(pheno_file) == "txt"))
   pheno_ds <- tibble::tibble(data.table::fread(file = pheno_file,
                                                header = TRUE))
   return(pheno_ds)
