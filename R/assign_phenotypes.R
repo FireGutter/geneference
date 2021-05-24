@@ -29,9 +29,13 @@ assign_ltfh_phenotype <- function(pheno_file,
                                   sibs) {
 
   stopifnot("pheno_file needs to be a valid file" = file.exists(pheno_file),
-            "sibs needs to be an integer of size 0 or more" = (class(sibs) == "numeric" && sibs == round(sibs) && 0 <= sibs),
-            "output_file" = TRUE,  # fix det Rasmus
-            "alpha needs to be numeric and between 0 and 1" = (class(alpha) == "numeric" && 0 < alpha && alpha < 1))
+            "sibs needs to be an integer of size 0 or more" =
+              (class(sibs) == "numeric" && sibs == round(sibs) && 0 <= sibs),
+            "output_file needs to be a valid file path ending with '.txt'" =
+              (tools::file_ext(output_file) == "txt" &&
+                 file.exists(output_file)),
+            "alpha needs to be a number between 0 and 1" =
+              (class(alpha) == "numeric" && 0 < alpha && alpha < 1))
 
   # import phenotypes.
   pheno <- load_phenotypes(pheno_file)
