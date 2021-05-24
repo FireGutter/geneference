@@ -1,5 +1,5 @@
 #'
-#' @title Simulate genotypes with ranomized family history
+#' @title Simulation with random family sizes
 #' @md
 #' @description Simulate genotypes for individuals with family history, where
 #' each individual is given a random number of siblings. Parents' genotypes are

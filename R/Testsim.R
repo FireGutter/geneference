@@ -1,5 +1,5 @@
 #'
-#' @title Simulate genotypes in the R session
+#' @title Simulate genotypes in the R session without family history
 #' @description A quick way of simulating a small amount of data to be stored
 #' in the R-session. Note that this function only simulates data for
 #' individuals without family history, i.e. they are not simulated as

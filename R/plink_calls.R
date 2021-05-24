@@ -19,7 +19,7 @@
 p_2_b <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=TRUE) {
   stopifnot("ped_file needs to be a valid file" = file.exists(paste0(ped_file, ".ped")),
             "bed_file needs to be a valid file" = TRUE,  # fix det Rasmus
-            "del needs to be either TRUE or FALSE" = class(bed) == "logical",
+            "del needs to be either TRUE or FALSE" = class(del) == "logical",
             "plink_path needs to be a valid path to plink" = (plink_path == TRUE || file.exists(paste0(plink_path, "/plink.exe"))))
 
   if (plink_path != TRUE) {
