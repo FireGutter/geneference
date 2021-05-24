@@ -19,7 +19,7 @@ rmnorm <- function(n, S) {
               (n > 0 && class(n) == "numeric" && n == round(n)),
             "S needs to be a valid covariance matrix" =
               (nrow(S) == ncol(S) && all(is.numeric(S))) &&
-              all(S == t(S)) && all(S >= 0))
+                  all(S == t(S)) && all(S >= 0))
 
   n_liab <- nrow(S)
   C <- chol(S)
