@@ -29,6 +29,19 @@ load_assoc_results <- function(plink_file,
                                true_effects_file,
                                MAFs_file,
                                alpha) {
+  stopifnot("plink_file needs to be a valid file with extension '.assoc' or '.qassoc'" =
+              (file.exists(plink_file) &&
+                 (tools::file_ext(plink_file) == "assoc" ||
+                    tools::file_ext(plink_file) == "qassoc")),
+            "true_effects_file needs to a valid file with extension '.txt'" =
+              (file.exists(true_effects_file) &&
+                 tools::file_ext(true_effects_file) == "txt"),
+            "MAFs_file needs to be a valid file with extension '.txt'" =
+              (file.exists(MAFs_file) &&
+                 tools::file_ext(MAFs_file) == "txt"),
+            "alpha needs to be a number between 0 and 1" =
+              (is.numeric(alpha) && 0 < alpha && alpha < 1))
+  
   results <- tibble::tibble(
     data.table::fread(file = plink_file,
     header = TRUE))
