@@ -22,27 +22,44 @@ reference:
     contents:
     - testsim
     - family_simulation
+    - family_dist_simulaiton
+    - randomized_familiy_simulation
 
   - title: Analysis
     desc: >
       Perform statistical analysis to discover what can be causally inferred
-      from data.
+      from data. (tmp desc)
     contents:
     - starts_with("assign")
     - starts_with("analysis")
-    - calculate_cov
+  - subtitle: Import, calculate (tmp subtitle)
+    desc: >
+      Functionalities for importing data to the R session and performing a few
+      calculations in R. (write better desc)
+    contents:
+    - starts_with("load")
+    - starts_with("calculate")
+  - subtitle: Visualisations
+    desc: >
+      Once you have imported data to R, you can use these functions for
+      visualising stuff. The functions listed here can either return a ggplot
+      object or save an image of the plot to disk. Users familiar with the
+      ggplot2 package can manipulate the returned objects. (tmp desc)
+    contents:
+    - starts_with("plot")
 
   - title: Helper functions
     desc: >
       These are miscellaneous helper functions also exported by the package.
+      Write one line motivating their use.
     contents:
     - rmnorm
     - p_2_b
     - covmatrix
 
 articles:
-  - title: Detailed background
-    desc: this is for nerds
+  - title: Detailed background (tmp title)
+    desc: this is for nerds (write a desc)
     contents:
       - gibbs
       - liability-distribution
