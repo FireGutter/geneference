@@ -10,7 +10,9 @@
 #'
 #' @export
 calculate_error_types <- function(dataset, alpha, analysis_name) {
-  stopifnot("alpha needs to be a number between 0 and 1" =
+  stopifnot("dataset should have columns 'significant', 'causal' and 'bonferroni'" =
+              all(c("significant", "causal", "bonferroni") %in% colnames(dataset)),
+            "alpha needs to be a number between 0 and 1" =
               (is.numeric(alpha) && 0 < alpha && alpha < 1),
             "analysis_name needs to be a string" = is.character(analysis_name))
   
