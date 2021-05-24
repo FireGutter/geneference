@@ -2,7 +2,7 @@
 % Please edit documentation in R/family_dist_simulaiton.R
 \name{family_dist_simulaiton}
 \alias{family_dist_simulaiton}
-\title{Simulate genotypes with family history}
+\title{Simulation with varying family sizes}
 \usage{
 family_dist_simulaiton(n, m, q, hsq, k, dist, path = "")
 }

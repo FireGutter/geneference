@@ -2,7 +2,7 @@
 % Please edit documentation in R/randomized_familiy_simulation.R
 \name{randomized_familiy_simulation}
 \alias{randomized_familiy_simulation}
-\title{Simulate genotypes with ranomized family history}
+\title{Simulation with random family sizes}
 \usage{
 randomized_familiy_simulation(n, m, q, hsq, k, sib_fert, dist = 0, path = "")
 }
