@@ -20,7 +20,7 @@
 #' individual i, and a vector specifying whether individual i has the
 #' phenotype.
 #'
-#' @importFrom stats qnorm rnorm runif rbinom
+#' @import stats
 #'
 #' @export
 #' @examples

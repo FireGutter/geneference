@@ -29,7 +29,8 @@ condition <- function(S, a, person) {
 #' @param start_value initial value for the Gibbs sampler
 #' @param alpha significance level
 #'
-#' @importFrom stats pnorm qnorm rnorm runif sd
+#' @import stats
+#' 
 #' @noRd
 Gibbs <- function(conf, burn_in, start_value, alpha) {
   #Start_value needs to be a number

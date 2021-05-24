@@ -34,12 +34,8 @@
 #' that we want a total of 100 + 200 + 300 + 400 = 1000 individuals. Here 100
 #' individuals have 0 siblings, 200 has 1 sibling and so on...
 #'
-#' @importFrom data.table data.table as.data.table fwrite :=
-#' @import future.apply
-#' @import flock
-#' @import dplyr
-#' @import future
-#' @importFrom stats rbinom rmultinom rpois start qnorm rnorm runif
+#' @importFrom data.table :=
+#' @import stats
 #'
 #' @return Does not return any value, but prints the following five files to
 #' the \code{path} parameter specified in the function call:
@@ -63,7 +59,7 @@
 family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
   
   # Set worker nodes:
-  plan(multiprocess, workers = max(availableCores(logical = F) - 1, 1))
+  future::plan(future::multiprocess, workers = max(future::availableCores(logical = F) - 1, 1))
 
   parentmaker <- function(m, antal, MAFs){
     sapply(1:antal, function(i){rbinom(m, 2, MAFs)})
@@ -101,7 +97,7 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
 
   MAFs <- runif(m, 0.01, 0.49) #Find MAFs for children and parents
 
-  fwrite(as.data.table(MAFs), #Save the MAFs
+  data.table::fwrite(data.table::as.data.table(MAFs), #Save the MAFs
          paste0(path, "MAFs.txt", sep = ""),
          quote = F,
          sep = " ",
@@ -119,7 +115,7 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
   beta[causual_SNP] <- rnorm(q, 0, sqrt(hsq/q))
 
 
-  fwrite(as.data.table(beta), #Save the beta
+  data.table::fwrite(data.table::as.data.table(beta), #Save the beta
          paste0(path, "beta.txt", sep = ""),
          quote = F,
          sep = " ",
@@ -140,7 +136,7 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
   }
 
   #We create the header for the phenofile:
-  fwrite(as.data.table(rbind(header)),
+  data.table::fwrite(data.table::as.data.table(rbind(header)),
          paste0(path, "phenotypes.txt", sep = ""),
          quote = F,
          sep = " ",
@@ -160,13 +156,13 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
       snps_for_child <- rbinom(n = m, 2, 1/2)
       vals <- ifelse(child_mean == 1, 1, 0)
       child_mean[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_child, 1)
-      return(if_else(round_vec == 1, ceiling(child_mean), floor(child_mean)))}))
+      return(dplyr::if_else(round_vec == 1, ceiling(child_mean), floor(child_mean)))}))
 
 
 
     if(largest_sib != 0){
 
-      sibtable <- data.table("start" = numeric(splits[i]))
+      sibtable <- data.table::data.table("start" = numeric(splits[i]))
 
       if (amount_of_sibs[i] != 0) {
         for(j in 1:amount_of_sibs[i]){
@@ -176,7 +172,7 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
             snps_for_sibs <- rbinom(n = m, 2, 1/2)
             vals <- ifelse(sibs == 1, 1, 0)
             sibs[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_sibs, 1)
-            return(if_else(round_vec == 1, ceiling(sibs), floor(sibs)))}))
+            return(dplyr::if_else(round_vec == 1, ceiling(sibs), floor(sibs)))}))
 
           sib_lg <- sweep(sweep(sibs, 2, mu, FUN = "-"), 2, sigma, FUN = "/") %*% beta
           sib_liab <- sib_lg + rnorm(splits[i], 0, sqrt(1 - hsq))
@@ -219,7 +215,7 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
 
     locked = flock::lock(lock) # locks file
 
-    fwrite(as.data.table(to_ped(child, part = cusplits[i])), ## writes to locked file
+    data.table::fwrite(data.table::as.data.table(to_ped(child, part = cusplits[i])), ## writes to locked file
            paste0(path, "genotypes.ped", sep = ""),
            quote = F,
            sep = " ",
@@ -227,14 +223,14 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
            append = T)
 
     if (largest_sib != 0) {
-      fwrite(as.data.table(cbind(id, rep(1, splits[i]), c_pheno, c_lg, c_liab, p_pheno[seq(1, 2*splits[i], 2)], parlg[seq(1, 2*splits[i], 2)], parliab[seq(1, 2*splits[i], 2)], p_pheno[seq(2, 2*splits[i], 2)], parlg[seq(2, 2*splits[i], 2)], parliab[seq(2, 2*splits[i], 2)], sibtable)),
+      data.table::fwrite(data.table::as.data.table(cbind(id, rep(1, splits[i]), c_pheno, c_lg, c_liab, p_pheno[seq(1, 2*splits[i], 2)], parlg[seq(1, 2*splits[i], 2)], parliab[seq(1, 2*splits[i], 2)], p_pheno[seq(2, 2*splits[i], 2)], parlg[seq(2, 2*splits[i], 2)], parliab[seq(2, 2*splits[i], 2)], sibtable)),
              paste0(path, "phenotypes.txt", sep = ""),
              quote = F,
              sep = " ",
              col.names = F,
              append = T)}
     else {
-      fwrite(as.data.table(cbind(id, rep(1, splits[i]), c_pheno, c_lg, c_liab, p_pheno[seq(1, 2*splits[i], 2)], parlg[seq(1, 2*splits[i], 2)], parliab[seq(1, 2*splits[i], 2)], p_pheno[seq(2, 2*splits[i], 2)], parlg[seq(2, 2*splits[i], 2)], parliab[seq(2, 2*splits[i], 2)])),
+      data.table::fwrite(data.table::as.data.table(cbind(id, rep(1, splits[i]), c_pheno, c_lg, c_liab, p_pheno[seq(1, 2*splits[i], 2)], parlg[seq(1, 2*splits[i], 2)], parliab[seq(1, 2*splits[i], 2)], p_pheno[seq(2, 2*splits[i], 2)], parlg[seq(2, 2*splits[i], 2)], parliab[seq(2, 2*splits[i], 2)])),
              paste0(path, "phenotypes.txt", sep = ""),
              quote = F,
              sep = " ",

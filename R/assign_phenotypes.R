@@ -17,7 +17,6 @@
 #' where configuration, configuration class and posterior mean genetic
 #' liability is appended to the end of \code{pheno_file}.
 #'
-#' @importFrom magrittr `%>%`
 #' @import utils
 #'
 #' @export
