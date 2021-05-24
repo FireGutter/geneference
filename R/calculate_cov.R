@@ -8,8 +8,7 @@
 #' @param file path to the file that should be read.
 #' @param sib number of siblings. Default is 0.
 #'
-#' @importFrom data.table as.data.table fread
-#' @importFrom stats cov
+#' @import stats
 #'
 #' @return A covariance matrix using the data from the selected file. All
 #' entries in the matrix are multiplied by 100.
@@ -20,7 +19,8 @@
 calculate_cov <- function(file, sib = 0) {
   stopifnot("sib needs to be a non-negative integer" =
             (sib >= 0 && class(sib) == "numeric" && round(sib) == sib))
-  ph <- fread(file)
+  
+  ph <- data.table::fread(file)
   ph <- as.data.frame(ph)
   indexes <- c(c(4:5, 8), c(seq(11, 11 + sib * 3, by = 3)))
   round(100 * cov(ph[, indexes]))

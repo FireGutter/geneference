@@ -41,13 +41,6 @@
 #' individuals has. Note that in this case, no dist has to be specified, since
 #' the function overwrites it with the range of the simulated siblings.
 #'
-#' @importFrom data.table data.table as.data.table fwrite :=
-#' @import future.apply
-#' @import flock
-#' @import dplyr
-#' @import future
-#' @importFrom stats rbinom rmultinom rpois start
-#'
 #' @return a list where first entry is the distribution of the simulated individuals
 #' and the second entry is the number of siblings (dist) for these individuals.
 #' the function also call family_dist_simulaiton that prints the following five files to
@@ -67,8 +60,10 @@
 #' data.
 #' * genotypes.ped - the simulated genotypes in a PLINK-readable format.
 #'
-#' @export
+#' @import stats
 #'
+#' @export
+
 randomized_familiy_simulation <- function(n, m, q, hsq, k, sib_fert, dist = 0, path = "") {
 
 

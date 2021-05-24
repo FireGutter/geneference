@@ -2,9 +2,10 @@
 #' @title Multivariate normal distributions
 #' @description Simulate random values from a multivariate normal distribution.
 #'
-#'
 #' @param S a valid covariance matrix.
 #' @param n number of random vectors that is to be simulated.
+#'
+#' @import stats
 #'
 #' @return Returns a matrix with n rows and i columns, where i is determined by
 #' the size of the specified covariance matrix.

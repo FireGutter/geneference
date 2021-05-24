@@ -11,13 +11,7 @@
 #' @param k is the prevalence of trait parameter
 #' @param path is the file path, where the files will be stored
 #'
-#' @import parallel
-#' @importFrom data.table as.data.table fwrite
-#' @import future.apply
-#' @import flock
-#' @import dplyr
-#' @import future
-#' @importFrom stats rbinom
+#' @import stats
 #'
 #' @return This function returns five files: Three txt files: Beta, MAFs and phenotypes, a genotypes MAP file and a genotypes PED file.
 #'
@@ -64,7 +58,7 @@ individualsim <- function(n, m, q, hsq, k, path){
 
   simulation <- function(n, m, MAFs){
     #Detecting the number of cores of ones computer and making one core available
-    cores <- detectCores(logical = FALSE)-1
+    cores <- parallel::detectCores(logical = FALSE)-1
 
     #If the cores are creater than 1 then we check if n is a multiple of cores
     if (cores>1){
@@ -76,14 +70,14 @@ individualsim <- function(n, m, q, hsq, k, path){
     }
 
     #Making a cluster of the cores
-    cl <- makeCluster(cores)
+    cl <- parallel::makeCluster(cores)
     #Exporting the cores to the function we want them to run on
-    clusterExport(cl, c("SNP_simulation"))
+    parallel::clusterExport(cl, c("SNP_simulation"))
 
     #Making the multiprocessing simulation (note: because of the way rbindlist works we have to switch rows and columns when inputting it to 'SNP_simulation'). Can maybe also use bind_cols() instead
-    geno <- clusterCall(cl, function(persons, SNPs, MAF) SNP_simulation(persons, SNPs, MAFs), persons = (n/cores), SNPs = m, MAF = MAFs)
+    geno <- parallel::clusterCall(cl, function(persons, SNPs, MAF) SNP_simulation(persons, SNPs, MAFs), persons = (n/cores), SNPs = m, MAF = MAFs)
 
-    stopCluster(cl)
+    parallel::stopCluster(cl)
 
     #binding it all together
     return(t(dplyr::bind_cols(geno)))
@@ -96,7 +90,7 @@ individualsim <- function(n, m, q, hsq, k, path){
 
   parts <- ceiling((n*m)/10000000) #varaiable to control how many parts we divide the problem into
 
-  fwrite(as.data.table(MAFs),
+  data.table::fwrite(data.table::as.data.table(MAFs),
          paste(path,"MAFs.txt",sep = ""),
          quote = F,
          sep = " ",
@@ -108,14 +102,14 @@ individualsim <- function(n, m, q, hsq, k, path){
   beta <- matrix(0, nrow = m, ncol = 1)
   beta[causual_SNP] <- rnorm(q, 0, sqrt(hsq/q))
 
-  fwrite(as.data.table(beta),
+  data.table::fwrite(data.table::as.data.table(beta),
          paste(path,"beta.txt",sep = ""),
          quote = F,
          sep = " ",
          col.names = F,
          append = T)
 
-  fwrite(as.data.table(rbind(c("FID", "IID", "pheno"))),
+  data.table::fwrite(data.table::as.data.table(rbind(c("FID", "IID", "pheno"))),
          paste(path,"phenotypes.txt", sep = ""),
          quote = F,
          sep = " ",
@@ -149,14 +143,14 @@ individualsim <- function(n, m, q, hsq, k, path){
 
     id <- matrix(1:(batch_size))+(batch_size)*(i-1)
 
-    fwrite(as.data.table(to_ped(persons, (i-1) * (batch_size))), ## writes to locked file
+    data.table::fwrite(data.table::as.data.table(to_ped(persons, (i-1) * (batch_size))), ## writes to locked file
            paste(path,"genotypes.ped", sep = ""),
            quote = F,
            sep = " ",
            col.names = F,
            append = T)
 
-    fwrite(as.data.table(cbind(id,rep(1,batch_size),y)),
+    data.table::fwrite(data.table::as.data.table(cbind(id,rep(1,batch_size),y)),
            paste(path,"phenotypes.txt",sep = ""),
            quote = F,
            sep = " ",
