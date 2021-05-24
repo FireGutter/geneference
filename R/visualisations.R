@@ -123,7 +123,7 @@ plot_manhattan <- function(dataset,
                            save_plot_path = FALSE,
                            plot_filename = "manhattan_plot.png") {
   data_plt <- dataset %>%
-    filter(P < 0.05)
+    dplyr::filter(P < 0.05)
   m <- nrow(dataset)
   plt <- ggplot2::ggplot(data_plt) +
     ggplot2::geom_point(mapping = ggplot2::aes(SNP,
@@ -171,7 +171,7 @@ plot_estimates_vs_true <- function(dataset,
                                    save_plot_path = FALSE,
                                    plot_filename = "beta_comparison.png") {
   tmpdataacc <- dataset %>%
-    filter(significant)
+    dplyr::filter(significant)
 
   plt <- ggplot2::ggplot(tmpdataacc) +
     ggplot2::geom_point(mapping = ggplot2::aes(BETA,
