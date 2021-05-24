@@ -56,11 +56,29 @@
 #'
 #' @export
 
-sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
-  
-  
+family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
+  stopifnot("n and dist needs to have same length" = length(n) == length(dist),
+            "n needs to be a vector of positive integers" =
+              (all(n > 0) && is.numeric(n) && all(n == round(n))),
+            "m needs to be an integer greater than 0" =
+              (m > 0 && class(m) == "numeric" && m == round(m)),
+            "q needs to be an integer greater than 0 and smaller than m" =
+              (q > 0 && class(q) == "numeric" && q == round(q) && q <= m),
+            "hsq needs to be a number between 0 and 1" =
+              (hsq > 0 && hsq < 1 && class(hsq) == "numeric"),
+            "k needs to be a number between 0 and 1" =
+              (k > 0 && k < 1 && class(k) == "numeric"),
+            "dist needs to be a vector of non-negative integers" =
+              (all(dist >= 0) && is.numeric(dist) && all(dist == round(dist))),
+            "path needs to be default or a valid path ending with '/' or '\\\\'"
+            = (path == "" || (dir.exists(path))
+               && (substr(path, nchar(path), nchar(path)) == "/" ||
+                     substr(path, nchar(path), nchar(path)) == "\\")))
+
+
+
   path = path_validation(path)
-  
+
   # Set worker nodes:
   future::plan(future::multiprocess, workers = max(future::availableCores(logical = F) - 1, 1))
 
@@ -140,7 +158,7 @@ sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
   else {
     header <- c(header, "line_pheno")
   }
-  
+
   #We create the header for the phenofile:
   data.table::fwrite(data.table::as.data.table(rbind(header)),
          paste0(path, "phenotypes.txt", sep = ""),
