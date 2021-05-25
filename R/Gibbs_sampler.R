@@ -50,31 +50,36 @@ generate_pmgl <- function(conf, burn_in, start_value, alpha) {
   
   i <- 0
   while (TRUE) {
+    #Batch sampling with sample size being burn_in size
     for (s in 1:burn_in) {
       i <- i + 1
+      #Updating each of the liabilities
       for (j in 1:n) {
+        #Finding conditional mean and variance
         param <- condition(S, matrix(liabs, nrow = n, ncol = 1), j)
         mu <- param[1]
         var <- param[2]
+        #If genetic liability, then sample from normal distribution
         if (j == 1) {
           liabs[j] <- rnorm(1, mu, sqrt(var))
-        } else{
+        } else{ #Else make transformation to sample from truncated distribution
           crit_U <- pnorm(crit, mu, sqrt(var))
+          #If case, then sample from critical value and above
           if (conf_list[[1]][j - 1] == "2") {
             U <- runif(1, crit_U, 1)
-          } else{
+          } else{ #Else, sample from critical value and below
             U <- runif(1, 0, crit_U)
           }
           liabs[j] <- qnorm(U, mu, sqrt(var))
         }
       }
+      #If burn in is over, then save genetic liability and check SEM
       if (i > burn_in) {
         genliabs[i - burn_in] <- liabs[1]
-      }
-    }
-    if (i > burn_in) {
-      if (sd(genliabs[1:(i - burn_in), ]) / sqrt(i - burn_in) < 0.01) {
-        return(mean(genliabs[1:(i - burn_in)]))
+        #If SEM is less than 0.01, then return mean of sampled genetic data
+        if (sd(genliabs[1:(i - burn_in), ]) / sqrt(i - burn_in) < 0.01) {
+          return(mean(genliabs[1:(i - burn_in)]))
+        }
       }
     }
   }
