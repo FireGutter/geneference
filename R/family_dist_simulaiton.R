@@ -60,6 +60,9 @@
 
 family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
   
+  
+  path = path_validation(path)
+  
   # Set worker nodes:
   future::plan(future::multiprocess, workers = max(future::availableCores(logical = F) - 1, 1))
 

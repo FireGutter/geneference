@@ -51,6 +51,7 @@
 #' family_simulation(n = 10000, m = 10000, q = 100, hsq = 0.5, k = 0.05, sib = 3, path = "")
 
 family_simulation <- function(n, m, q, hsq, k, sib = 0, path = "") {
+  
   stopifnot("n needs to be an integer greater than 0" =
               (n > 0 && class(n) == "numeric" && n == round(n)),
             "m needs to be an integer greater than 0" =
@@ -68,6 +69,8 @@ family_simulation <- function(n, m, q, hsq, k, sib = 0, path = "") {
                && (substr(path, nchar(path), nchar(path)) == "/" ||
                      substr(path, nchar(path), nchar(path)) == "\\")))
 
+  path = path_validation(path)
+  
   # Set worker nodes:
   future::plan(future::multiprocess, workers = max(future::availableCores(logical = F) - 1, 1))
   

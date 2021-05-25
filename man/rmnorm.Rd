@@ -18,3 +18,6 @@ the size of the specified covariance matrix.
 \description{
 Simulate random values from a multivariate normal distribution.
 }
+\examples{
+rmnorm(n = 10, S = covmatrix(sib = 0, hsq = 0.5))
+}
