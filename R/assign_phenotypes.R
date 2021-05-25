@@ -29,12 +29,13 @@ assign_ltfh_phenotype <- function(pheno_file,
                                   sibs) {
 
   stopifnot("pheno_file needs to be a valid file" = file.exists(pheno_file),
-            "sibs needs to be an integer of size 0 or more" =
-              (is.numeric(sibs) && sibs == round(sibs) && 0 <= sibs),
             "output_file needs to be a valid file path ending with '.txt'" =
               (tools::file_ext(output_file) == "txt"),
             "alpha needs to be a number between 0 and 1" =
-              (is.numeric(alpha) && 0 < alpha && alpha < 1))
+              (is.numeric(alpha) && 0 < alpha && alpha < 1),
+            "sibs needs to be an integer of size 0 or more" =
+              (missing(sibs) ||
+                 (is.numeric(sibs) && sibs == round(sibs) && 0 <= sibs)))
 
   # import phenotypes.
   pheno <- load_phenotypes(pheno_file)
@@ -134,8 +135,8 @@ assign_GWAX_phenotype <- function(pheno_file,
             "output_file needs to be a valid file path ending with '.txt'" =
               (tools::file_ext(output_file) == "txt"),
             "sibs needs to be an integer of size 0 or more" =
-              (class(sibs) == "numeric" && sibs == round(sibs) && 0 <= sibs))
-
+              (missing(sibs) ||
+                 (is.numeric(sibs) && sibs == round(sibs) && 0 <= sibs)))
 
   # Read the file
   pheno <- load_phenotypes(pheno_file)
