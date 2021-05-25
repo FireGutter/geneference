@@ -4,6 +4,6 @@
 #'
 #' @return integer
 #' @export
-n_sibs <- function(pheno_file) {
-  return(length(grep("sib", colnames(data.table::fread(pheno_file)))) / 3)
+n_sibs <- function(pheno) {
+  return(length(grep("sib", colnames(pheno))) / 3)
 }
