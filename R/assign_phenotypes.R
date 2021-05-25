@@ -33,7 +33,7 @@ assign_ltfh_phenotype <- function(pheno_file,
               (tools::file_ext(output_file) == "txt"),
             "alpha needs to be a number between 0 and 1" =
               (is.numeric(alpha) && 0 < alpha && alpha < 1),
-            "sibs needs to be an integer of size 0 or more" =
+            "sibs needs to be a non-negative integer" =
               (missing(sibs) ||
                  (is.numeric(sibs) && sibs == round(sibs) && 0 <= sibs)))
 
