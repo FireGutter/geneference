@@ -33,7 +33,7 @@ assign_ltfh_phenotype <- function(pheno_file,
   #import phenotypes.
   pheno <- tibble::tibble(data.table::fread(pheno_file))
   
-  if (missing(sibs)){
+  if (missing(sibs)){  # if sibs isn't specified we just assign the max number of sibs.
     sibs <- n_sibs(pheno)
   }
 
