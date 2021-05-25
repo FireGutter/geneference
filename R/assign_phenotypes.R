@@ -134,7 +134,7 @@ assign_GWAX_phenotype <- function(pheno_file,
   stopifnot("pheno_file needs to be a valid file" = file.exists(pheno_file),
             "output_file needs to be a valid file path ending with '.txt'" =
               (tools::file_ext(output_file) == "txt"),
-            "sibs needs to be an integer of size 0 or more" =
+            "sibs needs to be a non-negative integer" =
               (missing(sibs) ||
                  (is.numeric(sibs) && sibs == round(sibs) && 0 <= sibs)))
 
