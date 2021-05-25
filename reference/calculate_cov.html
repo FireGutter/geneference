@@ -167,25 +167,25 @@ validate that covariances of data are as expected." />
 validate that covariances of data are as expected.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>calculate_cov</span><span class='op'>(</span><span class='va'>file</span>, sib <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>calculate_cov</span><span class='op'>(</span><span class='va'>pheno</span>, <span class='va'>sibs</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>file</th>
-      <td><p>path to the file that should be read.</p></td>
+      <th>pheno</th>
+      <td><p>dataset with phenotypes, as loaded by <code><a href='load_phenotypes.html'>load_phenotypes()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>sib</th>
-      <td><p>number of siblings. Default is 0.</p></td>
+      <th>sibs</th>
+      <td><p><em>optional:</em> number of siblings to be included in covariance
+matrix. Defaults to using all of an individual's siblings.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A covariance matrix using the data from the selected file. All
-entries in the matrix are multiplied by 100.</p>
+    <p>A covariance matrix using the data from the given dataset.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
