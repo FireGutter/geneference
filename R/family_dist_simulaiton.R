@@ -55,8 +55,6 @@
 #' * genotypes.ped - the simulated genotypes in a PLINK-readable format.
 #'
 #' @export
-#' @examples
-#' family_dist_simulaiton(n = c(100, 200, 300, 400), m = 10000, q = 100, hsq = 0.5, k = 0.05, dist = c(0, 1, 2, 3), path = "")
 
 family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
   

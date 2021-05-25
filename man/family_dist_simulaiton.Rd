@@ -73,6 +73,3 @@ function is implemented) in order to convert the generated .ped to the
 smaller .bed format.
 }
 
-\examples{
-family_dist_simulaiton(n = c(100, 200, 300, 400), m = 10000, q = 100, hsq = 0.5, k = 0.05, dist = c(0, 1, 2, 3), path = "")
-}

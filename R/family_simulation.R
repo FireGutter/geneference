@@ -47,8 +47,7 @@
 #' * genotypes.ped - the simulated genotypes in a PLINK-readable format.
 #'
 #' @export
-#' @examples
-#' family_simulation(n = 10000, m = 10000, q = 100, hsq = 0.5, k = 0.05, sib = 3, path = "")
+
 
 family_simulation <- function(n, m, q, hsq, k, sib = 0, path = "") {
   
