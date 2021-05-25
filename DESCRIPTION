@@ -9,13 +9,16 @@ Authors@R: c(
             email = "jbsteenstrup@post.au.dk"),
     person("Rasmus",
             "Brostrøm Jensen",
-            role = "aut"),
+            role = c("aut", "cre"),
+            email = "201706904@post.au.dk"),
     person("Magnus",
             "Conradsen",
-            role = "aut"),
+            role = c("aut", "cre"),
+            email = "bigmag@post.au.dk"),
     person("Marc",
             "Timmer Jensen",
-            role = "aut"))
+            role = c("aut", "cre"),
+            email = "201907421@post.au.dk"))
 Description: This package has the purpose of opening the door to the world of GWAS
     and the new tehnique of LT-FH. This package can be used to simulate data.
     Some of the backbone of this package is PLINK, which is a hole other program.
