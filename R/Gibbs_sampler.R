@@ -32,7 +32,7 @@ condition <- function(S, a, person) {
 #' @import stats
 #' 
 #' @noRd
-Gibbs <- function(conf, burn_in, start_value, alpha) {
+generate_pmgl <- function(conf, burn_in, start_value, alpha) {
   #Start_value needs to be a number
   #Conf needs to be a string consisting of only 1's and 2's
   #burn_in needs to be an integer
@@ -48,7 +48,6 @@ Gibbs <- function(conf, burn_in, start_value, alpha) {
   
   crit <- qnorm(1 - alpha)
   
-  #Sampling until sem is low enough
   i <- 0
   while (TRUE) {
     for (s in 1:burn_in) {
