@@ -75,7 +75,7 @@ assign_ltfh_phenotype <- function(pheno_file,
 
   # Table of configuration classes and their posterior mean genetic liability
   table_2 <- dplyr::distinct(table_1, conf_class, .keep_all = TRUE) %>%
-    dplyr::mutate(LTFH_pheno = Gibbs(conf = LTFH_key,
+    dplyr::mutate(LTFH_pheno = generate_pmgl(conf = LTFH_key,
                                      burn_in = 200,
                                      start_value = 3,
                                      alpha = alpha)) %>%
