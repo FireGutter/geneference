@@ -4,16 +4,16 @@
 \alias{calculate_cov}
 \title{Calculate covariances between liabilities}
 \usage{
-calculate_cov(file, sib = 0)
+calculate_cov(pheno, sibs)
 }
 \arguments{
-\item{file}{path to the file that should be read.}
+\item{pheno}{dataset with phenotypes, as loaded by \code{load_phenotypes()}.}
 
-\item{sib}{number of siblings. Default is 0.}
+\item{sibs}{\emph{optional:} number of siblings to be included in covariance
+matrix. Defaults to using all of an individual's siblings.}
 }
 \value{
-A covariance matrix using the data from the selected file. All
-entries in the matrix are multiplied by 100.
+A covariance matrix using the data from the given dataset.
 }
 \description{
 Compute a sample covariance matrix. This can be used to
