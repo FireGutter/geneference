@@ -4,7 +4,7 @@
 \alias{assign_GWAX_phenotype}
 \title{Create case-control status by proxy}
 \usage{
-assign_GWAX_phenotype(pheno_file, output_file = pheno_file, sibs = 0)
+assign_GWAX_phenotype(pheno_file, output_file = pheno_file, sibs)
 }
 \arguments{
 \item{pheno_file}{path to file with information on phenotype status, with
@@ -14,13 +14,15 @@ geneference.}
 \item{output_file}{path of output file. This is by default the same as
 \code{pheno_file}.}
 
-\item{sibs}{number of siblings in the families. If family size varies,
-specify the number of siblings in the largest family.}
+\item{sibs}{\emph{optional:} specify number of siblings to use for proxy.
+Defaults to using all of an individual's siblings.}
 }
 \value{
 Does not return anything, but writes \code{output_file} to disk,
 where the GWAX phenotype column is appended to the end of \code{pheno_file}.
 }
 \description{
-to be written
+to be written. Note: sibs argument can be used for using a
+dataset with many siblings as a dataset with fewer siblings. Include this
+in \code{vignette("geneference")}.
 }
