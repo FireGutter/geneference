@@ -15,8 +15,8 @@
 #' @export
 calculate_cov <- function(pheno, sibs) {
   stopifnot("sib needs to be a non-negative integer" =
-            (missing(sibs) || (sibs >= 0 && class(sibs) == "numeric"
-                                 && round(sibs) == sibs)))
+            (missing(sibs) ||
+               (sibs >= 0 && is.numeric(sibs) && round(sibs) == sibs)))
 
   # If sibs isn't specified we just assign the max number of siblings in data
   if (missing(sibs)) {
