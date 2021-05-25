@@ -1,11 +1,11 @@
-#' Conditional means and covariances of MVN
+#' @title Conditional means and covariances of MVN
 #'
-#' Helper function for our Gibbs sampler.
+#' @description Helper function for our Gibbs sampler.
 #'
-#' @param S covariance matrix of a multivariate normal distribution
-#' @param a numeric vector of liabilities
+#' @param S covariance matrix of a multivariate normal distribution.
+#' @param a numeric vector of liabilities.
 #' @param person integer indicating which liability (index) we want to
-#' calculate the distribution for, conditional on the other liabilities
+#' calculate the distribution for, conditional on the other liabilities.
 #'
 #' @noRd
 condition <- function(S, a, person) {
@@ -21,13 +21,13 @@ condition <- function(S, a, person) {
   return(c(cond_mu, cond_S))
 }
 
-#' Gibbs sampler for truncated normal distribution
+#' @title Gibbs sampler for truncated normal distribution
 #'
-#' @param conf configuration to calculate posterior mean genetic liability for
-#' @param burn_in number of iterations before burn in of the sampler is
-#' considered to be completed
-#' @param start_value initial value for the Gibbs sampler
-#' @param alpha significance level
+#' @param conf configuration to calculate posterior mean genetic liability for.
+#' @param burn_in number of iterations before burn in of the sampler is.
+#' considered to be completed.
+#' @param start_value initial value for the Gibbs sampler.
+#' @param alpha significance level.
 #'
 #' @import stats
 #' 
