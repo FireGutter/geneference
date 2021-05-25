@@ -55,6 +55,8 @@
 #' * genotypes.ped - the simulated genotypes in a PLINK-readable format.
 #'
 #' @export
+#' @examples
+#' family_dist_simulaiton(n = c(100, 200, 300, 400), m = 10000, q = 100, hsq = 0.5, k = 0.05, dist = c(0, 1, 2, 3), path = "")
 
 family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
   
@@ -68,7 +70,7 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
   largest_sib <- max(dist)
   values <- numeric(length(dist))
 
-  for (i in 1:length(dist)){
+  for (i in 1:length(dist)) {
     values[i] <- ceiling((n[i]*m)/10000000)
   }
 
@@ -81,7 +83,7 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
   lower_bound <- 1
   upper_bound <- 0
 
-  for(i in 1:length(values)){
+  for(i in 1:length(values)) {
     x <- values[i]
     pers <- n[i]
     upper_bound <- upper_bound + x
@@ -125,9 +127,9 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
 
   header <- c("FID", "IID", "pheno", "child_lg", "child_liab", "par1_pheno", "par1_lg", "par1_liab", "par2_pheno", "par2_lg", "par2_liab")
 
-  if(largest_sib != 0){
+  if(largest_sib != 0) {
     sib_header <- numeric(3*largest_sib)
-    for(i in 0:(largest_sib - 1)){
+    for(i in 0:(largest_sib - 1)) {
       sib_header[3 * i + 1] <- paste0("sib", i + 1, "_pheno", sep = "")
       sib_header[3 * i + 2] <- paste0("sib", i + 1, "_lg", sep = "")
       sib_header[3 * i + 3] <- paste0("sib", i + 1, "_liab", sep = "")
@@ -150,7 +152,7 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
 
     parentmatrix <- parentmaker(m = m, antal = 2*splits[i], MAFs)
 
-    child <- t(sapply(seq(1, ncol(parentmatrix), 2), function(i){
+    child <- t(sapply(seq(1, ncol(parentmatrix), 2), function(i) {
       child_mean <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
       round_vec <- rbinom(n = m, 1, 1/2)
       snps_for_child <- rbinom(n = m, 2, 1/2)
@@ -160,7 +162,7 @@ family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
 
 
 
-    if(largest_sib != 0){
+    if(largest_sib != 0) {
 
       sibtable <- data.table::data.table("start" = numeric(splits[i]))
 

@@ -41,8 +41,6 @@ testsim <- function(n, m, q, hsq, k, to_ped = T) {
               (k > 0 && k < 1 && class(k) == "numeric"),
             "to_ped needs to be logical" = class(to_ped) == "logical")
 
-  h <- sqrt(hsq)
-
   # Calculate the Minor Allele Frequency. All individuals have the same MAFs.
   MAFs <- runif(m, 0.01, 0.49)
 
@@ -51,7 +49,7 @@ testsim <- function(n, m, q, hsq, k, to_ped = T) {
 
   # Create the effect-sizes for the causal SNPs
   beta <- matrix(0, nrow = m, ncol = 1)
-  beta[causual_SNP] <- rnorm(q, 0, h / sqrt(q))
+  beta[causual_SNP] <- rnorm(q, 0, sqrt(hsq / q))
 
   # Determine number of risk-allelles for each genotype
   persons <- t(sapply(1:n, function(y) rbinom(m, 2, MAFs)))
@@ -62,7 +60,7 @@ testsim <- function(n, m, q, hsq, k, to_ped = T) {
   # Calculate the genetic liabilities
   lg <- sweep(sweep(persons, 2, mu, FUN = "-"), 2, sigma, FUN = "/") %*% beta
 
-  liability <- lg + rnorm(n, 0, sqrt(1 - h^2)) # Find the full liabilities
+  liability <- lg + rnorm(n, 0, sqrt(1 - hsq)) # Find the full liabilities
 
   critical <- qnorm(1 - k) # Find the threshold of disease liability
 
