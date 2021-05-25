@@ -35,7 +35,7 @@ assign_ltfh_phenotype <- function(pheno_file,
 
   # helper function for determining phenotype status based on liabilities
   onetwo <- function(x) {
-    dplyr::if_else(x >= crit, 2, 1)
+    dplyr::if_else(x != -9, dplyr::if_else(x >= crit, "2", "1"), "")
   }
 
   # helper function for finding equivalent configurations
