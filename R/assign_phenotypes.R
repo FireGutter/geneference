@@ -109,8 +109,7 @@ assign_ltfh_phenotype <- function(pheno_file,
 #' geneference.
 #' @param output_file path of output file. This is by default the same as
 #' \code{pheno_file}.
-#' @param sibs number of siblings in the families. If family size varies,
-#' specify the number of siblings in the largest family.
+#' @param sibs number of siblings in the families. optional. ÆNDRES
 #'
 #'
 #' @return Does not return anything, but writes \code{output_file} to disk,
@@ -119,7 +118,7 @@ assign_ltfh_phenotype <- function(pheno_file,
 #' @export
 assign_GWAX_phenotype <- function(pheno_file,
                                   output_file = pheno_file,
-                                  sibs = 0) {
+                                  sibs) {
 
   stopifnot("pheno_file needs to be a valid file" = file.exists(pheno_file),
             "output_file" = TRUE,  # fix det Rasmus
@@ -129,6 +128,10 @@ assign_GWAX_phenotype <- function(pheno_file,
   # Read the file
   pheno <- tibble::tibble(data.table::fread(pheno_file))
 
+  if (missing(sibs)){  # if sibs isn't specified we just assign the max number of sibs.
+    sibs <- n_sibs(pheno)
+  }
+  
   # Columns with phenotypes for child, parent 1 and parent 2
   pheno_cols <- seq(3, 10, 3)
 
