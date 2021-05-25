@@ -6,7 +6,7 @@
 #'
 #'
 #' @param file path to the file that should be read.
-#' @param sib number of siblings. Default is 0.
+#' @param sibs number of siblings. optional. ÆNDRERS
 #'
 #' @import stats
 #'
@@ -16,12 +16,18 @@
 #' @export
 
 
-calculate_cov <- function(file, sib = 0) {
+calculate_cov <- function(file, sibs) {
   stopifnot("sib needs to be a non-negative integer" =
-            (sib >= 0 && class(sib) == "numeric" && round(sib) == sib))
+            (!exists("sibs") || (sibs >= 0 && class(sibs) == "numeric" && round(sibs) == sibs)))
   
   ph <- data.table::fread(file)
   ph <- as.data.frame(ph)
-  indexes <- c(c(4:5, 8), c(seq(11, 11 + sib * 3, by = 3)))
-  round(100 * cov(ph[, indexes]))
+  
+  if (missing(sibs)){  # if sibs isn't specified we just assign the max number of sibs.
+    sibs <- n_sibs(ph)
+  }
+  
+  ph[ph == -9] <- NA
+  indexes <- c(c(4:5, 8), c(seq(11, 11 + sibs * 3, by = 3)))
+  round(100 * cov(ph[, indexes], use = "complete.obs"))
 }
