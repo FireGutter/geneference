@@ -1,5 +1,5 @@
 #'
-#' @title individualsim
+#' @title sim_no_family
 #'
 #' @description This function simulate data for individual enteties (the data for the parents)
 #' is unknown.
@@ -19,7 +19,7 @@
 
 
 
-individualsim <- function(n, m, q, hsq, k, path){
+sim_no_family <- function(n, m, q, hsq, k, path){
   stopifnot("n needs to be an integer greater than 0" =
               (n > 0 && class(n) == "numeric" && n == round(n)),
             "m needs to be an integer greater than 0" =
@@ -111,7 +111,7 @@ individualsim <- function(n, m, q, hsq, k, path){
          col.names = F,
          append = T)
 
-  data.table::fwrite(data.table::as.data.table(rbind(c("FID", "IID", "pheno"))),
+  data.table::fwrite(data.table::as.data.table(rbind(c("FID", "IID", "pheno", "line_pheno"))),
          paste(path,"phenotypes.txt", sep = ""),
          quote = F,
          sep = " ",
@@ -141,7 +141,8 @@ individualsim <- function(n, m, q, hsq, k, path){
 
     critical <- qnorm(1-k)
 
-    y <- sapply(liability, function(x) ifelse(x>critical,1,0))
+    y <- sapply(liability, function(x) ifelse(x>critical, 2, 1))
+    line_pheno <- y + 1
 
     id <- matrix(1:(batch_size))+(batch_size)*(i-1)
 
@@ -152,7 +153,7 @@ individualsim <- function(n, m, q, hsq, k, path){
            col.names = F,
            append = T)
 
-    data.table::fwrite(data.table::as.data.table(cbind(id,rep(1,batch_size),y)),
+    data.table::fwrite(data.table::as.data.table(cbind(id,rep(1,batch_size), y, line_pheno)),
            paste(path,"phenotypes.txt",sep = ""),
            quote = F,
            sep = " ",

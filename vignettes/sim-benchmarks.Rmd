@@ -1,0 +1,19 @@
+---
+title: "Expected running times and sizes of simulations"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Expected running times and sizes of simulations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette lists a few runs of different simulation functions to give an idea of what running times are to be expected and how much disk space is required for different sizes of simulations.
+
+I suggest that we make a table, either with markdown formatting or some use of tibbles and kable.
