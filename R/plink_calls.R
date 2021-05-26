@@ -20,7 +20,7 @@ p_2_b <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=TRUE) {
   stopifnot("ped_file needs to be a valid file without extension" =
               file.exists(paste0(ped_file, ".ped")) 
               && file.exists(paste0(ped_file, ".map")),
-            "bed_file needs to be a valid file" =
+            "bed_file needs to be a valid file without extension" =
               (tools::file_ext(output_file) == ""),
             "del needs to be either TRUE or FALSE" = is.logical(del),
             "plink_path needs to be a valid path to plink" =
