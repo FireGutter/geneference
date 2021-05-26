@@ -27,12 +27,12 @@ p_2_b <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=TRUE) {
               (plink_path == TRUE || file.exists(paste0(plink_path, "/plink.exe"))))
 
   if (plink_path != TRUE) {
-    tmp_path <- paste0("SET PATH=", path_to_path(plink_path), ";")
+    tmp_path <- paste0("SET PATH=", quote_path(plink_path), ";")
   } else {
     tmp_path <- ""
   }
-  shell(paste(tmp_path, "&&", "plink --file", path_to_path(ped_file),
-               "--make-bed --out", path_to_path(bed_file)))
+  shell(paste(tmp_path, "&&", "plink --file", quote_path(ped_file),
+               "--make-bed --out", quote_path(bed_file)))
 
   if (del == TRUE) {
     unlink(paste0(ped_file, ".ped"))
@@ -91,7 +91,7 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
 
 
   if (plink_path != TRUE) {
-    tmp_path <- paste0("SET PATH=", path_to_path(plink_path), ";")
+    tmp_path <- paste0("SET PATH=", quote_path(plink_path), ";")
   } else{
     tmp_path <- ""
   }
@@ -102,10 +102,10 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
   }
   geno_file <- file_path_sans_ext(geno_file) #NOTE IF NOT NEW CONVENTION: this is from tools
   plink_command <- paste(tmp_path, "&&",
-                         "plink", file_type, path_to_path(geno_file),
-                         "--pheno", path_to_path(pheno_file),
+                         "plink", file_type, quote_path(geno_file),
+                         "--pheno", quote_path(pheno_file),
                          "--pheno-name", pheno_name,
-                         "--out", path_to_path(out_file),
+                         "--out", quote_path(out_file),
                          "--assoc")
 
   shell(cmd = plink_command)
@@ -160,7 +160,7 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
               (is.numeric(hsq) && length(hsq) == 1 && 0 < hsq && hsq < 1))
 
   if (plink_path != TRUE) {
-    tmp_path <- paste0("SET PATH=", path_to_path(plink_path), ";")
+    tmp_path <- paste0("SET PATH=", quote_path(plink_path), ";")
   } else{
     tmp_path <- ""
   }
@@ -171,10 +171,10 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
   }
   geno_file <- file_path_sans_ext(geno_file)
   plink_command <- paste(tmp_path, "&&",
-                         "plink", file_type, path_to_path(geno_file),
-                         "--pheno", path_to_path(pheno_file),
+                         "plink", file_type, quote_path(geno_file),
+                         "--pheno", quote_path(pheno_file),
                          "--pheno-name", pheno_name,
-                         "--out", path_to_path(out_file),
+                         "--out", quote_path(out_file),
                          "--lasso", h2)
 
   shell(cmd = plink_command)

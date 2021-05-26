@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-path_to_path <- function(path) {
+quote_path <- function(path) {
   if (path != "") {
     return(paste0("\"", path, "\""))
   } else {
