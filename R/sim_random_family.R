@@ -64,7 +64,7 @@
 #'
 #' @export
 
-randomized_familiy_simulation <- function(n, m, q, hsq, k, sib_fert, dist = 0, path = "") {
+sim_random_family <- function(n, m, q, hsq, k, sib_fert, dist = 0, path = "") {
 
 
   if (length(sib_fert) > 1) {
