@@ -10,7 +10,8 @@
 #' extension.
 #' @param del if \code{TRUE}, deletes the \code{ped_file} after conversion.
 #' @param plink_path \code{TRUE} if user has added PLINK to the system
-#' variable "Path". Otherwise a string specifying the path to PLINK.
+#' variable "PATH". Otherwise a string specifying the path to the folder
+#' containing plink.exe.
 #'
 #' @return Does not return anything, but writes the converted \code{ped_file}
 #' to disk at the path \code{bed_file}.
@@ -59,7 +60,8 @@ p_2_b <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=TRUE) {
 #' @param bed logical indicating whether or not the genotypes file is a .bed
 #' file. \code{FALSE} if the file is .ped.
 #' @param plink_path \code{TRUE} if user has added PLINK to the system
-#' variable "Path". Otherwise a string specifying the path to PLINK.
+#' variable "PATH". Otherwise a string specifying the path to the folder
+#' containing plink.exe.
 #'
 #' @return Does not return anything, but PLINK writes \code{out_file} to disk,
 #' containing results of the performed analysis. The columns in the printed
@@ -126,8 +128,9 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
 #' @param bed logical indicating whether or not the genotypes file is a .bed
 #' file. \code{FALSE} if the file is .ped.
 #' @param plink_path \code{TRUE} if user has added PLINK to the system
-#' variable "Path". Otherwise a string specifying the path to PLINK.
-#' @param hsq heritability parameter (used for calibration of lasso).
+#' variable "PATH". Otherwise a string specifying the path to the folder
+#' containing plink.exe.
+#' @param h2 heritability parameter (used for calibration of lasso).
 #'
 #' @return Does not return anything, but PLINK writes \code{out_file} to disk,
 #' containing results of the performed lasso-regression. The columns in the
