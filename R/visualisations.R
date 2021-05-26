@@ -32,7 +32,7 @@ plot_pval_QQ <- function(dataset,
   stopifnot("dataset must have a column named 'P'" = "P" %in% colnames(dataset),
             "line_size needs to be a positive number" =
               (is.numeric(line_size) && line_size > 0),
-            "save_plot_path needs to be default or a valid path of directory" =
+            "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
               (tools::file_ext(plot_filename) == "png" ||
@@ -93,7 +93,7 @@ plot_pval_hist <- function(dataset,
   stopifnot("dataset must have a column named 'P'" = "P" %in% colnames(dataset),
             "bins needs to be a positive integer" =
               (is.numeric(bins) && bins > 0 && bins == round(bins)),
-            "save_plot_path needs to be default or a valid path of directory" =
+            "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
               (tools::file_ext(plot_filename) == "png" ||
@@ -148,7 +148,7 @@ plot_manhattan <- function(dataset,
   
   stopifnot("dataset must have a column named 'P', 'SNP' and 'causal'" =
               all(c("SNP", "P", "causal") %in% colnames(dataset)),
-            "save_plot_path needs to be default or a valid path of directory" =
+            "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
               (tools::file_ext(plot_filename) == "png" ||
@@ -203,6 +203,16 @@ plot_manhattan <- function(dataset,
 plot_estimates_vs_true <- function(dataset,
                                    save_plot_path = FALSE,
                                    plot_filename = "beta_comparison.png") {
+  
+  stopifnot("dataset must have a column named 'BETA', 'true_effect' and 'bonferroni'" =
+              all(c("BETA", "true_effect", "bonferroni") %in% colnames(dataset)),
+            "save_plot_path needs to be default or a valid path" =
+              (save_plot_path == FALSE || dir.exists(save_plot_path)),
+            "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
+              (tools::file_ext(plot_filename) == "png" ||
+                 tools::file_ext(plot_filename) == "pdf" ||
+                 tools::file_ext(plot_filename) == "jpeg"))
+  
   tmpdataacc <- dataset %>%
     dplyr::filter(significant)
 
