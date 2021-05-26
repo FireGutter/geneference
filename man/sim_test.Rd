@@ -35,6 +35,6 @@ offspring. Hence, the simulation cannot be used in a study of family
 history.
 }
 \examples{
-testsim(10, 15, 5, 0.5, 0.05, TRUE)
+sim_test(10, 15, 5, 0.5, 0.05, TRUE)
 
 }
