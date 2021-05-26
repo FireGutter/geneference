@@ -1,4 +1,3 @@
-destination: ../../genehome
 
 template:
   package: preferably
@@ -8,7 +7,7 @@ navbar:
   left:
     - icon: fa-home fa-lg
       href: index.html
-    - text: "Introduction"
+    - text: "Example study"
       href: articles/geneference.html
     - text: "Functions"
       href: reference/index.html
@@ -21,7 +20,10 @@ reference:
       Simulate individuals and their genotypes, either including or excluding
       family history.
     contents:
-    - starts_with("sim")
+    - testsim
+    - family_simulation
+    - family_dist_simulaiton
+    - randomized_familiy_simulation
 
   - title: Analysis
     desc: >
@@ -61,4 +63,3 @@ articles:
     contents:
       - gibbs
       - liability-distribution
-      - sim-benchmarks
