@@ -3,21 +3,24 @@ Type: Package
 Title: LT-FH analysis and data simulation
 Version: 0.1.0
 Authors@R: c(
+    person(given = "FireGutter",
+           role = "cre",
+           email = "jbsteenstrup@post.au.dk"),
     person("Jacob",
             "Birkeland Steenstrup",
-            role = c("aut", "cre"),
+            role = "aut",
             email = "jbsteenstrup@post.au.dk"),
     person("Rasmus",
             "Brostrøm Jensen",
-            role = c("aut", "cre"),
+            role = "aut",
             email = "201706904@post.au.dk"),
     person("Magnus",
             "Conradsen",
-            role = c("aut", "cre"),
+            role = "aut",
             email = "bigmag@post.au.dk"),
     person("Marc",
             "Timmer Jensen",
-            role = c("aut", "cre"),
+            role = "aut", 
             email = "201907421@post.au.dk"))
 Description: This package has the purpose of opening the door to the world of GWAS
     and the new tehnique of LT-FH. This package can be used to simulate data.
