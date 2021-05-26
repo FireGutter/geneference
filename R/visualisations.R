@@ -145,6 +145,16 @@ plot_pval_hist <- function(dataset,
 plot_manhattan <- function(dataset,
                            save_plot_path = FALSE,
                            plot_filename = "manhattan_plot.png") {
+  
+  stopifnot("dataset must have a column named 'P', 'SNP' and 'causal'" =
+              all(c("SNP", "P", "causal") %in% colnames(dataset)),
+            "save_plot_path needs to be default or a valid path of directory" =
+              (save_plot_path == FALSE || dir.exists(save_plot_path)),
+            "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
+              (tools::file_ext(plot_filename) == "png" ||
+                 tools::file_ext(plot_filename) == "pdf" ||
+                 tools::file_ext(plot_filename) == "jpeg"))
+  
   data_plt <- dataset %>%
     dplyr::filter(P < 0.05)
   m <- nrow(dataset)
