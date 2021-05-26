@@ -13,6 +13,7 @@
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
+#' ÆNDRES: Must be either pdf, png or jpeg
 #'
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
@@ -27,6 +28,17 @@ plot_pval_QQ <- function(dataset,
                          qq_shape = 19,
                          save_plot_path = FALSE,
                          plot_filename = "QQ-pvals.png") {
+  
+  stopifnot("dataset must have a column named 'P'" = "P" %in% colnames(dataset),
+            "line_size needs to be a positive number" =
+              (is.numeric(line_size) && line_size > 0),
+            "save_plot_path needs to be default or a valid path of directory" =
+              (save_plot_path == FALSE || dir.exists(save_plot_path)),
+            "plot_filename must have either '.png', '.pdf' or 'jpeg' as extension" =
+              (tools::file_ext(plot_filename) == "png" ||
+                 tools::file_ext(plot_filename) == "pdf" ||
+                 tools::file_ext(plot_filename) == "jpeg"))
+  
   plt <- ggplot2::ggplot(data = dataset) +
     ggplot2::geom_abline(size = line_size, color = line_color) +
     ggplot2::geom_qq(mapping = ggplot2::aes(sample = P),
