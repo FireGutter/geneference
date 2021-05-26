@@ -52,17 +52,19 @@
 sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
 
   stopifnot("n needs to be an integer greater than 0" =
-              (n > 0 && is.numeric(n) && n == round(n)),
+              (n > 0 && is.numeric(n) && n == round(n) && length(n) == 1),
             "m needs to be an integer greater than 0" =
-              (m > 0 && is.numeric(m) && m == round(m)),
+              (m > 0 && is.numeric(m) && m == round(m) && length(m) == 1),
             "q needs to be an integer greater than 0 and smaller than m" =
-              (q > 0 && is.numeric(q) && q == round(q) && q <= m),
+              (q > 0 && is.numeric(q) && q == round(q) && length(q) == 1 
+               && q <= m),
             "hsq needs to be a number between 0 and 1" =
-              (hsq > 0 && hsq < 1 && is.numeric(hsq)),
+              (hsq > 0 && hsq < 1 && is.numeric(hsq) && length(hsq) == 1),
             "k needs to be a number between 0 and 1" =
-              (k > 0 && k < 1 && is.numeric(k)),
+              (k > 0 && k < 1 && is.numeric(k) && length(k) == 1),
             "sib needs to be a non-negative integer" =
-              (sib >= 0 && is.numeric(sib) && round(sib) == sib),
+              (sib >= 0 && is.numeric(sib) && round(sib) == sib 
+               && length(sib) == 1),
             "path needs to be default or a valid path ending with '/' or '\\\\'"
             = (path == "" || (dir.exists(path))
                && (substr(path, nchar(path), nchar(path)) == "/" ||
@@ -75,7 +77,7 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
 
   # Defining a function that creates genotypes for parents
   parent_maker <- function(m, number, MAFs) {
-    sapply(1:number, function(i) {rbinom(m, 2, MAFs)})
+    vapply(1:number, function(y) {rbinom(m, 2, MAFs)}, FUN.VALUE = numeric(m))
   }
 
   # Here we hard code the function to simulate 10 million SNPs per session
@@ -148,27 +150,29 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
     parentmatrix <- parent_maker(m = m, number = 2 * splits[i], MAFs)
 
     # Using the parents' genotypes the genotypes can be calculated for children
-    child <- t(sapply(seq(1, ncol(parentmatrix), 2), function(i){
+    child <- t(vapply(seq(1, ncol(parentmatrix), 2), function(j){
       child_mean <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
       round_vec <- rbinom(n = m, 1, 1/2)
       snps_for_child <- rbinom(n = m, 2, 1/2)
       vals <- ifelse(child_mean == 1, 1, 0)
       child_mean[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_child, 1)
-      return(dplyr::if_else(round_vec == 1, ceiling(child_mean), floor(child_mean)))}))
+      return(dplyr::if_else(round_vec == 1, ceiling(child_mean), floor(child_mean)))},
+      FUN.VALUE = numeric(m)))
 
     if (sib != 0) {
 
       sibtable <- data.table::data.table("begin" = numeric(splits[i]))
 
-      for (j in 1:sib) {
+      for (j in seq_len(sib)) {
         # We create genotypes for siblings in same way as for the individuals
-        sibs <- t(sapply(seq(1, ncol(parentmatrix), 2), function(i){
+        sibs <- t(vapply(seq(1, ncol(parentmatrix), 2), function(j){
           sibs <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
           round_vec <- rbinom(n = m, 1, 1/2)
           snps_for_sibs <- rbinom(n = m, 2, 1/2)
           vals <- ifelse(sibs == 1, 1, 0)
           sibs[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_sibs, 1)
-          return(dplyr::if_else(round_vec == 1, ceiling(sibs), floor(sibs)))}))
+          return(dplyr::if_else(round_vec == 1, ceiling(sibs), floor(sibs)))},
+          FUN.VALUE = numeric(m)))
 
         # Find the genetic liability, liability and phenotype for the
         # siblings and add this to the "sibtable"
@@ -200,8 +204,12 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
 
 
     # Make phenotypes:
-    c_pheno <- sapply(c_liab, function(x) ifelse(x > critical, 2, 1))
-    p_pheno <- sapply(parliab, function(x) ifelse(x > critical, 2, 1))
+    c_pheno <- vapply(c_liab, function(x) ifelse(x > critical, 2, 1), 
+                      FUN.VALUE = matrix(splits[i]))
+    
+    p_pheno <- vapply(parliab, function(x) ifelse(x > critical, 2, 1), 
+                      FUN.VALUE = matrix(splits[i]))
+
     c_line_pheno <- c_pheno + 1
 
     # Create the ID per individual

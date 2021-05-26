@@ -29,15 +29,16 @@
 
 sim_test <- function(n, m, q, hsq, k, to_ped = T) {
   stopifnot("n needs to be an integer greater than 0" =
-              (n > 0 && class(n) == "numeric" && n == round(n)),
+              (n > 0 && is.numeric(n) && n == round(n) && length(n) == 1),
             "m needs to be an integer greater than 0" =
-              (m > 0 && class(m) == "numeric" && m == round(m)),
+              (m > 0 && is.numeric(m) && m == round(m) && length(m) == 1),
             "q needs to be an integer greater than 0 and smaller than m" =
-              (q > 0 && class(q) == "numeric" && q == round(q) && q <= m),
+              (q > 0 && is.numeric(q) && q == round(q) && length(q) == 1 
+               && q <= m),
             "hsq needs to be a number between 0 and 1" =
-              (hsq > 0 && hsq < 1 && class(hsq) == "numeric"),
+              (hsq > 0 && hsq < 1 && is.numeric(hsq) && length(hsq) == 1),
             "k needs to be a number between 0 and 1" =
-              (k > 0 && k < 1 && class(k) == "numeric"),
+              (k > 0 && k < 1 && is.numeric(k) && length(k) == 1),
             "to_ped needs to be logical" = class(to_ped) == "logical")
 
   # Calculate the Minor Allele Frequency. All individuals have the same MAFs.
@@ -51,7 +52,8 @@ sim_test <- function(n, m, q, hsq, k, to_ped = T) {
   beta[causual_SNP] <- rnorm(q, 0, sqrt(hsq / q))
 
   # Determine number of risk-allelles for each genotype
-  persons <- t(sapply(1:n, function(y) rbinom(m, 2, MAFs)))
+  persons <- t(vapply(1:n, function(y) rbinom(m, 2, MAFs), 
+                      FUN.VALUE = numeric(m)))
 
   mu <- 2 * MAFs # Find the mean value per SNP
   sigma <- sqrt(2 * MAFs * (1 - MAFs)) # Find the variance
@@ -64,7 +66,8 @@ sim_test <- function(n, m, q, hsq, k, to_ped = T) {
   critical <- qnorm(1 - k) # Find the threshold of disease liability
 
   # Turn the matrix into binary on the format 1 or 2.
-  pheno <- sapply(liability, function(x) ifelse(x > critical, 2, 1))
+  pheno <- vapply(liability, function(x) ifelse(x > critical, 2, 1),
+                  FUN.VALUE = matrix(n))
   line_pheno <- pheno + 1
 
   if (to_ped) {

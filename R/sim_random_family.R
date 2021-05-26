@@ -72,11 +72,12 @@ sim_random_family <- function(n, m, q, hsq, k, sib_fert, dist = 0, path = "") {
             "m needs to be a positive integer" =
               (m > 0 && is.numeric(m) && m == round(m)),
             "q needs to be a positive integer and smaller than m" =
-              (q > 0 && is.numeric(q) && q == round(q) && q <= m),
+              (q > 0 && is.numeric(q) && q == round(q) && length(q) == 1
+               && q <= m),
             "hsq needs to be a number between 0 and 1" =
-              (hsq > 0 && hsq < 1 && is.numeric(hsq)),
+              (hsq > 0 && hsq < 1 && is.numeric(hsq) && length(hsq) == 1),
             "k needs to be a number between 0 and 1" =
-              (k > 0 && k < 1 && is.numeric(k)),
+              (k > 0 && k < 1 && is.numeric(k) && length(k) == 1),
             "sib_fert should either be a probability vector or a positive integer" =
               (is.numeric(sib_fert) && all(sib_fert > 0) &&
               ((length(sib_fert) > 1 && sum(sib_fert) == 1) ||
