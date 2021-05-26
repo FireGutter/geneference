@@ -4,7 +4,7 @@
 \alias{family_simulation}
 \title{Simulation with a fixed family size}
 \usage{
-family_simulation(n, m, q, hsq, k, path = "", sib = 0)
+family_simulation(n, m, q, hsq, k, sib = 0, path = "")
 }
 \arguments{
 \item{n}{number of genotypes (individuals).}
@@ -18,11 +18,11 @@ the phenotype.}
 
 \item{k}{prevalence of phenotype.}
 
+\item{sib}{number of siblings per individual.}
+
 \item{path}{directory where the files will be stored. If nothing is
 specified, \code{family_simulation} writes its files in the current
 working directory.}
-
-\item{sib}{number of siblings per individual.}
 }
 \value{
 Does not return any value, but prints the following five files to

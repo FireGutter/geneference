@@ -49,7 +49,8 @@
 #' @export
 
 
-family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
+family_simulation <- function(n, m, q, hsq, k, sib = 0, path = "") {
+  
   stopifnot("n needs to be an integer greater than 0" =
               (n > 0 && class(n) == "numeric" && n == round(n)),
             "m needs to be an integer greater than 0" =
@@ -60,13 +61,15 @@ family_simulation <- function(n, m, q, hsq, k, path = "", sib = 0) {
               (hsq > 0 && hsq < 1 && class(hsq) == "numeric"),
             "k needs to be a number between 0 and 1" =
               (k > 0 && k < 1 && class(k) == "numeric"),
+            "sib needs to be a non-negative integer" =
+              (sib >= 0 && class(sib) == "numeric" && round(sib) == sib),
             "path needs to be default or a valid path ending with '/' or '\\\\'"
             = (path == "" || (dir.exists(path))
                && (substr(path, nchar(path), nchar(path)) == "/" ||
-                     substr(path, nchar(path), nchar(path)) == "\\")),
-            "sib needs to be a non-negative integer" =
-              (sib >= 0 && class(sib) == "numeric" && round(sib) == sib))
+                     substr(path, nchar(path), nchar(path)) == "\\")))
 
+  path = path_validation(path)
+  
   # Set worker nodes:
   future::plan(future::multiprocess, workers = max(future::availableCores(logical = F) - 1, 1))
   

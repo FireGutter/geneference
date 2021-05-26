@@ -34,6 +34,8 @@ individualsim <- function(n, m, q, hsq, k, path){
             = (path == "" || (dir.exists(path))
                && (substr(path, nchar(path), nchar(path)) == "/" ||
                      substr(path, nchar(path), nchar(path)) == "\\")))
+  
+  path = path_validation(path)
 
   #Function that ties everything together (one function to rule them all)
 
