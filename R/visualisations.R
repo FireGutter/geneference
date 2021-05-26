@@ -262,6 +262,16 @@ plot_pmgl_vs_true <- function(dataset,
                               line_color = "black",
                               save_plot_path = FALSE,
                               plot_filename = "posterior_liabilities.png") {
+  
+  stopifnot("dataset must have a column named 'LTFH_pheno' and 'child_lg'" =
+              all(c("LTFH_pheno", "child_lg") %in% colnames(dataset)),
+            "save_plot_path needs to be default or a valid path" =
+              (save_plot_path == FALSE || dir.exists(save_plot_path)),
+            "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
+              (tools::file_ext(plot_filename) == "png" ||
+                 tools::file_ext(plot_filename) == "pdf" ||
+                 tools::file_ext(plot_filename) == "jpeg"))
+  
   plt <- ggplot2::ggplot(dataset) +
     ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg),
                         color = "cornflowerblue",
