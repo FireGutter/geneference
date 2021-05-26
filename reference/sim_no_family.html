@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>Articles • geneference</title>
+<title>sim_no_family — sim_no_family • geneference</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -72,7 +72,9 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="sim_no_family — sim_no_family" />
+<meta property="og:description" content="This function simulate data for individual enteties (the data for the parents)
+is unknown." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -95,7 +97,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -155,22 +157,56 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>sim_no_family</h1>
+    <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/sim_no_family.R'><code>R/sim_no_family.R</code></a></small>
+    <div class="hidden name"><code>sim_no_family.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>Detailed background (tmp title)</h3>
-      <p class="section-desc"><p>this is for nerds (write a desc)</p></p>
-
-      <dl>
-        <dt><a href="gibbs.html">Documentation for Gibbs sampling process</a></dt>
-        <dd><p>This vignette provides some details on the Gibbs sampler we use as part of computing the LT-FH phenotype.</p></dt>
-        <dt><a href="liability-distribution.html">Liability distributions with LT-FH</a></dt>
-        <dd><p>An overview and explanation of the methodology used for drawing liabilities.</p></dt>
-        <dt><a href="sim-benchmarks.html">Expected running times and sizes of simulations</a></dt>
-        <dd></dt>
-      </dl>
+    <div class="ref-description">
+    <p>This function simulate data for individual enteties (the data for the parents)
+is unknown.</p>
     </div>
+
+    <pre class="usage"><span class='fu'>sim_no_family</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>m</span>, <span class='va'>q</span>, <span class='va'>hsq</span>, <span class='va'>k</span>, <span class='va'>path</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>n</th>
+      <td><p>is the amount of enteties (humans)</p></td>
+    </tr>
+    <tr>
+      <th>m</th>
+      <td><p>is the amount of SNPS per entety</p></td>
+    </tr>
+    <tr>
+      <th>q</th>
+      <td><p>is the amount of causal SNPs</p></td>
+    </tr>
+    <tr>
+      <th>hsq</th>
+      <td><p>heritability parameter that is squard</p></td>
+    </tr>
+    <tr>
+      <th>k</th>
+      <td><p>is the prevalence of trait parameter</p></td>
+    </tr>
+    <tr>
+      <th>path</th>
+      <td><p>is the file path, where the files will be stored</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>This function returns five files: Three txt files: Beta, MAFs and phenotypes, a genotypes MAP file and a genotypes PED file.</p>
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 

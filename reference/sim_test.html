@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>Import phenotypes from simulation — load_phenotypes • geneference</title>
+<title>Simulate genotypes in the R session without family history — sim_test • geneference</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -72,8 +72,12 @@
 
 
 
-<meta property="og:title" content="Import phenotypes from simulation — load_phenotypes" />
-<meta property="og:description" content="Import phenotypes from simulation" />
+<meta property="og:title" content="Simulate genotypes in the R session without family history — sim_test" />
+<meta property="og:description" content="A quick way of simulating a small amount of data to be stored
+in the R-session. Note that this function only simulates data for
+individuals without family history, i.e. they are not simulated as
+offspring. Hence, the simulation cannot be used in a study of family
+history." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -156,31 +160,134 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Import phenotypes from simulation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/load_data.R'><code>R/load_data.R</code></a></small>
-    <div class="hidden name"><code>load_phenotypes.Rd</code></div>
+    <h1>Simulate genotypes in the R session without family history</h1>
+    <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/sim_test.R'><code>R/sim_test.R</code></a></small>
+    <div class="hidden name"><code>sim_test.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Import phenotypes from simulation</p>
+    <p>A quick way of simulating a small amount of data to be stored
+in the R-session. Note that this function only simulates data for
+individuals without family history, i.e. they are not simulated as
+offspring. Hence, the simulation cannot be used in a study of family
+history.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>load_phenotypes</span><span class='op'>(</span><span class='va'>pheno_file</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>sim_test</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>m</span>, <span class='va'>q</span>, <span class='va'>hsq</span>, <span class='va'>k</span>, to_ped <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>pheno_file</th>
-      <td><p>path of file with phenotypes, including file extension.
-Simulation functions save this file as "phenotypes.txt".</p></td>
+      <th>n</th>
+      <td><p>number of genotypes (individuals).</p></td>
+    </tr>
+    <tr>
+      <th>m</th>
+      <td><p>number of SNPS per genotype.</p></td>
+    </tr>
+    <tr>
+      <th>q</th>
+      <td><p>number of causal SNPs, i.e. SNPs that effect chances of having
+the phenotype.</p></td>
+    </tr>
+    <tr>
+      <th>hsq</th>
+      <td><p>squared heritability parameter.</p></td>
+    </tr>
+    <tr>
+      <th>k</th>
+      <td><p>prevalence of phenotype.</p></td>
+    </tr>
+    <tr>
+      <th>to_ped</th>
+      <td><p>TRUE/FALSE indicating if the output should be in a
+PLINK-friendly format or not.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a tibble with the data from <code>pheno_file</code>.</p>
+    <p>Returns a list of 5 entries, containing a matrix of genotypes, a
+vector specifying indexes of causal SNPs, a vector the liability of
+individual i, a vector specifying whether individual i has the
+phenotype and a phenotype for linear regression in plink.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>sim_test</span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>15</span>, <span class='fl'>5</span>, <span class='fl'>0.5</span>, <span class='fl'>0.05</span>, <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $genotypes
+#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
+#&gt;  [1,] "1"  "1"  "1"  "1"  "1"  "1"  "c"  "a"  "c"  "a"   "a"   "a"   "c"  
+#&gt;  [2,] "2"  "1"  "1"  "1"  "1"  "1"  "a"  "a"  "a"  "a"   "c"   "a"   "a"  
+#&gt;  [3,] "3"  "1"  "1"  "1"  "1"  "1"  "a"  "a"  "c"  "c"   "a"   "a"   "a"  
+#&gt;  [4,] "4"  "1"  "1"  "1"  "1"  "1"  "a"  "a"  "c"  "a"   "a"   "a"   "a"  
+#&gt;  [5,] "5"  "1"  "1"  "1"  "1"  "1"  "c"  "a"  "a"  "a"   "a"   "a"   "c"  
+#&gt;  [6,] "6"  "1"  "1"  "1"  "1"  "1"  "a"  "a"  "a"  "a"   "a"   "a"   "a"  
+#&gt;  [7,] "7"  "1"  "1"  "1"  "1"  "1"  "a"  "a"  "c"  "c"   "a"   "a"   "a"  
+#&gt;  [8,] "8"  "1"  "1"  "1"  "1"  "1"  "c"  "c"  "c"  "a"   "c"   "a"   "c"  
+#&gt;  [9,] "9"  "1"  "1"  "1"  "1"  "1"  "c"  "c"  "a"  "a"   "a"   "a"   "a"  
+#&gt; [10,] "10" "1"  "1"  "1"  "1"  "1"  "c"  "a"  "c"  "a"   "c"   "a"   "a"  
+#&gt;       [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25]
+#&gt;  [1,] "a"   "c"   "c"   "c"   "a"   "a"   "a"   "a"   "a"   "c"   "a"   "a"  
+#&gt;  [2,] "a"   "a"   "a"   "a"   "a"   "c"   "a"   "c"   "a"   "c"   "c"   "a"  
+#&gt;  [3,] "a"   "c"   "a"   "a"   "a"   "a"   "a"   "a"   "a"   "c"   "c"   "a"  
+#&gt;  [4,] "a"   "c"   "a"   "c"   "c"   "c"   "a"   "c"   "a"   "c"   "a"   "a"  
+#&gt;  [5,] "a"   "a"   "a"   "c"   "a"   "c"   "a"   "a"   "a"   "a"   "a"   "a"  
+#&gt;  [6,] "a"   "a"   "a"   "c"   "c"   "a"   "a"   "a"   "a"   "c"   "a"   "a"  
+#&gt;  [7,] "a"   "a"   "a"   "c"   "c"   "a"   "a"   "a"   "a"   "a"   "a"   "c"  
+#&gt;  [8,] "a"   "c"   "a"   "c"   "a"   "a"   "a"   "a"   "a"   "c"   "a"   "a"  
+#&gt;  [9,] "a"   "a"   "a"   "c"   "a"   "a"   "a"   "a"   "a"   "c"   "a"   "a"  
+#&gt; [10,] "a"   "a"   "a"   "c"   "a"   "a"   "a"   "a"   "a"   "c"   "a"   "a"  
+#&gt;       [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35] [,36]
+#&gt;  [1,] "a"   "c"   "c"   "a"   "a"   "a"   "a"   "c"   "c"   "c"   "a"  
+#&gt;  [2,] "a"   "c"   "a"   "a"   "a"   "a"   "a"   "a"   "a"   "c"   "c"  
+#&gt;  [3,] "a"   "c"   "a"   "a"   "a"   "c"   "a"   "a"   "a"   "c"   "a"  
+#&gt;  [4,] "a"   "c"   "c"   "a"   "a"   "a"   "a"   "a"   "a"   "c"   "a"  
+#&gt;  [5,] "a"   "c"   "a"   "a"   "a"   "c"   "a"   "a"   "a"   "c"   "a"  
+#&gt;  [6,] "a"   "a"   "a"   "c"   "a"   "c"   "a"   "c"   "a"   "c"   "c"  
+#&gt;  [7,] "a"   "a"   "a"   "a"   "a"   "a"   "a"   "c"   "c"   "a"   "a"  
+#&gt;  [8,] "a"   "c"   "a"   "a"   "a"   "c"   "c"   "c"   "a"   "c"   "a"  
+#&gt;  [9,] "a"   "c"   "c"   "a"   "a"   "c"   "a"   "c"   "a"   "c"   "c"  
+#&gt; [10,] "a"   "c"   "c"   "a"   "a"   "a"   "a"   "c"   "a"   "a"   "a"  
+#&gt; 
+#&gt; $`SNP-Turn`
+#&gt;               [,1]
+#&gt;  [1,]  0.000000000
+#&gt;  [2,]  0.000000000
+#&gt;  [3,]  0.000000000
+#&gt;  [4,]  0.000000000
+#&gt;  [5,]  0.000000000
+#&gt;  [6,] -0.065170493
+#&gt;  [7,]  0.272615682
+#&gt;  [8,]  0.000000000
+#&gt;  [9,]  0.006064487
+#&gt; [10,]  0.009347931
+#&gt; [11,]  0.000000000
+#&gt; [12,] -0.076918211
+#&gt; [13,]  0.000000000
+#&gt; [14,]  0.000000000
+#&gt; [15,]  0.000000000
+#&gt; 
+#&gt; $liability
+#&gt;              [,1]
+#&gt;  [1,] -0.98080019
+#&gt;  [2,]  1.00955437
+#&gt;  [3,] -0.01082752
+#&gt;  [4,] -0.70594804
+#&gt;  [5,] -0.36774766
+#&gt;  [6,] -0.14039586
+#&gt;  [7,] -0.84222371
+#&gt;  [8,] -0.37318018
+#&gt;  [9,]  0.46251880
+#&gt; [10,] -0.12272320
+#&gt; 
+#&gt; $Phenotype
+#&gt;  [1] 1 1 1 1 1 1 1 1 1 1
+#&gt; 
+#&gt; $PLINK_linear_phenotype
+#&gt;  [1] 2 2 2 2 2 2 2 2 2 2
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

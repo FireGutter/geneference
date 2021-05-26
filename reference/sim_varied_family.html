@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>Articles • geneference</title>
+<title>Simulation with varying family sizes — sim_varied_family • geneference</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -72,7 +72,13 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Simulation with varying family sizes — sim_varied_family" />
+<meta property="og:description" content="Simulate genotypes for individuals with family history, where
+each individual has an arbitrary number of siblings. Parents' genotypes are
+simulated and used for simulating the genotypes of individuals and their
+siblings.
+family_dist_simulaiton makes use of parallel computation in order to
+decrease the running time." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -95,7 +101,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -155,22 +161,104 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Simulation with varying family sizes</h1>
+    <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/sim_varied_family.R'><code>R/sim_varied_family.R</code></a></small>
+    <div class="hidden name"><code>sim_varied_family.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>Detailed background (tmp title)</h3>
-      <p class="section-desc"><p>this is for nerds (write a desc)</p></p>
-
-      <dl>
-        <dt><a href="gibbs.html">Documentation for Gibbs sampling process</a></dt>
-        <dd><p>This vignette provides some details on the Gibbs sampler we use as part of computing the LT-FH phenotype.</p></dt>
-        <dt><a href="liability-distribution.html">Liability distributions with LT-FH</a></dt>
-        <dd><p>An overview and explanation of the methodology used for drawing liabilities.</p></dt>
-        <dt><a href="sim-benchmarks.html">Expected running times and sizes of simulations</a></dt>
-        <dd></dt>
-      </dl>
+    <div class="ref-description">
+    <p>Simulate genotypes for individuals with family history, where
+each individual has an arbitrary number of siblings. Parents' genotypes are
+simulated and used for simulating the genotypes of individuals and their
+siblings.
+<code>family_dist_simulaiton</code> makes use of parallel computation in order to
+decrease the running time.</p>
     </div>
+
+    <pre class="usage"><span class='fu'>sim_varied_family</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>m</span>, <span class='va'>q</span>, <span class='va'>hsq</span>, <span class='va'>k</span>, <span class='va'>dist</span>, path <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>n</th>
+      <td><p>number of genotypes (individuals). Given as a vector that match the
+dist vector (see discribtion below).</p></td>
+    </tr>
+    <tr>
+      <th>m</th>
+      <td><p>number of SNPS per genotype.</p></td>
+    </tr>
+    <tr>
+      <th>q</th>
+      <td><p>number of causal SNPs, i.e. SNPs that effect chances of having
+the phenotype.</p></td>
+    </tr>
+    <tr>
+      <th>hsq</th>
+      <td><p>squared heritability parameter.</p></td>
+    </tr>
+    <tr>
+      <th>k</th>
+      <td><p>prevalence of phenotype.</p></td>
+    </tr>
+    <tr>
+      <th>dist</th>
+      <td><p>the distribution of siblings. Given as a vector with the same length
+as the "n"-vector.</p></td>
+    </tr>
+    <tr>
+      <th>path</th>
+      <td><p>directory where the files will be stored. If nothing is
+specified, <code>family_simulation</code> writes its files in the current
+working directory.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Does not return any value, but prints the following five files to
+the <code>path</code> parameter specified in the function call:</p><ul>
+<li><p>Three text files:</p><ul>
+<li><p>beta.txt - a file of <code>m</code> rows with one column. The i'th row is
+the true effect of the i'th SNP.</p></li>
+<li><p>MAFs.txt - a file of <code>m</code> rows with one column. The i'th row is
+the true Minor Allelle Frequence of the i'th SNP.</p></li>
+<li><p>phenotypes.txt - a file of <code>n</code> rows, number of columns depend on
+number of siblings. Note that some individuals has fewer siblings as
+others. Thus we fill the empty value-slots with "-9". The file
+contains the phenotype and liability of
+each individual as well as information on the liabilities and phenotype
+status of their parents and siblings.</p></li>
+</ul></li>
+<li><p>genotypes.map - a file created such that PLINK will work with the genotype
+data.</p></li>
+<li><p>genotypes.ped - the simulated genotypes in a PLINK-readable format.</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Note that dist denotes the amount of siblings matched with the amount of
+individuals n. E.g. n = c(100, 200, 300, 400) and dist = c(0, 1, 2, 3) would mean
+that we want a total of 100 + 200 + 300 + 400 = 1000 individuals. Here 100
+individuals have 0 siblings, 200 has 1 sibling and so on...</p>
+    <h2 class="hasAnchor" id="warning"><a class="anchor" href="#warning"></a>Warning</h2>
+
+    
+
+<p>Simulating large datasets lead to very large files (eg. in the order of 100k
+genotypes with 100k SNPs takes up approximately 40GB of space).
+Please ensure that you have sufficient disk space at the disk where
+<code>path</code> resides prior to running the simulation.
+See FUNCTION-NAME DOCUMENTATION REFERENCE(this is a placeholder until
+function is implemented) in order to convert the generated .ped to the
+smaller .bed format.</p>
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
