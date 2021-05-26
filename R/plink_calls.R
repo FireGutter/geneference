@@ -27,12 +27,12 @@ p_2_b <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=TRUE) {
               (plink_path == TRUE || file.exists(paste0(plink_path, "/plink.exe"))))
 
   if (plink_path != TRUE) {
-    tmp_path <- paste0("set PATH=%PATH%;", plink_path, ";")
+    tmp_path <- paste0("SET PATH=", path_to_path(plink_path), ";")
   } else {
     tmp_path <- ""
   }
-  system(paste(tmp_path, "plink --file", ped_file,
-               "--make-bed --out", bed_file))
+  shell(paste(tmp_path, "&&", "plink --file", path_to_path(ped_file),
+               "--make-bed --out", path_to_path(bed_file)))
 
   if (del == TRUE) {
     unlink(paste0(ped_file, ".ped"))
