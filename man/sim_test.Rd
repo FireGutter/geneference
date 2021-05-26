@@ -22,10 +22,10 @@ the phenotype.}
 PLINK-friendly format or not.}
 }
 \value{
-Returns a list of 4 entries, containing a matrix of genotypes, a
+Returns a list of 5 entries, containing a matrix of genotypes, a
 vector specifying indexes of causal SNPs, a vector the liability of
-individual i, and a vector specifying whether individual i has the
-phenotype.
+individual i, a vector specifying whether individual i has the
+phenotype and a phenotype for linear regression in plink.
 }
 \description{
 A quick way of simulating a small amount of data to be stored

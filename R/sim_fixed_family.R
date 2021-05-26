@@ -126,7 +126,10 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
       sib_header[3 * i + 2] <- paste0("sib", i + 1, "_lg", sep = "")
       sib_header[3 * i + 3] <- paste0("sib", i + 1, "_liab", sep = "")
     }
-    header <- c(header, sib_header)
+    header <- c(header, sib_header, "line_pheno")
+  }
+  else {
+    header <- c(header, "line_pheno")
   }
   
   # Create the header for the phenofile:
@@ -199,7 +202,8 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
     # Make phenotypes:
     c_pheno <- sapply(c_liab, function(x) ifelse(x > critical, 2, 1))
     p_pheno <- sapply(parliab, function(x) ifelse(x > critical, 2, 1))
-
+    c_line_pheno <- c_pheno + 1
+    
     # Create the ID per individual
     id <- matrix(c((cusplits[i] + 1):cusplits[i + 1]))
 
@@ -223,7 +227,7 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
                                  p_pheno[seq(2, 2 * splits[i], 2)],
                                  parlg[seq(2, 2 * splits[i], 2)],
                                  parliab[seq(2, 2 * splits[i], 2)],
-                                 sibtable)),
+                                 sibtable, c_line_pheno)),
              paste0(path, "phenotypes.txt", sep = ""),
              quote = F,
              sep = " ",
@@ -237,7 +241,8 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
                                  parliab[seq(1, 2 * splits[i], 2)],
                                  p_pheno[seq(2, 2 * splits[i], 2)],
                                  parlg[seq(2, 2 * splits[i], 2)],
-                                 parliab[seq(2, 2 * splits[i], 2)])),
+                                 parliab[seq(2, 2 * splits[i], 2)],
+                                 c_line_pheno)),
              paste0(path, "phenotypes.txt", sep = ""),
              quote = F,
              sep = " ",

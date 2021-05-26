@@ -15,16 +15,16 @@
 #' @param to_ped TRUE/FALSE indicating if the output should be in a
 #' PLINK-friendly format or not.
 #'
-#' @return Returns a list of 4 entries, containing a matrix of genotypes, a
+#' @return Returns a list of 5 entries, containing a matrix of genotypes, a
 #' vector specifying indexes of causal SNPs, a vector the liability of
-#' individual i, and a vector specifying whether individual i has the
-#' phenotype.
+#' individual i, a vector specifying whether individual i has the
+#' phenotype and a phenotype for linear regression in plink.
 #'
 #' @import stats
 #'
 #' @export
 #' @examples
-#' testsim(10, 15, 5, 0.5, 0.05, TRUE)
+#' sim_test(10, 15, 5, 0.5, 0.05, TRUE)
 #'
 
 sim_test <- function(n, m, q, hsq, k, to_ped = T) {
@@ -64,18 +64,21 @@ sim_test <- function(n, m, q, hsq, k, to_ped = T) {
   critical <- qnorm(1 - k) # Find the threshold of disease liability
 
   # Turn the matrix into binary on the format 1 or 2.
-  y <- sapply(liability, function(x) ifelse(x > critical, 2, 1))
+  pheno <- sapply(liability, function(x) ifelse(x > critical, 2, 1))
+  line_pheno <- pheno + 1
 
   if (to_ped) {
     return(list("genotypes" = to_ped(persons, 0),
                 "SNP-Turn" = beta,
                 "liability" = liability,
-                "Phenotype" = y))
+                "Phenotype" = pheno,
+                "PLINK_linear_phenotype" = line_pheno))
   }
   else{
     return(list("genotypes" = persons,
                 "SNP-Turn" = beta,
                 "liability" = liability,
-                "Phenotype" = y))
+                "Phenotype" = pheno,
+                "PLINK_linear_phenotype" = line_pheno))
   }
 }
