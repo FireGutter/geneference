@@ -14,7 +14,7 @@
 #' @return A choice of a valid path, new folder, over-writing the files or
 #' stopping the simulation.
 #'
-#' @export
+#' @noRd
 
 path_validation <- function(path){
   while(any(file.exists(paste0(path, "phenotypes.txt")), 
@@ -30,7 +30,7 @@ path_validation <- function(path){
     cat("3: Choose new path\n")
     cat("4: Make a new folder at path for the new files\n")
     cat("\n")
-    ind = readline("Enter one number or skip to stop the simulation: ")
+    ind = readline("Enter a number from the list above: ")
     
     if (ind %in% c("1", "2", "3", "4", "")) {
       if (ind == "1" | ind == "") {
@@ -39,7 +39,7 @@ path_validation <- function(path){
       else if (ind == "2") {
         cat("Over-writing the files.")
         filenames <- c("phenotypes.txt", "beta.txt", "genotypes.ped", 
-                       "genotypes.map", "/MAFs.txt")
+                       "genotypes.map", "MAFs.txt")
         
         for (fil in filenames) {
           if(file.exists(paste0(path, fil))) {
@@ -48,17 +48,23 @@ path_validation <- function(path){
         }
       }
       else if (ind == "3") {
-        path = readline("Choose your new path (full-path): ")
+        path = readline("Enter the full path of a existing directory: ")
         while(!(dir.exists(path)) | !(substr(
           path, nchar(path), nchar(path)) %in% c("/", "\\"))){
           if (!(substr(path, nchar(path), nchar(path)) %in% c("/", "\\"))) {
-            cat("Path needs to be default or a valid path ending with '/'
-                or '\\\\'")
+            string <- paste0("Path needs to be default or a valid path ending ",
+                             "with '/' or '\\\\'.")
+            cat(string)
           }
           else {
             cat("Path does not exist choose new one:\n")
           }
-          path = readline("Choose your new path: ")
+          string <- paste0("Enter the full path of another existing directory ",
+                           "or skip to stop: ")
+          path = readline(string)
+          if (path == "") {
+            stop("You chose to stop the simulation.")
+          }
         }
       }
       else {
@@ -66,8 +72,11 @@ path_validation <- function(path){
         while(dir.exists(paste0(
           path, folder_name, substr(path, nchar(path), nchar(path))))){
           
-          cat("Folder does already exists. Choose a new name:\n")
-          folder_name = readline("Choose new folder name: ")
+          cat("Folder already exists.\n")
+          folder_name = readline("Choose new folder name or skip to stop: ")
+          if (folder_name == "") {
+            stop("You chose to stop the simulation.")
+          }
         }
         dir.create(paste0(path, folder_name))
         path = paste0(path, folder_name, substr(path, nchar(path), nchar(path)))
