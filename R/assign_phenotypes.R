@@ -36,7 +36,8 @@ assign_ltfh_phenotype <- function(pheno_file,
             "sibs needs to be a non-negative integer" =
               (missing(sibs) ||
                  (is.numeric(sibs) && sibs == round(sibs) && 0 <= sibs)),
-            "sibs needs to be at most the number of siblings in pheno_file")
+            "sibs needs to be at most the number of siblings in pheno_file" =
+              (missing(sibs) || sibs <= n_sibs(load_phenotypes(pheno_file))))
 
   # import phenotypes.
   pheno <- load_phenotypes(pheno_file)
