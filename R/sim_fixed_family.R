@@ -5,7 +5,7 @@
 #' each individual has a fixed number of siblings. Parents' genotypes are
 #' simulated and used for simulating the genotypes of individuals and their
 #' siblings.
-#' \code{family_simulation} makes use of parallel computation in order to
+#' \code{sim_fixed_family} makes use of parallel computation in order to
 #' decrease the running time.
 #'
 #' @section Warning:
@@ -49,7 +49,7 @@
 #' @export
 
 
-family_simulation <- function(n, m, q, hsq, k, sib = 0, path = "") {
+sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
   
   stopifnot("n needs to be an integer greater than 0" =
               (n > 0 && class(n) == "numeric" && n == round(n)),
