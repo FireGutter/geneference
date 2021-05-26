@@ -56,7 +56,7 @@
 #'
 #' @export
 
-family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
+sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
   
   
   path = path_validation(path)
