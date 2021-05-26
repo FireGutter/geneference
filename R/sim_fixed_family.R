@@ -61,12 +61,12 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
               (hsq > 0 && hsq < 1 && is.numeric(hsq)),
             "k needs to be a number between 0 and 1" =
               (k > 0 && k < 1 && is.numeric(k)),
+            "sib needs to be a non-negative integer" =
+              (sib >= 0 && is.numeric(sib) && round(sib) == sib),
             "path needs to be default or a valid path ending with '/' or '\\\\'"
             = (path == "" || (dir.exists(path))
                && (substr(path, nchar(path), nchar(path)) == "/" ||
-                     substr(path, nchar(path), nchar(path)) == "\\")),
-            "sib needs to be a non-negative integer" =
-              (sib >= 0 && is.numeric(sib) && round(sib) == sib))
+                     substr(path, nchar(path), nchar(path)) == "\\")))
 
   path = path_validation(path)
 
