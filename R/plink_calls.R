@@ -18,7 +18,7 @@
 #' @export
 p_2_b <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=TRUE) {
   stopifnot("ped_file needs to be a valid file without extension" =
-              (file.exists(paste0(ped_file, ".ped")) 
+              (file.exists(paste0(ped_file, ".ped"))
               && file.exists(paste0(ped_file, ".map"))),
             "bed_file needs to be a valid file without extension" =
               (tools::file_ext(output_file) == ""),
@@ -160,7 +160,7 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
               (is.numeric(hsq) && length(hsq) == 1 && 0 < hsq && hsq < 1))
 
   if (plink_path != TRUE) {
-    tmp_path <- paste0("set PATH=%PATH%;", plink_path, ";")
+    tmp_path <- paste0("SET PATH=", path_to_path(plink_path), ";")
   } else{
     tmp_path <- ""
   }
@@ -170,11 +170,12 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
     file_type <- "--file"
   }
   geno_file <- file_path_sans_ext(geno_file)
-  plink_command <- paste(tmp_path, "plink", file_type, geno_file,
-                         "--pheno", pheno_file,
+  plink_command <- paste(tmp_path, "&&",
+                         "plink", file_type, path_to_path(geno_file),
+                         "--pheno", path_to_path(pheno_file),
                          "--pheno-name", pheno_name,
-                         "--out", out_file,
-                         "--lasso", hsq)
+                         "--out", path_to_path(out_file),
+                         "--lasso", h2)
 
-  system(command = plink_command)
+  shell(cmd = plink_command)
 }
