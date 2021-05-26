@@ -1,5 +1,5 @@
 #'
-#' @title individualsim
+#' @title sim_no_family
 #'
 #' @description This function simulate data for individual enteties (the data for the parents)
 #' is unknown.
@@ -19,7 +19,7 @@
 
 
 
-individualsim <- function(n, m, q, hsq, k, path){
+sim_no_family <- function(n, m, q, hsq, k, path){
   stopifnot("n needs to be an integer greater than 0" =
               (n > 0 && class(n) == "numeric" && n == round(n)),
             "m needs to be an integer greater than 0" =
