@@ -26,9 +26,8 @@
 #' @examples
 #' testsim(10, 15, 5, 0.5, 0.05, TRUE)
 #'
-#'
 
-testsim <- function(n, m, q, hsq, k, to_ped = T) {
+sim_test <- function(n, m, q, hsq, k, to_ped = T) {
   stopifnot("n needs to be an integer greater than 0" =
               (n > 0 && class(n) == "numeric" && n == round(n)),
             "m needs to be an integer greater than 0" =
