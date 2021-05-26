@@ -56,7 +56,7 @@
 #'
 #' @export
 
-family_dist_simulaiton <- function(n, m, q, hsq, k, dist, path = ""){
+sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
   stopifnot("n and dist needs to have same length" = length(n) == length(dist),
             "n needs to be a vector of positive integers" =
               (all(n > 0) && is.numeric(n) && all(n == round(n))),
