@@ -65,7 +65,29 @@
 #' @export
 
 sim_random_family <- function(n, m, q, hsq, k, sib_fert, dist = 0, path = "") {
-
+  stopifnot("sib_fert and dist needs to have same length" =
+              length(sib_fert) == length(dist),
+            "n needs to be a positive integer" =
+              (n > 0 && is.numeric(n) && n == round(n)),
+            "m needs to be a positive integer" =
+              (m > 0 && is.numeric(m) && m == round(m)),
+            "q needs to be a positive integer and smaller than m" =
+              (q > 0 && is.numeric(q) && q == round(q) && length(q) == 1
+               && q <= m),
+            "hsq needs to be a number between 0 and 1" =
+              (hsq > 0 && hsq < 1 && is.numeric(hsq) && length(hsq) == 1),
+            "k needs to be a number between 0 and 1" =
+              (k > 0 && k < 1 && is.numeric(k) && length(k) == 1),
+            "sib_fert should either be a probability vector or a positive integer" =
+              (is.numeric(sib_fert) && all(sib_fert > 0) &&
+              ((length(sib_fert) > 1 && sum(sib_fert) == 1) ||
+                 length(sib_fert) == 1)),
+            "dist needs to be a vector of non-negative integers" =
+              (all(dist >= 0) && is.numeric(dist) && all(dist == round(dist))),
+            "path needs to be default or a valid path ending with '/' or '\\\\'"
+            = (path == "" || (dir.exists(path))
+               && (substr(path, nchar(path), nchar(path)) == "/" ||
+                     substr(path, nchar(path), nchar(path)) == "\\")))
 
   if (length(sib_fert) > 1) {
     individual_distribution <- c(rmultinom(1, n, sib_fert))
@@ -76,7 +98,6 @@ sim_random_family <- function(n, m, q, hsq, k, sib_fert, dist = 0, path = "") {
     individual_distribution <- as.vector(table(vals))
     dist <- ran[1]:ran[2]
   }
-  family_dist_simulaiton(n = individual_distribution, m = m, q = q, hsq = hsq, k = k, dist = dist, path = path)
+  sim_varied_family(n = individual_distribution, m = m, q = q, hsq = hsq, k = k, dist = dist, path = path)
   return(list("simulated_individuals(n)" = individual_distribution, "number_of_siblings(dist)" = dist))
 }
-

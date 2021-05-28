@@ -13,6 +13,7 @@
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
+#' ÆNDRES: Must be either pdf, png or jpeg
 #'
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
@@ -27,6 +28,18 @@ plot_pval_QQ <- function(dataset,
                          qq_shape = 19,
                          save_plot_path = FALSE,
                          plot_filename = "QQ-pvals.png") {
+  
+  stopifnot("dataset must have a column named 'P'" = "P" %in% colnames(dataset),
+            "line_size needs to be a positive number" =
+              (is.numeric(line_size) && line_size > 0 &&
+                 length(line_size) == 1),
+            "save_plot_path needs to be default or a valid path" =
+              (save_plot_path == FALSE || dir.exists(save_plot_path)),
+            "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
+              (file_ext(plot_filename) == "png" ||
+                 file_ext(plot_filename) == "pdf" ||
+                 file_ext(plot_filename) == "jpeg"))
+  
   plt <- ggplot2::ggplot(data = dataset) +
     ggplot2::geom_abline(size = line_size, color = line_color) +
     ggplot2::geom_qq(mapping = ggplot2::aes(sample = P),
@@ -77,6 +90,18 @@ plot_pval_hist <- function(dataset,
                            mean_color = "red",
                            save_plot_path = FALSE,
                            plot_filename = "pvalue_histogram.png") {
+  
+  stopifnot("dataset must have a column named 'P'" = "P" %in% colnames(dataset),
+            "bins needs to be a positive integer" =
+              (is.numeric(bins) && bins > 0 && bins == round(bins) &&
+                 length(bins) == 1),
+            "save_plot_path needs to be default or a valid path" =
+              (save_plot_path == FALSE || dir.exists(save_plot_path)),
+            "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
+              (file_ext(plot_filename) == "png" ||
+                 file_ext(plot_filename) == "pdf" ||
+                 file_ext(plot_filename) == "jpeg"))
+  
   plt <- ggplot2::ggplot(data = dataset) +
     ggplot2::geom_histogram(mapping = ggplot2::aes(P),
                             bins = bins + 1,
@@ -122,6 +147,16 @@ plot_pval_hist <- function(dataset,
 plot_manhattan <- function(dataset,
                            save_plot_path = FALSE,
                            plot_filename = "manhattan_plot.png") {
+  
+  stopifnot("dataset must have a column named 'P', 'SNP' and 'causal'" =
+              all(c("SNP", "P", "causal") %in% colnames(dataset)),
+            "save_plot_path needs to be default or a valid path" =
+              (save_plot_path == FALSE || dir.exists(save_plot_path)),
+            "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
+              (file_ext(plot_filename) == "png" ||
+                 file_ext(plot_filename) == "pdf" ||
+                 file_ext(plot_filename) == "jpeg"))
+  
   data_plt <- dataset %>%
     dplyr::filter(P < 0.05)
   m <- nrow(dataset)
@@ -170,6 +205,16 @@ plot_manhattan <- function(dataset,
 plot_estimates_vs_true <- function(dataset,
                                    save_plot_path = FALSE,
                                    plot_filename = "beta_comparison.png") {
+  
+  stopifnot("dataset must have a column named 'BETA', 'true_effect' and 'bonferroni'" =
+              all(c("BETA", "true_effect", "bonferroni") %in% colnames(dataset)),
+            "save_plot_path needs to be default or a valid path" =
+              (save_plot_path == FALSE || dir.exists(save_plot_path)),
+            "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
+              (file_ext(plot_filename) == "png" ||
+               file_ext(plot_filename) == "pdf" ||
+               file_ext(plot_filename) == "jpeg"))
+  
   tmpdataacc <- dataset %>%
     dplyr::filter(significant)
 
@@ -219,6 +264,16 @@ plot_pmgl_vs_true <- function(dataset,
                               line_color = "black",
                               save_plot_path = FALSE,
                               plot_filename = "posterior_liabilities.png") {
+  
+  stopifnot("dataset must have a column named 'LTFH_pheno' and 'child_lg'" =
+              all(c("LTFH_pheno", "child_lg") %in% colnames(dataset)),
+            "save_plot_path needs to be default or a valid path" =
+              (save_plot_path == FALSE || dir.exists(save_plot_path)),
+            "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
+              (file_ext(plot_filename) == "png" ||
+                 file_ext(plot_filename) == "pdf" ||
+                 file_ext(plot_filename) == "jpeg"))
+  
   plt <- ggplot2::ggplot(dataset) +
     ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg),
                         color = "cornflowerblue",

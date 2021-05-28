@@ -21,15 +21,16 @@
 
 sim_no_family <- function(n, m, q, hsq, k, path){
   stopifnot("n needs to be an integer greater than 0" =
-              (n > 0 && class(n) == "numeric" && n == round(n)),
+              (n > 0 && is.numeric(n) && n == round(n) && length(n) == 1),
             "m needs to be an integer greater than 0" =
-              (m > 0 && class(m) == "numeric" && m == round(m)),
+              (m > 0 && is.numeric(m) && m == round(m) && length(m) == 1),
             "q needs to be an integer greater than 0 and smaller than m" =
-              (q > 0 && class(q) == "numeric" && q == round(q) && q <= m),
+              (q > 0 && is.numeric(q) && q == round(q) && length(q) == 1 
+               && q <= m),
             "hsq needs to be a number between 0 and 1" =
-              (hsq > 0 && hsq < 1 && class(hsq) == "numeric"),
+              (hsq > 0 && hsq < 1 && is.numeric(hsq) && length(hsq) == 1),
             "k needs to be a number between 0 and 1" =
-              (k > 0 && k < 1 && class(k) == "numeric"),
+              (k > 0 && k < 1 && is.numeric(k) && length(k) == 1),
             "path needs to be default or a valid path ending with '/' or '\\\\'"
             = (path == "" || (dir.exists(path))
                && (substr(path, nchar(path), nchar(path)) == "/" ||

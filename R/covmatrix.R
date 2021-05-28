@@ -24,9 +24,10 @@
 
 covmatrix <- function(sib = 0, hsq) {
   stopifnot("sib needs to be a non-negative integer" =
-              (sib >= 0 && class(sib) == "numeric" && round(sib) == sib),
+              (sib >= 0 && is.numeric(sib) && round(sib) == sib &&
+                 length(sib) == 1),
             "hsq needs to be a number between 0 and 1" =
-              (hsq > 0 && hsq < 1 && class(hsq) == "numeric"))
+              (hsq > 0 && hsq < 1 && is.numeric(hsq) && length(hsq) == 1))
 
   s <- matrix(c(hsq, hsq, rep(0.5 * hsq, sib + 2),
                 hsq, 1, rep(0.5 * hsq, sib + 2),

@@ -57,21 +57,40 @@
 #' @export
 
 sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
-  
-  
+  stopifnot("n and dist needs to have same length" = length(n) == length(dist),
+            "n needs to be a vector of positive integers" =
+              (all(n > 0) && is.numeric(n) && all(n == round(n))),
+            "m needs to be an integer greater than 0" =
+              (m > 0 && is.numeric(m) && m == round(m)),
+            "q needs to be an integer greater than 0 and smaller than m" =
+              (q > 0 && is.numeric(q) && q == round(q) && length(q) == 1
+               && q <= m),
+            "hsq needs to be a number between 0 and 1" =
+              (hsq > 0 && hsq < 1 && is.numeric(hsq) && length(hsq) == 1),
+            "k needs to be a number between 0 and 1" =
+              (k > 0 && k < 1 && is.numeric(k) && length(k) == 1),
+            "dist needs to be a vector of non-negative integers" =
+              (all(dist >= 0) && is.numeric(dist) && all(dist == round(dist))),
+            "path needs to be default or a valid path ending with '/' or '\\\\'"
+            = (path == "" || (dir.exists(path))
+               && (substr(path, nchar(path), nchar(path)) == "/" ||
+                     substr(path, nchar(path), nchar(path)) == "\\")))
+
+
+
   path = path_validation(path)
-  
+
   # Set worker nodes:
   future::plan(future::multiprocess, workers = max(future::availableCores(logical = F) - 1, 1))
 
-  parentmaker <- function(m, antal, MAFs){
-    sapply(1:antal, function(i){rbinom(m, 2, MAFs)})
+  parent_maker <- function(m, number, MAFs) {
+    vapply(1:number, function(y) {rbinom(m, 2, MAFs)}, FUN.VALUE = numeric(m))
   }
 
   largest_sib <- max(dist)
   values <- numeric(length(dist))
 
-  for (i in 1:length(dist)) {
+  for (i in seq_len(length(dist))) {
     values[i] <- ceiling((n[i]*m)/10000000)
   }
 
@@ -84,7 +103,7 @@ sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
   lower_bound <- 1
   upper_bound <- 0
 
-  for(i in 1:length(values)) {
+  for(i in seq_len(length(values))) {
     x <- values[i]
     pers <- n[i]
     upper_bound <- upper_bound + x
@@ -140,7 +159,7 @@ sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
   else {
     header <- c(header, "line_pheno")
   }
-  
+
   #We create the header for the phenofile:
   data.table::fwrite(data.table::as.data.table(rbind(header)),
          paste0(path, "phenotypes.txt", sep = ""),
@@ -154,15 +173,16 @@ sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
 
   future.apply::future_lapply(1:parts, function(i) {
 
-    parentmatrix <- parentmaker(m = m, antal = 2*splits[i], MAFs)
+    parentmatrix <- parent_maker(m = m, number = 2*splits[i], MAFs)
 
-    child <- t(sapply(seq(1, ncol(parentmatrix), 2), function(i) {
+    child <- t(vapply(seq(1, ncol(parentmatrix), 2), function(i) {
       child_mean <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
       round_vec <- rbinom(n = m, 1, 1/2)
       snps_for_child <- rbinom(n = m, 2, 1/2)
       vals <- ifelse(child_mean == 1, 1, 0)
       child_mean[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_child, 1)
-      return(dplyr::if_else(round_vec == 1, ceiling(child_mean), floor(child_mean)))}))
+      return(dplyr::if_else(round_vec == 1, ceiling(child_mean), floor(child_mean)))},
+      FUN.VALUE = numeric(m)))
 
 
 
@@ -171,14 +191,15 @@ sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
       sibtable <- data.table::data.table("start" = numeric(splits[i]))
 
       if (amount_of_sibs[i] != 0) {
-        for(j in 1:amount_of_sibs[i]){
-          sibs <- t(sapply(seq(1, ncol(parentmatrix), 2), function(i){
+        for(j in seq_len(amount_of_sibs[i])) {
+          sibs <- t(vapply(seq(1, ncol(parentmatrix), 2), function(i){
             sibs <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
             round_vec <- rbinom(n = m, 1, 1/2)
             snps_for_sibs <- rbinom(n = m, 2, 1/2)
             vals <- ifelse(sibs == 1, 1, 0)
             sibs[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_sibs, 1)
-            return(dplyr::if_else(round_vec == 1, ceiling(sibs), floor(sibs)))}))
+            return(dplyr::if_else(round_vec == 1, ceiling(sibs), floor(sibs)))},
+            FUN.VALUE = numeric(m)))
 
           sib_lg <- sweep(sweep(sibs, 2, mu, FUN = "-"), 2, sigma, FUN = "/") %*% beta
           sib_liab <- sib_lg + rnorm(splits[i], 0, sqrt(1 - hsq))
@@ -210,8 +231,12 @@ sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
 
 
     #Make phenotypes:
-    c_pheno <- sapply(c_liab, function(x) ifelse(x > critical, 2, 1))
-    p_pheno <- sapply(parliab, function(x) ifelse(x > critical, 2, 1))
+    c_pheno <- vapply(c_liab, function(x) ifelse(x > critical, 2, 1), 
+                      FUN.VALUE = matrix(splits[i]))
+
+    p_pheno <- vapply(parliab, function(x) ifelse(x > critical, 2, 1), 
+                      FUN.VALUE = matrix(splits[i]))
+
     c_line_pheno <- c_pheno + 1
 
     #FID for the children/parents:
