@@ -31,13 +31,14 @@ plot_pval_QQ <- function(dataset,
   
   stopifnot("dataset must have a column named 'P'" = "P" %in% colnames(dataset),
             "line_size needs to be a positive number" =
-              (is.numeric(line_size) && line_size > 0),
+              (is.numeric(line_size) && line_size > 0 &&
+                 length(line_size) == 1),
             "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
-              (tools::file_ext(plot_filename) == "png" ||
-                 tools::file_ext(plot_filename) == "pdf" ||
-                 tools::file_ext(plot_filename) == "jpeg"))
+              (file_ext(plot_filename) == "png" ||
+                 file_ext(plot_filename) == "pdf" ||
+                 file_ext(plot_filename) == "jpeg"))
   
   plt <- ggplot2::ggplot(data = dataset) +
     ggplot2::geom_abline(size = line_size, color = line_color) +
@@ -92,13 +93,14 @@ plot_pval_hist <- function(dataset,
   
   stopifnot("dataset must have a column named 'P'" = "P" %in% colnames(dataset),
             "bins needs to be a positive integer" =
-              (is.numeric(bins) && bins > 0 && bins == round(bins)),
+              (is.numeric(bins) && bins > 0 && bins == round(bins) &&
+                 length(bins) == 1),
             "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
-              (tools::file_ext(plot_filename) == "png" ||
-                 tools::file_ext(plot_filename) == "pdf" ||
-                 tools::file_ext(plot_filename) == "jpeg"))
+              (file_ext(plot_filename) == "png" ||
+                 file_ext(plot_filename) == "pdf" ||
+                 file_ext(plot_filename) == "jpeg"))
   
   plt <- ggplot2::ggplot(data = dataset) +
     ggplot2::geom_histogram(mapping = ggplot2::aes(P),
@@ -151,9 +153,9 @@ plot_manhattan <- function(dataset,
             "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
-              (tools::file_ext(plot_filename) == "png" ||
-                 tools::file_ext(plot_filename) == "pdf" ||
-                 tools::file_ext(plot_filename) == "jpeg"))
+              (file_ext(plot_filename) == "png" ||
+                 file_ext(plot_filename) == "pdf" ||
+                 file_ext(plot_filename) == "jpeg"))
   
   data_plt <- dataset %>%
     dplyr::filter(P < 0.05)
@@ -209,9 +211,9 @@ plot_estimates_vs_true <- function(dataset,
             "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
-              (tools::file_ext(plot_filename) == "png" ||
-                 tools::file_ext(plot_filename) == "pdf" ||
-                 tools::file_ext(plot_filename) == "jpeg"))
+              (file_ext(plot_filename) == "png" ||
+               file_ext(plot_filename) == "pdf" ||
+               file_ext(plot_filename) == "jpeg"))
   
   tmpdataacc <- dataset %>%
     dplyr::filter(significant)
@@ -268,9 +270,9 @@ plot_pmgl_vs_true <- function(dataset,
             "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
-              (tools::file_ext(plot_filename) == "png" ||
-                 tools::file_ext(plot_filename) == "pdf" ||
-                 tools::file_ext(plot_filename) == "jpeg"))
+              (file_ext(plot_filename) == "png" ||
+                 file_ext(plot_filename) == "pdf" ||
+                 file_ext(plot_filename) == "jpeg"))
   
   plt <- ggplot2::ggplot(dataset) +
     ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg),

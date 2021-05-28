@@ -31,16 +31,16 @@ load_assoc_results <- function(plink_file,
                                alpha) {
   stopifnot("plink_file needs to be a valid file with extension '.assoc' or '.qassoc'" =
               (file.exists(plink_file) &&
-                 (tools::file_ext(plink_file) == "assoc" ||
-                    tools::file_ext(plink_file) == "qassoc")),
+                 (file_ext(plink_file) == "assoc" ||
+                    file_ext(plink_file) == "qassoc")),
             "true_effects_file needs to a valid file with extension '.txt'" =
               (file.exists(true_effects_file) &&
-                 tools::file_ext(true_effects_file) == "txt"),
+                 file_ext(true_effects_file) == "txt"),
             "MAFs_file needs to be a valid file with extension '.txt'" =
-              (file.exists(MAFs_file) &&
-                 tools::file_ext(MAFs_file) == "txt"),
+              (file.exists(MAFs_file) && file_ext(MAFs_file) == "txt"),
             "alpha needs to be a number between 0 and 1" =
-              (is.numeric(alpha) && 0 < alpha && alpha < 1))
+              (is.numeric(alpha) && 0 < alpha && alpha < 1 &&
+                 length(alpha) == 1))
   
   results <- tibble::tibble(
     data.table::fread(file = plink_file,
@@ -74,8 +74,7 @@ load_assoc_results <- function(plink_file,
 #' @export
 load_phenotypes <- function(pheno_file) {
   stopifnot("pheno_file needs to a valid file with extension '.txt'" =
-              (file.exists(pheno_file) &&
-                 tools::file_ext(pheno_file) == "txt"))
+              (file.exists(pheno_file) && file_ext(pheno_file) == "txt"))
   pheno_ds <- tibble::tibble(data.table::fread(file = pheno_file,
                                                header = TRUE))
   return(pheno_ds)
