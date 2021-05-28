@@ -55,5 +55,6 @@ Imports:
     cowplot,
     magrittr,
     tibble,
-    tidyr
+    tidyr,
+    ggrepel
 VignetteBuilder: knitr
