@@ -46,5 +46,11 @@ $$
 where $\epsilon_{o,e}$ and $\epsilon_{o,g}$ is the environmental and genetic liability of the target, $\epsilon_{p1}$ and $\epsilon_{p2}$ is the full liability of the parents, and $\epsilon_s$ is the full liability of the sibling(s). This is only for one sibling, but can be expanded to an arbitrary number of siblings. 
 
 To be able to include the case/control status for the family, each person is assigned a configuration. The configuration is created based on the case/control status of the target, the parents and siblings, such that each person with the same family history is in the same configuration. The configuration is used as prior knowledge in calculating the posterior mean genetic liability to be able to get a more precise estimate of what the genetic liability should be for each person. The posterior mean genetic liability $E(\epsilon_{o,g}|z_o,z_{p1},z_{p2},\overrightarrow{z_s})$ uses the case/control status of the target $(z_o)$, the parents $(z_{p1}, z_{p2})$ and the siblings $(\overrightarrow{z_s})$. 
+The case/control status of the family members informs us about what range the full liabilities lies in, since they have to be greater than T if case and less than T if control.
 
-
+Example:
+For a family with no siblings we have: 
+$$
+\epsilon_{o,g}|\epsilon_{o,f},\epsilon_{p1},\epsilon_{p2} \sim N(\frac{(h^2-\frac{1}{2}h^4)\cdot \epsilon_{o,f} + (\frac{1}{2}h^2 - \frac{1}{2}h^4)\cdot (\epsilon_{p1}+\epsilon_{p2})}{1-\frac{1}{2}h^4}, \frac{h^2 - \frac{3}{2}h^4 + \frac{1}{2}h^6}{1-\frac{1}{2}h^4})
+$$
+where $\epsilon_{o,f}$ is the targets own full liability and $\epsilon_{p1}, \epsilon_{p2}$ is the parents full liability. By including the knowledge about the configuration, then we we can sample the genetic liability from a normal distribution when the full liabilities have values that correspond to having the correct case/control status.
