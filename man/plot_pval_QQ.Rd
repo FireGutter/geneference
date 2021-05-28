@@ -28,7 +28,8 @@ plot_pval_QQ(
 \item{save_plot_path}{if \code{FALSE}, return the function returns a ggplot
 object. Else a path of the directory to save the plot to.}
 
-\item{plot_filename}{name of the file to be saved, including file extension.}
+\item{plot_filename}{name of the file to be saved, including file extension.
+ÆNDRES: Must be either pdf, png or jpeg}
 }
 \value{
 Either returns a \code{ggplot} object or saves the plot to

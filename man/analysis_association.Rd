@@ -29,7 +29,8 @@ file, excluding file extension.}
 file. \code{FALSE} if the file is .ped.}
 
 \item{plink_path}{\code{TRUE} if user has added PLINK to the system
-variable "Path". Otherwise a string specifying the path to PLINK.}
+variable "PATH". Otherwise a string specifying the path to the folder
+containing plink.exe.}
 }
 \value{
 Does not return anything, but PLINK writes \code{out_file} to disk,

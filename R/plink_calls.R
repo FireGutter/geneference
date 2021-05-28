@@ -131,7 +131,7 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
 #' @param plink_path \code{TRUE} if user has added PLINK to the system
 #' variable "PATH". Otherwise a string specifying the path to the folder
 #' containing plink.exe.
-#' @param h2 heritability parameter (used for calibration of lasso).
+#' @param hsq heritability parameter (used for calibration of lasso).
 #'
 #' @return Does not return anything, but PLINK writes \code{out_file} to disk,
 #' containing results of the performed lasso-regression. The columns in the
@@ -179,7 +179,7 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
                          "--pheno", quote_path(pheno_file),
                          "--pheno-name", pheno_name,
                          "--out", quote_path(out_file),
-                         "--lasso", h2)
+                         "--lasso", hsq)
 
   shell(cmd = plink_command)
 }
