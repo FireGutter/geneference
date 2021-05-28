@@ -22,13 +22,13 @@ This vignette shows how we model the liability distributions based on the work b
 In the simulations there are being simulated $n$ individuals with $m$ Single-Nucleotide Polymorphisms (SNPs), with $c$ causal SNPs. Each SNP is being drawn from a binomial distribution with ... and probability of the Minor Allele Frequency (MAF). Each SNP has its own MAF which is being drawn from a uniform distribution from $0.01$ to $0.49$. The effect size of the causal SNPs is drawn from a normal distribution with mean $0$ and variance $\frac{h^2}{c}$, and the effect size of non-causal SNPs is $0$.
 
 ## Liability threshold model
-The liability threshold model assigns a phenotype, case or control, to each person based on their full liability $l$, which can be divided into two parts, namely genetic liability ($l_{g}$) and environment $l_{e}$. The genetic liability is calculated by multiplying the SNPs by their effect size and summing them $l_g = X_i \beta$, where $X_i$ is the i'th persons SNPs and $\beta$ is the effect sizes. It is assumed that $l_g \sim N(0,h^2)$, where $h^2$ is the heritability. The liability from the environment is sampled and is assumed that $l_e \sim N(0,1-h^2)$, which makes the full liability $l = l_g+l_e \sim N(0,1)$. The liability theshold model assigns a case to a person if $l\geq T$, with $P(l\geq T) = k$, where $k$ is the prevalence of trait, e.g $5%$ and T is the threshold of disease liability and control otherwise.
+The liability threshold model assigns a phenotype, case or control, to each person based on their full liability $\epsilon$, which can be divided into two parts, namely genetic liability ($\epsilon_{g}$) and environment $\epsilon_{e}$. The genetic liability is calculated by multiplying the SNPs by their effect size and summing them $\epsilon_g = X_i \beta$, where $X_i$ is the i'th persons SNPs and $\beta$ is the effect sizes. It is assumed that $\epsilon_g \sim N(0,h^2)$, where $h^2$ is the heritability. The liability from the environment is sampled and is assumed that $\epsilon_e \sim N(0,1-h^2)$, which makes the full liability $\epsilon = \epsilon_g+\epsilon_e \sim N(0,1)$. The liability theshold model assigns a case to a person if $\epsilon\geq T$, with $P(\epsilon\geq T) = k$, where $k$ is the prevalence of trait, e.g $5%$ and T is the threshold of disease liability and control otherwise.
 
 ## LT-FH model
-The LT-FH method relies on the liability threshold model, but expands it to be able to take case/control status and/or family history into consideration. To model a family and their liabilities, it is assumed that it follows a multivariate normal distribution, where for two family members $cov(l_1, l_2) = K_{12}h^2$, where $K_{12}$ is the coefficient of the relationship, for example $1/2$ for a parent-offspring pair. Therefore, the liabilities of a family follows:
+The LT-FH method relies on the liability threshold model, but expands it to be able to take case/control status and/or family history into consideration. To model a family and their liabilities, it is assumed that it follows a multivariate normal distribution, where for two family members $cov(\epsilon_1, \epsilon_2) = K_{12}h^2$, where $K_{12}$ is the coefficient of the relationship, for example $1/2$ for a parent-offspring pair. Therefore, the liabilities of a family follows:
 $$
 \begin{pmatrix}
-l_{o,e} \\ l_{o,g} \\ l_{p1} \\ l_{p2} \\ l{s}
+\epsilon_{o,e} \\ \epsilon_{o,g} \\ \epsilon_{p1} \\ \epsilon_{p2} \\ \epsilon_{s}
 \end{pmatrix} \sim
 MVN_5 \begin{pmatrix}
 \begin{pmatrix}
@@ -43,6 +43,9 @@ MVN_5 \begin{pmatrix}
 \end{pmatrix}
 \end{pmatrix}
 $$
+where $\epsilon_{o,e}$ and $\epsilon_{o,g}$ is the environmental and genetic liability of the target, $\epsilon_{p1}$ and $\epsilon_{p2}$ is the full liability of the parents, and $\epsilon_s$ is the full liability of the sibling(s). This is only for one sibling, but can be expanded to an arbitrary number of siblings. 
+
+
 
 This is done by calculating posterior mean genetic liabilities for each person, based on the case/control status of their family. Each person is put into a configuration, such that every person with the same configuration has the same posterior mean genetic liability, since their case/control status of their family is the same. The configuration is used as prior knowledge to be able to get a more precise estimate of what the genetic liability should be for each person. 
 
