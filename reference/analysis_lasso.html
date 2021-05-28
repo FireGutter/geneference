@@ -174,7 +174,7 @@ NOTE: File extension will be .lasso.</p>
   <span class='va'>out_file</span>,
   bed <span class='op'>=</span> <span class='cn'>TRUE</span>,
   plink_path <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  h2 <span class='op'>=</span> <span class='fl'>0.5</span>
+  hsq <span class='op'>=</span> <span class='fl'>0.5</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -207,10 +207,11 @@ file. <code>FALSE</code> if the file is .ped.</p></td>
     <tr>
       <th>plink_path</th>
       <td><p><code>TRUE</code> if user has added PLINK to the system
-variable "Path". Otherwise a string specifying the path to PLINK.</p></td>
+variable "PATH". Otherwise a string specifying the path to the folder
+containing plink.exe.</p></td>
     </tr>
     <tr>
-      <th>h2</th>
+      <th>hsq</th>
       <td><p>heritability parameter (used for calibration of lasso).</p></td>
     </tr>
     </table>
