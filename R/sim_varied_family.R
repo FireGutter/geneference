@@ -173,7 +173,7 @@ sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
 
   future.apply::future_lapply(1:parts, function(i) {
 
-    parentmatrix <- parentmaker(m = m, antal = 2*splits[i], MAFs)
+    parentmatrix <- parent_maker(m = m, number = 2*splits[i], MAFs)
 
     child <- t(vapply(seq(1, ncol(parentmatrix), 2), function(i) {
       child_mean <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])

@@ -98,6 +98,6 @@ sim_random_family <- function(n, m, q, hsq, k, sib_fert, dist = 0, path = "") {
     individual_distribution <- as.vector(table(vals))
     dist <- ran[1]:ran[2]
   }
-  family_dist_simulaiton(n = individual_distribution, m = m, q = q, hsq = hsq, k = k, dist = dist, path = path)
+  sim_varied_family(n = individual_distribution, m = m, q = q, hsq = hsq, k = k, dist = dist, path = path)
   return(list("simulated_individuals(n)" = individual_distribution, "number_of_siblings(dist)" = dist))
 }
