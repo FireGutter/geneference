@@ -22,10 +22,11 @@ p_2_b <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=TRUE) {
               (file.exists(paste0(ped_file, ".ped"))
               && file.exists(paste0(ped_file, ".map"))),
             "bed_file needs to be a valid file without extension" =
-              (tools::file_ext(output_file) == ""),
+              (file_ext(output_file) == ""),
             "del needs to be either TRUE or FALSE" = is.logical(del),
             "plink_path needs to be a valid path to plink" =
-              (plink_path == TRUE || file.exists(paste0(plink_path, "/plink.exe"))))
+              (plink_path == TRUE || file.exists(paste0(plink_path,
+                                                        "/plink.exe"))))
 
   if (plink_path != TRUE) {
     tmp_path <- paste0("SET PATH=", quote_path(plink_path), ";")
@@ -74,18 +75,18 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
                                  bed=TRUE, plink_path=TRUE) {
   stopifnot("geno_file needs to be a valid file" =
               (file.exists(geno_file) &&
-                 ((tools::file_ext(geno_file) == "ped"
+                 ((file_ext(geno_file) == "ped"
                    && file.exists(paste0(ped_file, ".map"))) ||
-                    (tools::file_ext(geno_file) == "bed"
+                    (file_ext(geno_file) == "bed"
                     && file.exists(paste0(ped_file, ".bim"))
                     && file.exists(paste0(ped_file, ".fam"))))),
             "pheno_file needs to be a valid file" =
               (file.exists(pheno_file) &&
-                 tools::file_ext(pheno_file) == "txt"),
+                 file_ext(pheno_file) == "txt"),
             "pheno_name does not exist in 'pheno_file'" =
               (pheno_name %in% colnames(data.table::fread(pheno_file))),
             "out_file needs to be a valid file path without file extension" =
-              tools::file_ext(output_file) == "",
+              file_ext(output_file) == "",
             "bed needs to be either TRUE or FALSE" = is.logical(bed),
             "plink_path needs to be a valid path to plink" =
               (plink_path == TRUE ||
@@ -143,18 +144,18 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
                            out_file, bed=TRUE, plink_path=TRUE, hsq=0.5) {
   stopifnot("geno_file needs to be a valid file" =
               (file.exists(geno_file) &&
-                 ((tools::file_ext(geno_file) == "ped"
+                 ((file_ext(geno_file) == "ped"
                    && file.exists(paste0(ped_file, ".map"))) ||
-                    (tools::file_ext(geno_file) == "bed"
+                    (file_ext(geno_file) == "bed"
                      && file.exists(paste0(ped_file, ".bim"))
                      && file.exists(paste0(ped_file, ".fam"))))),
             "pheno_file needs to be a valid file" =
               (file.exists(pheno_file) &&
-                 tools::file_ext(pheno_file) == "txt"),
+                 file_ext(pheno_file) == "txt"),
             "pheno_name does not exist in 'pheno_file'" =
               (pheno_name %in% colnames(data.table::fread(pheno_file))),
             "out_file needs to be a valid file path without file extension" =
-              tools::file_ext(output_file) == "",
+              file_ext(output_file) == "",
             "bed needs to be either TRUE or FALSE" = is.logical(bed),
             "plink_path needs to be a valid path to plink" =
               (plink_path == TRUE ||
