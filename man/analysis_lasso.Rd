@@ -11,7 +11,7 @@ analysis_lasso(
   out_file,
   bed = TRUE,
   plink_path = TRUE,
-  h2 = 0.5
+  hsq = 0.5
 )
 }
 \arguments{
@@ -30,9 +30,10 @@ file, excluding file extension.}
 file. \code{FALSE} if the file is .ped.}
 
 \item{plink_path}{\code{TRUE} if user has added PLINK to the system
-variable "Path". Otherwise a string specifying the path to PLINK.}
+variable "PATH". Otherwise a string specifying the path to the folder
+containing plink.exe.}
 
-\item{h2}{heritability parameter (used for calibration of lasso).}
+\item{hsq}{heritability parameter (used for calibration of lasso).}
 }
 \value{
 Does not return anything, but PLINK writes \code{out_file} to disk,

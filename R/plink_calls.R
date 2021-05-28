@@ -10,7 +10,8 @@
 #' extension.
 #' @param del if \code{TRUE}, deletes the \code{ped_file} after conversion.
 #' @param plink_path \code{TRUE} if user has added PLINK to the system
-#' variable "Path". Otherwise a string specifying the path to PLINK.
+#' variable "PATH". Otherwise a string specifying the path to the folder
+#' containing plink.exe.
 #'
 #' @return Does not return anything, but writes the converted \code{ped_file}
 #' to disk at the path \code{bed_file}.
@@ -18,21 +19,22 @@
 #' @export
 p_2_b <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=TRUE) {
   stopifnot("ped_file needs to be a valid file without extension" =
-              (file.exists(paste0(ped_file, ".ped")) 
+              (file.exists(paste0(ped_file, ".ped"))
               && file.exists(paste0(ped_file, ".map"))),
             "bed_file needs to be a valid file without extension" =
-              (tools::file_ext(output_file) == ""),
+              (file_ext(output_file) == ""),
             "del needs to be either TRUE or FALSE" = is.logical(del),
             "plink_path needs to be a valid path to plink" =
-              (plink_path == TRUE || file.exists(paste0(plink_path, "/plink.exe"))))
+              (plink_path == TRUE || file.exists(paste0(plink_path,
+                                                        "/plink.exe"))))
 
   if (plink_path != TRUE) {
-    tmp_path <- paste0("set PATH=%PATH%;", plink_path, ";")
+    tmp_path <- paste0("SET PATH=", quote_path(plink_path), ";")
   } else {
     tmp_path <- ""
   }
-  system(paste(tmp_path, "plink --file", ped_file,
-               "--make-bed --out", bed_file))
+  shell(paste(tmp_path, "&&", "plink --file", quote_path(ped_file),
+               "--make-bed --out", quote_path(bed_file)))
 
   if (del == TRUE) {
     unlink(paste0(ped_file, ".ped"))
@@ -59,7 +61,8 @@ p_2_b <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=TRUE) {
 #' @param bed logical indicating whether or not the genotypes file is a .bed
 #' file. \code{FALSE} if the file is .ped.
 #' @param plink_path \code{TRUE} if user has added PLINK to the system
-#' variable "Path". Otherwise a string specifying the path to PLINK.
+#' variable "PATH". Otherwise a string specifying the path to the folder
+#' containing plink.exe.
 #'
 #' @return Does not return anything, but PLINK writes \code{out_file} to disk,
 #' containing results of the performed analysis. The columns in the printed
@@ -72,18 +75,18 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
                                  bed=TRUE, plink_path=TRUE) {
   stopifnot("geno_file needs to be a valid file" =
               (file.exists(geno_file) &&
-                 ((tools::file_ext(geno_file) == "ped"
+                 ((file_ext(geno_file) == "ped"
                    && file.exists(paste0(ped_file, ".map"))) ||
-                    (tools::file_ext(geno_file) == "bed"
+                    (file_ext(geno_file) == "bed"
                     && file.exists(paste0(ped_file, ".bim"))
                     && file.exists(paste0(ped_file, ".fam"))))),
             "pheno_file needs to be a valid file" =
               (file.exists(pheno_file) &&
-                 tools::file_ext(pheno_file) == "txt"),
+                 file_ext(pheno_file) == "txt"),
             "pheno_name does not exist in 'pheno_file'" =
               (pheno_name %in% colnames(data.table::fread(pheno_file))),
             "out_file needs to be a valid file path without file extension" =
-              tools::file_ext(output_file) == "",
+              file_ext(output_file) == "",
             "bed needs to be either TRUE or FALSE" = is.logical(bed),
             "plink_path needs to be a valid path to plink" =
               (plink_path == TRUE ||
@@ -91,7 +94,7 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
 
 
   if (plink_path != TRUE) {
-    tmp_path <- paste0("set PATH=%PATH%;", plink_path, ";")
+    tmp_path <- paste0("SET PATH=", quote_path(plink_path), ";")
   } else{
     tmp_path <- ""
   }
@@ -101,13 +104,14 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
     file_type <- "--file"
   }
   geno_file <- file_path_sans_ext(geno_file) #NOTE IF NOT NEW CONVENTION: this is from tools
-  plink_command <- paste(tmp_path, "plink", file_type, geno_file,
-                         "--pheno", pheno_file,
+  plink_command <- paste(tmp_path, "&&",
+                         "plink", file_type, quote_path(geno_file),
+                         "--pheno", quote_path(pheno_file),
                          "--pheno-name", pheno_name,
-                         "--out", out_file,
+                         "--out", quote_path(out_file),
                          "--assoc")
 
-  system(command = plink_command)
+  shell(cmd = plink_command)
 }
 
 #' @title Run Lasso analysis
@@ -125,7 +129,8 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
 #' @param bed logical indicating whether or not the genotypes file is a .bed
 #' file. \code{FALSE} if the file is .ped.
 #' @param plink_path \code{TRUE} if user has added PLINK to the system
-#' variable "Path". Otherwise a string specifying the path to PLINK.
+#' variable "PATH". Otherwise a string specifying the path to the folder
+#' containing plink.exe.
 #' @param hsq heritability parameter (used for calibration of lasso).
 #'
 #' @return Does not return anything, but PLINK writes \code{out_file} to disk,
@@ -139,18 +144,18 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
                            out_file, bed=TRUE, plink_path=TRUE, hsq=0.5) {
   stopifnot("geno_file needs to be a valid file" =
               (file.exists(geno_file) &&
-                 ((tools::file_ext(geno_file) == "ped"
+                 ((file_ext(geno_file) == "ped"
                    && file.exists(paste0(ped_file, ".map"))) ||
-                    (tools::file_ext(geno_file) == "bed"
+                    (file_ext(geno_file) == "bed"
                      && file.exists(paste0(ped_file, ".bim"))
                      && file.exists(paste0(ped_file, ".fam"))))),
             "pheno_file needs to be a valid file" =
               (file.exists(pheno_file) &&
-                 tools::file_ext(pheno_file) == "txt"),
+                 file_ext(pheno_file) == "txt"),
             "pheno_name does not exist in 'pheno_file'" =
               (pheno_name %in% colnames(data.table::fread(pheno_file))),
             "out_file needs to be a valid file path without file extension" =
-              tools::file_ext(output_file) == "",
+              file_ext(output_file) == "",
             "bed needs to be either TRUE or FALSE" = is.logical(bed),
             "plink_path needs to be a valid path to plink" =
               (plink_path == TRUE ||
@@ -159,7 +164,7 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
               (is.numeric(hsq) && length(hsq) == 1 && 0 < hsq && hsq < 1))
 
   if (plink_path != TRUE) {
-    tmp_path <- paste0("set PATH=%PATH%;", plink_path, ";")
+    tmp_path <- paste0("SET PATH=", quote_path(plink_path), ";")
   } else{
     tmp_path <- ""
   }
@@ -169,11 +174,12 @@ analysis_lasso <- function(geno_file, pheno_file, pheno_name,
     file_type <- "--file"
   }
   geno_file <- file_path_sans_ext(geno_file)
-  plink_command <- paste(tmp_path, "plink", file_type, geno_file,
-                         "--pheno", pheno_file,
+  plink_command <- paste(tmp_path, "&&",
+                         "plink", file_type, quote_path(geno_file),
+                         "--pheno", quote_path(pheno_file),
                          "--pheno-name", pheno_name,
-                         "--out", out_file,
+                         "--out", quote_path(out_file),
                          "--lasso", hsq)
 
-  system(command = plink_command)
+  shell(cmd = plink_command)
 }

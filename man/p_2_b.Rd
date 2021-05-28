@@ -16,7 +16,8 @@ extension.}
 \item{del}{if \code{TRUE}, deletes the \code{ped_file} after conversion.}
 
 \item{plink_path}{\code{TRUE} if user has added PLINK to the system
-variable "Path". Otherwise a string specifying the path to PLINK.}
+variable "PATH". Otherwise a string specifying the path to the folder
+containing plink.exe.}
 }
 \value{
 Does not return anything, but writes the converted \code{ped_file}
