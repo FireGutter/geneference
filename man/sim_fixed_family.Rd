@@ -21,7 +21,7 @@ the phenotype.}
 \item{sib}{number of siblings per individual.}
 
 \item{path}{directory where the files will be stored. If nothing is
-specified, \code{family_simulation} writes its files in the current
+specified, \code{sim_fixed_family} writes its files in the current
 working directory.}
 }
 \value{
@@ -35,9 +35,9 @@ the true effect of the i'th SNP.
 \item MAFs.txt - a file of \code{m} rows with one column. The i'th row is
 the true Minor Allelle Frequency of the i'th SNP.
 \item phenotypes.txt - a file of \code{n} rows, number of columns depend on
-number of siblings. The file contains the phenotype and liability of
-each individual as well as information on the liabilities and phenotype
-status of their parents and siblings.
+number of siblings. The file contains the phenotype status and liability
+of each individual as well as information on the liabilities and
+phenotype status of their parents and siblings.
 }
 \item genotypes.map - a file created such that PLINK will work with the genotype
 data.
@@ -52,7 +52,7 @@ has a fixed number of siblings specified by the \code{sib} parameter.
 }
 \details{
 Parents' genotypes are simulated and used for creating the genotypes of
-the individual and their siblings. For the methodology behind the
+the individuals and their siblings. For the methodology behind the
 simulation, see \code{vignette("liability-distribution")}.\cr
 \code{sim_fixed_family} makes use of parallel computation in order to
 decrease the running time. As one CPU core is left unused, the user
@@ -64,6 +64,6 @@ Simulating large datasets takes time and generates large files. For details
 on time complexity and required disk space, see
 \code{vignette("sim-benchmarks")}.\cr
 The largest file generated is \code{genotypes.ped}. See \code{p_2_b()} to convert it
-to another fileformat, thereby reducing its size significantly.
+to another file format, thereby reducing its size significantly.
 }
 

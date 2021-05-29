@@ -8,7 +8,7 @@
 #'
 #' @details
 #' Parents' genotypes are simulated and used for creating the genotypes of
-#' the individual and their siblings. For the methodology behind the
+#' the individuals and their siblings. For the methodology behind the
 #' simulation, see `vignette("liability-distribution")`.\cr
 #' \code{sim_fixed_family} makes use of parallel computation in order to
 #' decrease the running time. As one CPU core is left unused, the user
@@ -21,7 +21,7 @@
 #' @param hsq squared heritability parameter.
 #' @param k prevalence of phenotype.
 #' @param path directory where the files will be stored. If nothing is
-#' specified, \code{family_simulation} writes its files in the current
+#' specified, \code{sim_fixed_family} writes its files in the current
 #' working directory.
 #' @param sib number of siblings per individual.
 #'
@@ -33,9 +33,9 @@
 #'     * MAFs.txt - a file of \code{m} rows with one column. The i'th row is
 #'     the true Minor Allelle Frequency of the i'th SNP.
 #'     * phenotypes.txt - a file of \code{n} rows, number of columns depend on
-#'     number of siblings. The file contains the phenotype and liability of
-#'     each individual as well as information on the liabilities and phenotype
-#'     status of their parents and siblings.
+#'     number of siblings. The file contains the phenotype status and liability
+#'     of each individual as well as information on the liabilities and
+#'     phenotype status of their parents and siblings.
 #' * genotypes.map - a file created such that PLINK will work with the genotype
 #' data.
 #' * genotypes.ped - the simulated genotypes in a PLINK-readable format.
@@ -46,7 +46,7 @@
 #' on time complexity and required disk space, see
 #' `vignette("sim-benchmarks")`.\cr
 #' The largest file generated is `genotypes.ped`. See `p_2_b()` to convert it
-#' to another fileformat, thereby reducing its size significantly.
+#' to another file format, thereby reducing its size significantly.
 #'
 #' @importFrom data.table :=
 #' @import stats
@@ -75,7 +75,7 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
                && (substr(path, nchar(path), nchar(path)) == "/" ||
                      substr(path, nchar(path), nchar(path)) == "\\")))
 
-  path = path_validation(path)
+  path <- path_validation(path)
 
   # Set worker nodes:
   future::plan(future::multiprocess, workers = max(future::availableCores(logical = F) - 1, 1))
