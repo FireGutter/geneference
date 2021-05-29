@@ -1,11 +1,15 @@
-#' @title Convert .ped files to .bed
+#' @title Convert files to .bed
 #'
 #' @description to be written. Essentially:
-#' calls plink to convert for storing with smaller file size.
-#' NOTE: .ped file can be viewed, .bed cannot be viewed
+#' Calls PLINK to convert .ped and .map files to the .bed format, reducing
+#' file size significantly.
+#'
+#' @details
+#' Be aware that while .ped files can be viewed in text editors, .bed files
+#' can not.
 #'
 #' @param ped_file path of the .ped file to be converted, excluding file
-#' extension.
+#' extension. The .map needs
 #' @param bed_file path of the .bed file to be written, excluding file
 #' extension.
 #' @param del if \code{TRUE}, deletes the \code{ped_file} after conversion.

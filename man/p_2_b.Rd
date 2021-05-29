@@ -2,13 +2,13 @@
 % Please edit documentation in R/plink_calls.R
 \name{p_2_b}
 \alias{p_2_b}
-\title{Convert .ped files to .bed}
+\title{Convert files to .bed}
 \usage{
 p_2_b(ped_file, bed_file = ped_file, del = TRUE, plink_path = TRUE)
 }
 \arguments{
 \item{ped_file}{path of the .ped file to be converted, excluding file
-extension.}
+extension. The .map needs}
 
 \item{bed_file}{path of the .bed file to be written, excluding file
 extension.}
@@ -25,6 +25,10 @@ to disk at the path \code{bed_file}.
 }
 \description{
 to be written. Essentially:
-calls plink to convert for storing with smaller file size.
-NOTE: .ped file can be viewed, .bed cannot be viewed
+Calls PLINK to convert .ped and .map files to the .bed format, reducing
+file size significantly.
+}
+\details{
+Be aware that while .ped files can be viewed in text editors, .bed files
+can not.
 }
