@@ -94,7 +94,7 @@ load_phenotypes <- function(pheno_file) {
 #' assumes that the .txt files only contain one coulmn. Using the simulations
 #' this would be the beta and MAFs files.
 #'
-#' @param path to the folder containing the analysis-files.
+#' @param path full path to the folder containing the analysis-files.
 #' @param vars variables of interest that is to be imported if they exist in
 #' the current files.
 #'
@@ -383,11 +383,11 @@ mutator <- function(data, alpha) {
     if (grepl("^P_", val, ignore.case = T)) {
       strin1 <- paste0(val, "_significnat")
       strin2 <- paste0(val, "_bonferroni")
-      numbers <- data %>% select(dplyr::all_of(c(val)))
+      numbers <- data %>% dplyr::select(dplyr::all_of(c(val)))
       data <- data %>% dplyr::mutate("strin1v1" = numbers < alpha, 
                                      "strin2v2" = numbers < alpha/n)
-      setnames(data, "strin1v1", strin1)
-      setnames(data, "strin2v2", strin2)
+      data.table::setnames(data, "strin1v1", strin1)
+      data.table::setnames(data, "strin2v2", strin2)
     }
   }
   
@@ -426,14 +426,14 @@ mutator <- function(data, alpha) {
         if(ind %in% 1:nr_of_names){
           choices[i] <- names(data)[ind]
           i <- i + 1
-          LTFH_P <- pull(data, names(data)[ind])
+          LTFH_P <- dplyr::pull(data, names(data)[ind])
         }
         else if(ind == nr_of_names + 1){
           ind <- 0
           break
         }
         else {
-          cat("Invalid input.")
+          cat("Invalid input.\n")
         }
       }
       else if(i == 2){
@@ -445,14 +445,14 @@ mutator <- function(data, alpha) {
         if(ind %in% 1:nr_of_names){
           choices[i] <- names(data)[ind]
           i <- i + 1
-          LINE_P <- pull(data, names(data)[ind])
+          LINE_P <- dplyr::pull(data, names(data)[ind])
         }
         else if(ind == nr_of_names + 1){
           ind <- 0
           break
         }
         else {
-          cat("Invalid input.")
+          cat("Invalid input.\n")
         }
       }
       else if(i == 3){
@@ -464,14 +464,14 @@ mutator <- function(data, alpha) {
         if(ind %in% 1:nr_of_names){
           choices[i] <- names(data)[ind]
           i <- i + 1
-          LTFH_BETA <- pull(data, names(data)[ind])
+          LTFH_BETA <- dplyr::pull(data, names(data)[ind])
         }
         else if(ind == nr_of_names + 1){
           ind <- 0
           break
         }
         else {
-          cat("Invalid input.")
+          cat("Invalid input.\n")
         }
       }
       else if(i == 4){
@@ -483,14 +483,14 @@ mutator <- function(data, alpha) {
         if(ind %in% 1:nr_of_names){
           choices[i] <- names(data)[ind]
           i <- i + 1
-          LTFH_SE <- pull(data, names(data)[ind])
+          LTFH_SE <- dplyr::pull(data, names(data)[ind])
         }
         else if(ind == nr_of_names + 1){
           ind <- 0
           break
         }
         else {
-          cat("Invalid input.")
+          cat("Invalid input.\n")
         }
       }
       else if(i == 5){
@@ -502,14 +502,14 @@ mutator <- function(data, alpha) {
         if(ind %in% 1:nr_of_names){
           choices[i] <- names(data)[ind]
           i <- i + 1
-          MAFS <- pull(data, names(data)[ind])
+          MAFS <- dplyr::pull(data, names(data)[ind])
         }
         else if(ind == nr_of_names + 1){
           ind <- 0
           break
         }
         else {
-          cat("Invalid input.")
+          cat("Invalid input.\n")
         }
       }
       else if(i == 6) {
@@ -564,7 +564,7 @@ mutator <- function(data, alpha) {
   sq <- sqrt(n * median(qchisq(LTFH_P, 1, lower.tail = T))/median(qchisq(LINE_P, 1, lower.tail = T)))
   obs <- (LTFH_BETA / (LTFH_SE * sq)) * sqrt(k * (1 - k) / (2 * MAFS * (1 - MAFS)))
   
-  data <- data %>% mutate("LTFH_transformed" = obs)
+  data <- data %>% dplyr::mutate("LTFH_transformed" = obs)
   
   return(data)
 }

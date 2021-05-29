@@ -297,3 +297,61 @@ plot_pmgl_vs_true <- function(dataset,
     return(plt)
   }
 }
+
+#' @title Plot transformed linear GWAS beta values against the LTFH_transformed
+#' values.
+#'
+#' @description description to be written.
+#'
+#' @param dataset data imported to R.
+#' @param transformed_beta the transformed beta values from LTFH.
+#' @param linear_beta the beta values from standard GWAS.
+#' @param bonferroni corrected significant values from LTFH.
+#' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
+#' object. Else a path of the directory to save the plot to.
+#' @param plot_filename name of the file to be saved, including file extension.
+#'
+#' @return Either returns a \code{ggplot} object or saves the plot to
+#' \code{save_plot_path} and returns NULL.
+#'
+#' @export
+GWAS_beta_VS_LTFH_transfored_beta <- function(dataset,
+                                              transformed_beta,
+                                              linear_beta,
+                                              bonferroni,
+                                              save_plot_path = FALSE,
+                                              plot_filename = "LTFH.png") {
+  
+  stopifnot("save_plot_path needs to be default or a valid path" =
+              (save_plot_path == FALSE || dir.exists(save_plot_path)),
+            "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
+              (tools::file_ext(plot_filename) == "png" ||
+                 tools::file_ext(plot_filename) == "pdf" ||
+                 tools::file_ext(plot_filename) == "jpeg"))
+  
+  plt <- ggplot2::ggplot(dataset, ggplot2::aes(x = transformed_beta,
+                                               y = linear_beta)) +
+    ggplot2::geom_point(mapping = ggplot2::aes(color = bonferroni)) +
+    ggplot2::geom_smooth(se = FALSE, method = "lm")+
+    ggplot2::geom_abline(intercept = 0, slope = 1, color="green", 
+                         linetype="dashed", size = 1) +
+    ggplot2::labs(x = "LTFH beta",
+                  y = "GWAS beta",
+                  title = "Comparing LTFH beta to GWAS beta",
+                  subtitle = deparse(substitute(dataset)),
+                  colour = "Significant with\n Bonferroni-correction") +
+    ggplot2::theme_light() +
+    ggplot2::theme(plot.title = ggplot2::element_text(face = "bold",
+                                                      hjust = 0.5),
+                   plot.subtitle = ggplot2::element_text(face = "bold",
+                                                         hjust = 0.5))
+  
+  if (save_plot_path != FALSE) {
+    ggplot2::ggsave(filename = plot_filename,
+                    plot = plt,
+                    path = save_plot_path)
+  } else{
+    return(plt)
+  }
+}
+
