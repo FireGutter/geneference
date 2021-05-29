@@ -95,14 +95,13 @@ load_phenotypes <- function(pheno_file) {
 #' this would be the beta and MAFs files.
 #'
 #' @param path full path to the folder containing the analysis-files.
-#' @param vars variables of interest that is to be imported if they exist in
-#' the current files.
 #'
 #' @return A data.table containing the different results from the files.
 #' 
 #' @export
 
-reader <- function(path, vars = c("P", "BETA", "CHISQ", "SE")){
+reader <- function(path){
+  vars <- c("P", "BETA", "CHISQ", "SE")
   re <- list.files(path)
   len <- length(re)
   pick <- numeric(len)
@@ -152,6 +151,7 @@ reader <- function(path, vars = c("P", "BETA", "CHISQ", "SE")){
       for(k in vals){
         if(!(k %in% 1:(nr - 1))){
           flag <- FALSE
+          break
         } else {
           flag <- TRUE
         }
@@ -376,32 +376,6 @@ reader <- function(path, vars = c("P", "BETA", "CHISQ", "SE")){
 #' @export
 
 mutator <- function(data, alpha) {
-  data <- data %>% dplyr::mutate("causal" = beta != 0)
-  n <- nrow(data)
-  
-  for(val in names(data)) {
-    if (grepl("^P_", val, ignore.case = T)) {
-      strin1 <- paste0(val, "_significnat")
-      strin2 <- paste0(val, "_bonferroni")
-      numbers <- data %>% dplyr::select(dplyr::all_of(c(val)))
-      data <- data %>% dplyr::mutate("strin1v1" = numbers < alpha, 
-                                     "strin2v2" = numbers < alpha/n)
-      data.table::setnames(data, "strin1v1", strin1)
-      data.table::setnames(data, "strin2v2", strin2)
-    }
-  }
-  
-  while (TRUE){
-    cat("Do you also want to make a transformed LTFH_beta - column?")
-    ind = readline('Enter 0 for "NO" or 1 for "YES": ')
-    if(ind %in% c(0, 1)){
-      break
-    }
-    else {
-      cat("Invalid input.\n\n")
-    }
-  }
-  
   plotter <- function(){
     j <- 1
     for(name in names(data)){
@@ -413,17 +387,82 @@ mutator <- function(data, alpha) {
   
   nr_of_names <- length(names(data))
   
-  if(ind == 1){
+  while(TRUE){
+    cat("Do you want to create a causal column from the beta column?")
+    ind = readline('Enter 0 for "NO" or 1 for "YES": ')
+    if(ind %in% c(0, 1)){
+      if(ind == 1){
+        while(TRUE) {
+          cat("Which column is the beta-column?\n")
+          plotter()
+          cat(nr_of_names + 1, "That column does not exist\n")
+          val <- readline('Enter a number: ')
+          if(val %in% 1:nr_of_names){
+            val <- strtoi(val)
+            beta_vals <- dplyr::pull(data, names(data)[val])
+            data <- data %>% dplyr::mutate("causal" = beta_vals != 0)
+            break
+          }
+          else if(val == (nr_of_names + 1)){
+            cat("Since the beta column does not exist, the causal column can't be created\n")
+            ind <- 0
+            break
+          }
+          else {
+            cat("Invalid input.\n")
+          }
+        }
+        break
+      }
+      break
+    }
+    cat("Invalid input.\n")
+  }
+  
+  m <- nrow(data)
+  
+  for(val in names(data)) {
+    if (grepl("^P_", val, ignore.case = T)) {
+      strin1 <- paste0(val, "_significnat")
+      strin2 <- paste0(val, "_bonferroni")
+      numbers <- data %>% dplyr::select(dplyr::all_of(c(val)))
+      data <- data %>% dplyr::mutate("strin1v1" = numbers < alpha, 
+                                     "strin2v2" = numbers < alpha/m)
+      data.table::setnames(data, "strin1v1", strin1)
+      data.table::setnames(data, "strin2v2", strin2)
+    }
+  }
+  
+  while (TRUE){
+    cat("Do you also want to make a transformed LTFH_beta - column?")
+    ind <- readline('Enter 0 for "NO" or 1 for "YES": ')
+    if(ind %in% c(0, 1)){
+      if(ind == 1){
+        cat("Do you have standard names form the loader function?\n")
+        sec <-  readline('Enter 0 for "NO" or 1 for "YES": ')
+        if(sec %in% c(0, 1)){
+          break
+        }
+      }
+    }
+    else {
+      cat("Invalid input.\n\n")
+    }
+  }
+
+  nr_of_names <- length(names(data))
+  
+  if(ind == 1 & sec == 0){
     i <- 1
     choices <- numeric(6)
     while(TRUE){
       if(i == 1){
-        cat("Which column is the P-values form LTFH?\n")
+        cat("Which column contain P-values form LTFH?\n")
         plotter()
-        cat(nr_of_names + 1, "None of the columns are the P-values from LTFH.\n")
+        cat(nr_of_names + 1, "None of the columns contain P-values from LTFH.\n")
         ind <- readline('Enter a number: ')
-        ind <- strtoi(ind)
         if(ind %in% 1:nr_of_names){
+          ind <- strtoi(ind)
           choices[i] <- names(data)[ind]
           i <- i + 1
           LTFH_P <- dplyr::pull(data, names(data)[ind])
@@ -437,12 +476,12 @@ mutator <- function(data, alpha) {
         }
       }
       else if(i == 2){
-        cat("Which column is the P-values form linear GWAS?\n")
+        cat("Which column contain P-values form linear GWAS?\n")
         plotter()
-        cat(nr_of_names + 1, "None of the columns are the P-values from linear GWAS.\n")
+        cat(nr_of_names + 1, "None of the columns contain P-values from linear GWAS.\n")
         ind <- readline('Enter a number: ')
-        ind <- strtoi(ind)
         if(ind %in% 1:nr_of_names){
+          ind <- strtoi(ind)
           choices[i] <- names(data)[ind]
           i <- i + 1
           LINE_P <- dplyr::pull(data, names(data)[ind])
@@ -456,12 +495,12 @@ mutator <- function(data, alpha) {
         }
       }
       else if(i == 3){
-        cat("Which column contain the beta-values form LTFH?\n")
+        cat("Which column contain beta-values form LTFH?\n")
         plotter()
-        cat(nr_of_names + 1, "None of the columns contain the beta-values from LTFH.\n")
+        cat(nr_of_names + 1, "None of the columns contain beta-values from LTFH.\n")
         ind <- readline('Enter a number: ')
-        ind <- strtoi(ind)
         if(ind %in% 1:nr_of_names){
+          ind <- strtoi(ind)
           choices[i] <- names(data)[ind]
           i <- i + 1
           LTFH_BETA <- dplyr::pull(data, names(data)[ind])
@@ -475,12 +514,12 @@ mutator <- function(data, alpha) {
         }
       }
       else if(i == 4){
-        cat("Which column contain the standard-error (SE) values form LTFH?\n")
+        cat("Which column contain standard-errors (SE) values form LTFH?\n")
         plotter()
-        cat(nr_of_names + 1, "None of the columns contain the standard-error from LTFH.\n")
+        cat(nr_of_names + 1, "None of the columns contain standard-errors from LTFH.\n")
         ind <- readline('Enter a numbe": ')
-        ind <- strtoi(ind)
         if(ind %in% 1:nr_of_names){
+          ind <- strtoi(ind)
           choices[i] <- names(data)[ind]
           i <- i + 1
           LTFH_SE <- dplyr::pull(data, names(data)[ind])
@@ -498,8 +537,8 @@ mutator <- function(data, alpha) {
         plotter()
         cat(nr_of_names + 1, "None of the columns contain the MAFs values.\n")
         ind <- readline('Enter a number: ')
-        ind <- strtoi(ind)
         if(ind %in% 1:nr_of_names){
+          ind <- strtoi(ind)
           choices[i] <- names(data)[ind]
           i <- i + 1
           MAFS <- dplyr::pull(data, names(data)[ind])
@@ -522,19 +561,19 @@ mutator <- function(data, alpha) {
       else if(i == 7) {
         while(TRUE) {
           cat("The following data has been entered:\n")
-          cat("1: LTFH_P:", choices[1])
+          cat("1: P values from LTFH:", choices[1])
           cat("\n")
-          cat("2: LINE_P:", choices[2])
+          cat("2: P values from linear GWAS:", choices[2])
           cat("\n")
-          cat("3: BETA_LTFH:", choices[3])
+          cat("3: BETA values from LTFH:", choices[3])
           cat("\n")
-          cat("4: LTFH_SE:", choices[4])
+          cat("4: SE from LTFH:", choices[4])
           cat("\n")
           cat("5: MAF:", choices[5])
           cat("\n")
-          cat("6: k:", choices[6])
+          cat("6: k (preverlace):", choices[6])
           cat("\n")
-          ind = readline("Is this correct? Enter 7 if yes. Enter any of the above numbers if no: ")
+          ind = readline('Is this correct? Enter 7 if "YES". Enter any of the above numbers if no: ')
           if(ind %in% 1:7) {
             if(ind == "7"){
               i <- 8
@@ -556,12 +595,23 @@ mutator <- function(data, alpha) {
     }
   }
   
-  if(ind == 0){
+  if(ind == 0) {
+    return(data)
+  }
+  else if(ind == 1 & sec == 1) {
+    ind <- readline('Choose the preverlance parameter "k": ')
+    options(digits = 5)
+    k <- as.double(ind)
+    sq <- sqrt(m * median(qchisq(data$P_LTFH, 1, lower.tail = T))/median(qchisq(data$P_linear, 1, lower.tail = T)))
+    obs <- (data$BETA_LTFH / (data$SE_LTFH * sq)) * sqrt(k * (1 - k) / (2 * data$MAFs * (1 - data$MAFs)))
+    
+    data <- data %>% dplyr::mutate("LTFH_transformed" = obs)
+    
     return(data)
   }
   
   
-  sq <- sqrt(n * median(qchisq(LTFH_P, 1, lower.tail = T))/median(qchisq(LINE_P, 1, lower.tail = T)))
+  sq <- sqrt(m * median(qchisq(LTFH_P, 1, lower.tail = T))/median(qchisq(LINE_P, 1, lower.tail = T)))
   obs <- (LTFH_BETA / (LTFH_SE * sq)) * sqrt(k * (1 - k) / (2 * MAFS * (1 - MAFS)))
   
   data <- data %>% dplyr::mutate("LTFH_transformed" = obs)
