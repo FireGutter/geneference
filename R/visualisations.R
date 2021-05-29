@@ -277,9 +277,9 @@ plot_pmgl_vs_true <- function(dataset,
   repel_data <- dataset[, .SD[which.min(child_lg)], by = conf_class]
   
   plt <- ggplot2::ggplot(dataset) +
-    ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg),
-                        color = "cornflowerblue",
-                        size = 0.6) +
+    ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg, color = conf_class),
+                        size = 0.6,
+                        show.legend = FALSE) +
     ggplot2::geom_abline(color = line_color, linetype = "dashed") +
     ggplot2::theme_light() +
     ggplot2::labs(x = "Posterior mean genetic liability",
