@@ -297,3 +297,60 @@ plot_pmgl_vs_true <- function(dataset,
     return(plt)
   }
 }
+
+#' @title Plot transformed linear GWAS beta values against the LTFH_transformed
+#' values.
+#'
+#' @description description to be written.
+#'
+#' @param dataset data imported to R.
+#' @param beta_x beta-values to be displayed on the x-axis. E.g. the transformed
+#' LTFH beta values.
+#' @param beta_y beta-values to be displayed on the y-axis. E.g. the linear GWAS
+#' beta values.
+#' @param bonferroni corrected significant values from LTFH.
+#' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
+#' object. Else a path of the directory to save the plot to.
+#' @param plot_filename name of the file to be saved, including file extension.
+#'
+#' @return Either returns a \code{ggplot} object or saves the plot to
+#' \code{save_plot_path} and returns NULL.
+#'
+#' @export
+Compare_beta <- function(dataset, beta_x, beta_y, bonferroni, 
+                         save_plot_path = FALSE, 
+                         plot_filename = "Compare_beta.png") {
+  
+  stopifnot("save_plot_path needs to be default or a valid path" =
+              (save_plot_path == FALSE || dir.exists(save_plot_path)),
+            "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
+              (tools::file_ext(plot_filename) == "png" ||
+                 tools::file_ext(plot_filename) == "pdf" ||
+                 tools::file_ext(plot_filename) == "jpeg"))
+  
+  plt <- ggplot2::ggplot(dataset, ggplot2::aes(x = beta_x,
+                                               y = beta_y)) +
+    ggplot2::geom_point(mapping = ggplot2::aes(color = bonferroni)) +
+    ggplot2::geom_smooth(se = FALSE, method = "lm")+
+    ggplot2::geom_abline(intercept = 0, slope = 1, color="green", 
+                         linetype="dashed", size = 1) +
+    ggplot2::labs(x = "LTFH beta",
+                  y = "GWAS beta",
+                  title = "Comparing LTFH beta to GWAS beta",
+                  subtitle = deparse(substitute(dataset)),
+                  colour = "Significant with\n Bonferroni-correction") +
+    ggplot2::theme_light() +
+    ggplot2::theme(plot.title = ggplot2::element_text(face = "bold",
+                                                      hjust = 0.5),
+                   plot.subtitle = ggplot2::element_text(face = "bold",
+                                                         hjust = 0.5))
+  
+  if (save_plot_path != FALSE) {
+    ggplot2::ggsave(filename = plot_filename,
+                    plot = plt,
+                    path = save_plot_path)
+  } else{
+    return(plt)
+  }
+}
+

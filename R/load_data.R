@@ -79,3 +79,544 @@ load_phenotypes <- function(pheno_file) {
                                                header = TRUE))
   return(pheno_ds)
 }
+
+
+
+#' @title Import and merge analysis results from plink and txt-files as MAF
+#' @md
+#'
+#' @description Placeholder description: Merge results from PLINK with
+#' values used for simulation. The names of the columns are created from the
+#' names of the different files. Note that this function is nt supposed to read
+#' the different pheno-files. The function does not let the user select a file
+#' if the file contain the string "pheno". If there is a pheno-file at the 
+#' path not containing "pheno", then please do not select it. This function
+#' assumes that the .txt files only contain one coulmn. Using the simulations
+#' this would be the beta and MAFs files.
+#'
+#' @param path full path to the folder containing the analysis-files.
+#'
+#' @return A data.table containing the different results from the files.
+#' 
+#' @export
+
+reader <- function(path){
+  vars <- c("P", "BETA", "CHISQ", "SE")
+  re <- list.files(path)
+  len <- length(re)
+  pick <- numeric(len)
+  i <- 1
+  j <- 1
+  
+  for(val in re){
+    if (any(c(grepl("\\.assoc", val, ignore.case = T), 
+              grepl("\\.qassoc", val, ignore.case = T),
+              grepl("\\.txt", val, ignore.case = T))) & 
+        !grepl("pheno", val, ignore.case = T)) {
+      pick[i] <- re[j]
+      i <- i + 1
+    }
+    j <- j + 1
+  }
+  if(i == 1){
+    stop("No analysis files from plink found at path.")
+  }
+  
+  pick <- pick[1:(i - 1)]
+  
+  while(TRUE) {
+    cat("Which files would you like to load?: \n")
+    nr <- 1
+    for(val in pick){
+      cat(nr, val)
+      cat("\n")
+      nr <- nr + 1
+    }
+    
+    cat(nr, "all \n")
+    cat(nr + 1, "abort \n")
+    
+    
+    ind = readline('Enter a number or numbers seperated by " ": ')
+    vals <- c(strsplit(ind, " ")[[1]])
+    if(length(vals) == 1){
+      if(vals %in% 1:(nr + 1)){
+        break
+      }
+      else{
+        cat("Invalid input. \n\n")
+      }
+    }
+    else {
+      for(k in vals){
+        if(!(k %in% 1:(nr - 1))){
+          flag <- FALSE
+          break
+        } else {
+          flag <- TRUE
+        }
+      }
+      if(!flag) {
+        cat("Invalid input. \n\n")
+      }
+      else if(any(duplicated(vals) | 
+                  duplicated(vals, fromLast = TRUE))){
+        cat("The same number can not be repeated. \n")
+      }
+      else {
+        break
+      }
+    }
+  }
+  
+  
+  
+  if(length(vals) == 1 & vals[1] != nr){
+    if(vals == nr + 1){
+      stop("This process has been aborted.")
+    }
+    if (grepl("\\.txt", pick[strtoi(vals)], ignore.case = T)) {
+      name <- sub("\\.txt.*", "", pick[strtoi(vals)])
+      data <- data.table::fread(paste0(path, pick[strtoi(vals)]),
+                                col.names = c(name))
+      data <- data %>% tibble::rowid_to_column("SNP")
+    }
+    else {
+      data <- data.table::fread(paste0(path, pick[strtoi(vals)]))
+    }
+  }
+  else{
+    if(vals[1] == nr){
+      vals <- 1:(strtoi(vals) - 1)
+    }
+    else{
+      vals <- strtoi(vals)
+    }
+    
+    choices <- numeric(length(vals))
+    for(i in seq_len(length(vals))) {
+      choices[i] <- pick[vals[i]]
+    }
+    assoc <- grepl("\\.assoc", choices, ignore.case = T)
+    qassoc <- grepl("\\.qassoc", choices, ignore.case = T)
+    txt <- grepl("\\.txt", choices, ignore.case = T)
+    
+    assoc_val <- choices[assoc]
+    qassoc_val <- choices[qassoc]
+    txt_val <- choices[txt]
+    
+    if(any(assoc)) {
+      for(i in seq_len(sum(assoc))) {
+        if(i == 1) {
+          tmp <- data.table::fread(paste0(path, assoc_val[i]))
+          name <- sub("\\.assoc.*", "", assoc_val[i])
+          
+          data <- data.table::data.table("SNP" = tmp$SNP, "A1" = tmp$A1)
+          
+          for(v in vars){
+            if(v %in% names(tmp)){
+              strin <- paste0(v, "_", name)
+              stup <- tmp %>% dplyr::select(dplyr::all_of(c("SNP", v)))
+              data.table::setnames(stup, v, strin)
+              data <- dplyr::inner_join(data, stup, by = "SNP") 
+            }
+          }
+          
+        }
+        else {
+          tmp <- data.table::fread(paste0(path, assoc_val[i]))
+          name <- sub("\\.assoc.*", "", assoc_val[i])
+          
+          for(v in vars){
+            if(v %in% names(tmp)){
+              strin <- paste0(v, "_", name)
+              stup <- tmp %>% dplyr::select(dplyr::all_of(c("SNP", v)))
+              data.table::setnames(stup, v, strin)
+              data <- dplyr::inner_join(data, stup, by = "SNP") 
+            }
+          }
+        }
+      }
+    }
+    else if(any(qassoc)) {
+      for(i in seq_len(sum(qassoc))) {
+        if(i == 1) {
+          tmp <- data.table::fread(paste0(path, qassoc_val[i]))
+          name <- sub("\\.qassoc.*", "", qassoc_val[i])
+          
+          data <- data.table::data.table("SNP" = tmp$SNP)
+          
+          for(v in vars){
+            if(v %in% names(tmp)){
+              strin <- paste0(v, "_", name)
+              stup <- tmp %>% dplyr::select(dplyr::all_of(c("SNP", v)))
+              data.table::setnames(stup, v, strin)
+              data <- dplyr::inner_join(data, stup, by = "SNP") 
+            }
+          }
+        }
+        else {
+          tmp <- data.table::fread(paste0(path, qassoc_val[i]))
+          name <- sub("\\.qassoc.*", "", qassoc_val[i])
+          
+          for(v in vars){
+            if(v %in% names(tmp)){
+              strin <- paste0(v, "_", name)
+              stup <- tmp %>% dplyr::select(dplyr::all_of(c("SNP", v)))
+              data.table::setnames(stup, v, strin)
+              data <- dplyr::inner_join(data, stup, by = "SNP") 
+            }
+          }
+        }
+      }
+    }
+    else {
+      for(i in seq_len(sum(txt))) {
+        if(i == 1) {
+          name <- sub("\\.txt.*", "", txt_val[i])
+          tmp <- data.table::fread(paste0(path, txt_val[i]), 
+                                   col.names = c(name))
+          data <- tmp %>% tibble::rowid_to_column("SNP")
+        }
+        else {
+          name <- sub("\\.txt.*", "", txt_val[i])
+          tmp <- data.table::fread(paste0(path, txt_val[i]),
+                                   col.names = c(name))
+          tmp <- tmp %>% tibble::rowid_to_column("SNP")
+          data <- dplyr::inner_join(data, tmp, by = "SNP")
+        }
+      }
+    }
+    
+    
+    
+    
+    if(all(c(any(assoc), any(qassoc), any(txt)))) {
+      for(i in seq_len(sum(qassoc))) {
+        tmp <- data.table::fread(paste0(path, qassoc_val[i]))
+        name <- sub("\\.qassoc.*", "", qassoc_val[i])
+        
+        for(v in vars){
+          if(v %in% names(tmp)){
+            strin <- paste0(v, "_", name)
+            stup <- tmp %>% dplyr::select(dplyr::all_of(c("SNP", v)))
+            data.table::setnames(stup, v, strin)
+            data <- dplyr::inner_join(data, stup, by = "SNP") 
+          }
+        }
+      }
+      for(i in seq_len(sum(txt))) {
+        name <- sub("\\.txt.*", "", txt_val[i])
+        tmp <- data.table::fread(paste0(path, txt_val[i]),
+                                 col.names = c(name))
+        tmp <- tmp %>% tibble::rowid_to_column("SNP")
+        data <- dplyr::inner_join(data, tmp, by = "SNP")
+      }
+    }
+    else if (all(c(any(assoc), any(txt)))) {
+      for(i in seq_len(sum(txt))) {
+        name <- sub("\\.txt.*", "", txt_val[i])
+        tmp <- data.table::fread(paste0(path, txt_val[i]),
+                                 col.names = c(name))
+        tmp <- tmp %>% tibble::rowid_to_column("SNP")
+        data <- dplyr::inner_join(data, tmp, by = "SNP")
+      }
+    }
+    else if (all(c(any(assoc), any(qassoc)))) {
+      for(i in seq_len(sum(qassoc))) {
+        tmp <- data.table::fread(paste0(path, qassoc_val[i]))
+        name <- sub("\\.qassoc.*", "", qassoc_val[i])
+        
+        for(v in vars){
+          if(v %in% names(tmp)){
+            strin <- paste0(v, "_", name)
+            stup <- tmp %>% dplyr::select(dplyr::all_of(c("SNP", v)))
+            data.table::setnames(stup, v, strin)
+            data <- dplyr::inner_join(data, stup, by = "SNP") 
+          }
+        }
+      }
+    }
+    else if(all(c(any(qassoc), any(txt)))) {
+      for(i in seq_len(sum(txt))) {
+        name <- sub("\\.txt.*", "", txt_val[i])
+        tmp <- data.table::fread(paste0(path, txt_val[i]),
+                                 col.names = c(name))
+        tmp <- tmp %>% tibble::rowid_to_column("SNP")
+        data <- dplyr::inner_join(data, tmp, by = "SNP")
+      }
+    }
+  }
+  
+  
+  return(data)
+}
+
+
+
+#' @title This function takes the data from the reader-function and does append
+#' some calculated columns.
+#' @md
+#'
+#' @description This function assumes that all columns starting with "P_" are
+#' columns with p-values. The function creates to new column per the "P_" 
+#' columns. One column called "..._significnat", which indicates what SNPs are
+#' viewed as significant according to the analysis. The function also creates a
+#' "..._bonferroni" that does the same, exept this column uses the bonferroni
+#' correctsion. The function also ask the user if they want to make a
+#' transformed LTFH-column. If the user have not done the LTFH-analysis, then
+#' they most say no (0) to this action. If yes (1) is pressed, then the function
+#' will ask the user which columns the function shall use for the analysis.
+#'
+#' @param data data.table from the reader function.
+#' @param alpha significance level (often set as 0.05).
+#'
+#' @return A data.table containing the new appended results.
+#' 
+#' @export
+
+mutator <- function(data, alpha) {
+  plotter <- function(){
+    j <- 1
+    for(name in names(data)){
+      cat(j, name)
+      cat("\n")
+      j <- j + 1
+    }
+  }
+  
+  nr_of_names <- length(names(data))
+  
+  while(TRUE){
+    cat("Do you want to create a causal column from the beta column?")
+    ind = readline('Enter 0 for "NO" or 1 for "YES": ')
+    if(ind %in% c(0, 1)){
+      if(ind == 1){
+        while(TRUE) {
+          cat("Which column is the beta-column?\n")
+          plotter()
+          cat(nr_of_names + 1, "That column does not exist\n")
+          val <- readline('Enter a number: ')
+          if(val %in% 1:nr_of_names){
+            val <- strtoi(val)
+            beta_vals <- dplyr::pull(data, names(data)[val])
+            data <- data %>% dplyr::mutate("causal" = beta_vals != 0)
+            break
+          }
+          else if(val == (nr_of_names + 1)){
+            cat("Since the beta column does not exist, the causal column can't be created\n")
+            ind <- 0
+            break
+          }
+          else {
+            cat("Invalid input.\n")
+          }
+        }
+        break
+      }
+      break
+    }
+    cat("Invalid input.\n")
+  }
+  
+  m <- nrow(data)
+  
+  for(val in names(data)) {
+    if (grepl("^P_", val, ignore.case = T)) {
+      strin1 <- paste0(val, "_significnat")
+      strin2 <- paste0(val, "_bonferroni")
+      numbers <- data %>% dplyr::select(dplyr::all_of(c(val)))
+      data <- data %>% dplyr::mutate("strin1v1" = numbers < alpha, 
+                                     "strin2v2" = numbers < alpha/m)
+      data.table::setnames(data, "strin1v1", strin1)
+      data.table::setnames(data, "strin2v2", strin2)
+    }
+  }
+  
+  while (TRUE){
+    cat("Do you also want to make a transformed LTFH_beta - column?")
+    ind <- readline('Enter 0 for "NO" or 1 for "YES": ')
+    if(ind %in% c(0, 1)){
+      if(ind == 1){
+        cat("Do you have standard names form the loader function?\n")
+        sec <-  readline('Enter 0 for "NO" or 1 for "YES": ')
+        if(sec %in% c(0, 1)){
+          break
+        }
+      }
+    }
+    else {
+      cat("Invalid input.\n\n")
+    }
+  }
+
+  nr_of_names <- length(names(data))
+  
+  if(ind == 1 & sec == 0){
+    i <- 1
+    choices <- numeric(6)
+    while(TRUE){
+      if(i == 1){
+        cat("Which column contain P-values form LTFH?\n")
+        plotter()
+        cat(nr_of_names + 1, "None of the columns contain P-values from LTFH.\n")
+        ind <- readline('Enter a number: ')
+        if(ind %in% 1:nr_of_names){
+          ind <- strtoi(ind)
+          choices[i] <- names(data)[ind]
+          i <- i + 1
+          LTFH_P <- dplyr::pull(data, names(data)[ind])
+        }
+        else if(ind == nr_of_names + 1){
+          ind <- 0
+          break
+        }
+        else {
+          cat("Invalid input.\n")
+        }
+      }
+      else if(i == 2){
+        cat("Which column contain P-values form linear GWAS?\n")
+        plotter()
+        cat(nr_of_names + 1, "None of the columns contain P-values from linear GWAS.\n")
+        ind <- readline('Enter a number: ')
+        if(ind %in% 1:nr_of_names){
+          ind <- strtoi(ind)
+          choices[i] <- names(data)[ind]
+          i <- i + 1
+          LINE_P <- dplyr::pull(data, names(data)[ind])
+        }
+        else if(ind == nr_of_names + 1){
+          ind <- 0
+          break
+        }
+        else {
+          cat("Invalid input.\n")
+        }
+      }
+      else if(i == 3){
+        cat("Which column contain beta-values form LTFH?\n")
+        plotter()
+        cat(nr_of_names + 1, "None of the columns contain beta-values from LTFH.\n")
+        ind <- readline('Enter a number: ')
+        if(ind %in% 1:nr_of_names){
+          ind <- strtoi(ind)
+          choices[i] <- names(data)[ind]
+          i <- i + 1
+          LTFH_BETA <- dplyr::pull(data, names(data)[ind])
+        }
+        else if(ind == nr_of_names + 1){
+          ind <- 0
+          break
+        }
+        else {
+          cat("Invalid input.\n")
+        }
+      }
+      else if(i == 4){
+        cat("Which column contain standard-errors (SE) values form LTFH?\n")
+        plotter()
+        cat(nr_of_names + 1, "None of the columns contain standard-errors from LTFH.\n")
+        ind <- readline('Enter a numbe": ')
+        if(ind %in% 1:nr_of_names){
+          ind <- strtoi(ind)
+          choices[i] <- names(data)[ind]
+          i <- i + 1
+          LTFH_SE <- dplyr::pull(data, names(data)[ind])
+        }
+        else if(ind == nr_of_names + 1){
+          ind <- 0
+          break
+        }
+        else {
+          cat("Invalid input.\n")
+        }
+      }
+      else if(i == 5){
+        cat("Which column contain the MAF - values\n")
+        plotter()
+        cat(nr_of_names + 1, "None of the columns contain the MAFs values.\n")
+        ind <- readline('Enter a number: ')
+        if(ind %in% 1:nr_of_names){
+          ind <- strtoi(ind)
+          choices[i] <- names(data)[ind]
+          i <- i + 1
+          MAFS <- dplyr::pull(data, names(data)[ind])
+        }
+        else if(ind == nr_of_names + 1){
+          ind <- 0
+          break
+        }
+        else {
+          cat("Invalid input.\n")
+        }
+      }
+      else if(i == 6) {
+        ind <- readline('Choose the preverlance parameter "k": ')
+        options(digits = 5)
+        k <- as.double(ind)
+        choices[i] <- ind
+        i <- i + 1
+      }
+      else if(i == 7) {
+        while(TRUE) {
+          cat("The following data has been entered:\n")
+          cat("1: P values from LTFH:", choices[1])
+          cat("\n")
+          cat("2: P values from linear GWAS:", choices[2])
+          cat("\n")
+          cat("3: BETA values from LTFH:", choices[3])
+          cat("\n")
+          cat("4: SE from LTFH:", choices[4])
+          cat("\n")
+          cat("5: MAF:", choices[5])
+          cat("\n")
+          cat("6: k (preverlace):", choices[6])
+          cat("\n")
+          ind = readline('Is this correct? Enter 7 if "YES". Enter any of the above numbers if no: ')
+          if(ind %in% 1:7) {
+            if(ind == "7"){
+              i <- 8
+              break
+            }
+            else{
+              i <- strtoi(ind)
+              break
+            }
+          }
+          else {
+            cat("Invalid input! \n")
+          }
+        }
+      }
+      else {
+        break
+      }
+    }
+  }
+  
+  if(ind == 0) {
+    return(data)
+  }
+  else if(ind == 1 & sec == 1) {
+    ind <- readline('Choose the preverlance parameter "k": ')
+    options(digits = 5)
+    k <- as.double(ind)
+    sq <- sqrt(m * median(qchisq(data$P_LTFH, 1, lower.tail = T))/median(qchisq(data$P_linear, 1, lower.tail = T)))
+    obs <- (data$BETA_LTFH / (data$SE_LTFH * sq)) * sqrt(k * (1 - k) / (2 * data$MAFs * (1 - data$MAFs)))
+    
+    data <- data %>% dplyr::mutate("LTFH_transformed" = obs)
+    
+    return(data)
+  }
+  
+  
+  sq <- sqrt(m * median(qchisq(LTFH_P, 1, lower.tail = T))/median(qchisq(LINE_P, 1, lower.tail = T)))
+  obs <- (LTFH_BETA / (LTFH_SE * sq)) * sqrt(k * (1 - k) / (2 * MAFS * (1 - MAFS)))
+  
+  data <- data %>% dplyr::mutate("LTFH_transformed" = obs)
+  
+  return(data)
+}
+
+
