@@ -33,11 +33,16 @@ We can ... see the framework directly in our R session:
 ```
 blabla simple and small.. blabla for larger, we need to work outside R(mention plink, write to disk)
 
+```{r}
+#this is sim_test with ped conversion
+```
+
+
 We use `sim_random_family` to blabla... 
 ```{r, eval=FALSE}
 #this is call to large dataset with random family size
 ```
-.. we now have .. files in our directory .. (show this somehow?) .. to save space we chose .bed, this means that if we try to open the file it is gibberish...
+.. we now have .. files in our directory .. (show this somehow? show header(phenotypes) and maybe some of the others) .. to save space we chose .bed, this means that if we try to open the file it is gibberish...
 
 
 # Analysis
@@ -46,9 +51,14 @@ let's say we want to investigate the benefit of having data on more siblings. in
 
 show that we don't need to know max number of siblings
 
+loading marc and loading pheno
+from here on out... everything in R... standard plots, calculations...
+
 call calculate cov - it actually tells us how many families with at least x siblings
 
+Show pmgl plot, say something about assignment
+
 call calculate error types, use pipe to get more rows
-comment on general performance
+comment on general performance of different analyses
 ## Visualisation
 Examples of plots.
