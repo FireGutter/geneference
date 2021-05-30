@@ -4,13 +4,10 @@
 \alias{reader}
 \title{Import and merge analysis results from plink and txt-files as MAF}
 \usage{
-reader(path, vars = c("P", "BETA", "CHISQ", "SE"))
+reader(path)
 }
 \arguments{
 \item{path}{full path to the folder containing the analysis-files.}
-
-\item{vars}{variables of interest that is to be imported if they exist in
-the current files.}
 }
 \value{
 A data.table containing the different results from the files.
