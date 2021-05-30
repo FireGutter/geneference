@@ -18,7 +18,7 @@ This vignette lists a few runs of different simulation functions to give an idea
 
 I suggest that we make a table, either with markdown formatting or some use of tibbles and kable.
 
-```{r, echo=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(knitr)
 library(kableExtra)
@@ -48,23 +48,28 @@ kable(caption =  '<b>Run times</b>',
   kable_styling(full_width = T)
 ```
 
+Bear in mind that these run times doesn't take into account, the amount of memory available, the frequency of the memory, the frequency of the CPU or the write speed of the disk. Write speed probably being the most important of these factors, because the most time consuming element in the simulation is the writing of data to the disk. The simulations done by the 7 core system is better in all the prior mentioned factors the 3 core system.
+
 ```{r, echo=FALSE}
-file_sizes <- tibble("n"= c(1e5, 1e4, 1e4, 1e5),
-                     "m"= c(1e5, 1e4, 1e5, 1e4),
-                     ".ped and .map total file size (GB)" = c(39.62, 0.37, 3.73, 3.73),
-                     ".bed, .bim and .fam total file size (GB)" = c(2.33, 1, 1, 1))
+file_sizes <- tibble("n"= c(1e5, 1e4, 1e4, 1e5, 5e4),
+                     "m"= c(1e5, 1e4, 1e5, 1e4, 5e4),
+                     ".ped and .map total file size (GB)" = c(39.62, 0.37, 3.73, 3.73, 9.31),
+                     ".bed, .bim and .fam total file size (GB)" = c(2.33, 0.02, 0.23, 0.23, 0.58))
                      
 ```
+
 
 ```{r, echo=FALSE}
 bedsamlet <- 2077784 + 1688894 + 2500000003
 pedsamlet <- 42540100367 + 1677788
 ped2 <- 400158894 + 147788
-bed2 <- 1
+bed3 <- 250000003 + 187788 + 1688894
 ped3 <- 4000158894 + 1677788
-bed3 <- 1
+bed4 <- 250000003 + 187788 + 1688894
 ped4 <- 4001688894 + 147788
-bed4 <- 1
+bed5 <- 625000003 + 1027788 + 838894
+ped5 <- 10000838894 + 827788
+bed2 <- 25000003 + 187788 + 158894
 ```
 
 
@@ -76,3 +81,5 @@ kable(caption =  '<b>File sizes</b>',
   kable_styling(full_width = T)
 ```
 
+The size of the .ped and .map files pretty much follow the linear function $file\_size \approx n \cdot m \cdot 3.7 \cdot 10^{-9}$ the same goes for .bed, .bim and .fam with the function $file\_size \approx n \cdot m \cdot 2.3 \cdot 10^{-10}$.
+From the table we also see that it is favorable to store the data in .bed/.bim/.fam format, since it only uses a $\frac{1}{17}$ of the space .ped/.map uses.
