@@ -304,8 +304,10 @@ plot_pmgl_vs_true <- function(dataset,
 #' @description description to be written.
 #'
 #' @param dataset data imported to R.
-#' @param transformed_beta the transformed beta values from LTFH.
-#' @param linear_beta the beta values from standard GWAS.
+#' @param beta_x beta-values to be displayed on the x-axis. E.g. the transformed
+#' LTFH beta values.
+#' @param beta_y beta-values to be displayed on the y-axis. E.g. the linear GWAS
+#' beta values.
 #' @param bonferroni corrected significant values from LTFH.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
@@ -315,12 +317,9 @@ plot_pmgl_vs_true <- function(dataset,
 #' \code{save_plot_path} and returns NULL.
 #'
 #' @export
-GWAS_beta_VS_LTFH_transfored_beta <- function(dataset,
-                                              transformed_beta,
-                                              linear_beta,
-                                              bonferroni,
-                                              save_plot_path = FALSE,
-                                              plot_filename = "LTFH.png") {
+Compare_beta <- function(dataset, beta_x, beta_y, bonferroni, 
+                         save_plot_path = FALSE, 
+                         plot_filename = "Compare_beta.png") {
   
   stopifnot("save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
@@ -329,8 +328,8 @@ GWAS_beta_VS_LTFH_transfored_beta <- function(dataset,
                  tools::file_ext(plot_filename) == "pdf" ||
                  tools::file_ext(plot_filename) == "jpeg"))
   
-  plt <- ggplot2::ggplot(dataset, ggplot2::aes(x = transformed_beta,
-                                               y = linear_beta)) +
+  plt <- ggplot2::ggplot(dataset, ggplot2::aes(x = beta_x,
+                                               y = beta_y)) +
     ggplot2::geom_point(mapping = ggplot2::aes(color = bonferroni)) +
     ggplot2::geom_smooth(se = FALSE, method = "lm")+
     ggplot2::geom_abline(intercept = 0, slope = 1, color="green", 
