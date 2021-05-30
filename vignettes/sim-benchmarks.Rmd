@@ -51,8 +51,8 @@ kable(caption =  '<b>Run times</b>',
 ```{r}
 file_sizes <- tibble("n"= c(1e5, 1e4),
                      "m"= c(1e5, 1e4),
-                     ".ped and .map file size (GB)" = c(39.62, 0.37),
-                     ".bed, .bim and .fam file size (GB)" = c(2.33, ))
+                     ".ped and .map total file size (GB)" = c(39.62, 0.37),
+                     ".bed, .bim and .fam total file size (GB)" = c(2.33, 1))
                      
 ```
 
@@ -60,6 +60,7 @@ file_sizes <- tibble("n"= c(1e5, 1e4),
 bedsamlet <- 2077784 + 1688894 + 2500000003
 pedsamlet <- 42540100367 + 1677788
 ped2 <- 400158894 + 1677788
+bed2 <- 1
 ```
 
 
@@ -69,11 +70,5 @@ kable(caption =  '<b>File sizes</b>',
       format = "html",
       align = "c") %>% 
   kable_styling(full_width = T)
-```
-
-
-
-```{r}
-file_sizes
 ```
 
