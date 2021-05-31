@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>sim_no_family — sim_no_family • geneference</title>
+<title>Simulation without family history — sim_no_family • geneference</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -72,9 +72,9 @@
 
 
 
-<meta property="og:title" content="sim_no_family — sim_no_family" />
-<meta property="og:description" content="This function simulate data for individual enteties (the data for the parents)
-is unknown." />
+<meta property="og:title" content="Simulation without family history — sim_no_family" />
+<meta property="og:description" content="Simulate genetic data, including genotypes, phenotype status
+and liabilities, for individuals." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -157,14 +157,14 @@ is unknown." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>sim_no_family</h1>
+    <h1>Simulation without family history</h1>
     <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/sim_no_family.R'><code>R/sim_no_family.R</code></a></small>
     <div class="hidden name"><code>sim_no_family.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function simulate data for individual enteties (the data for the parents)
-is unknown.</p>
+    <p>Simulate genetic data, including genotypes, phenotype status
+and liabilities, for individuals.</p>
     </div>
 
     <pre class="usage"><span class='fu'>sim_no_family</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>m</span>, <span class='va'>q</span>, <span class='va'>hsq</span>, <span class='va'>k</span>, <span class='va'>path</span><span class='op'>)</span></pre>
@@ -174,33 +174,69 @@ is unknown.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>n</th>
-      <td><p>is the amount of enteties (humans)</p></td>
+      <td><p>number of genotypes (individuals).</p></td>
     </tr>
     <tr>
       <th>m</th>
-      <td><p>is the amount of SNPS per entety</p></td>
+      <td><p>number of SNPS per genotype.</p></td>
     </tr>
     <tr>
       <th>q</th>
-      <td><p>is the amount of causal SNPs</p></td>
+      <td><p>number of causal SNPs, i.e. SNPs that effect chances of having
+the phenotype.</p></td>
     </tr>
     <tr>
       <th>hsq</th>
-      <td><p>heritability parameter that is squard</p></td>
+      <td><p>squared heritability parameter.</p></td>
     </tr>
     <tr>
       <th>k</th>
-      <td><p>is the prevalence of trait parameter</p></td>
+      <td><p>prevalence of phenotype.</p></td>
     </tr>
     <tr>
       <th>path</th>
-      <td><p>is the file path, where the files will be stored</p></td>
+      <td><p>directory where the files will be stored. If nothing is
+specified, <code>sim_no_family</code> writes its files in the current
+working directory.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>This function returns five files: Three txt files: Beta, MAFs and phenotypes, a genotypes MAP file and a genotypes PED file.</p>
+    <p>Does not return any value, but prints the following five files to
+the <code>path</code> parameter specified in the function call:</p><ul>
+<li><p>Three text files:</p><ul>
+<li><p>beta.txt - a file of <code>m</code> rows with one column. The i'th row is
+the true effect of the i'th SNP.</p></li>
+<li><p>MAFs.txt - a file of <code>m</code> rows with one column. The i'th row is
+the true Minor Allelle Frequency of the i'th SNP.</p></li>
+<li><p>phenotypes.txt - a file of <code>n</code> rows. The file contains the
+phenotype status and liability of each individual.</p></li>
+</ul></li>
+<li><p>genotypes.map - a file created such that PLINK will work with the genotype
+data.</p></li>
+<li><p>genotypes.ped - the simulated genotypes in a PLINK-readable format.</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>As this function does not include family history, its resulting data cannot
+be used by <code><a href='assign_ltfh_phenotype.html'>assign_ltfh_phenotype()</a></code> or
+<code><a href='assign_GWAX_phenotype.html'>assign_GWAX_phenotype()</a></code>.<br />
+For the methodology behind the simulation, see
+<code><a href='../articles/liability-distribution.html'>vignette("liability-distribution")</a></code>.<br />
+<code>sim_no_family()</code> makes use of parallel computation in order to
+decrease the running time. As at least one CPU core is left unused, the user
+should be able to do other work while the simulation is running.</p>
+    <h2 class="hasAnchor" id="warning"><a class="anchor" href="#warning"></a>Warning</h2>
+
+    
+
+<p>Simulating large datasets takes time and generates large files. For details
+on time complexity and required disk space, see
+<code><a href='../articles/sim-benchmarks.html'>vignette("sim-benchmarks")</a></code>.<br />
+The largest file generated is <code>genotypes.ped</code>. See <code><a href='convert_geno_file.html'>convert_geno_file()</a></code> to convert it
+to another file format, thereby reducing its size significantly.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

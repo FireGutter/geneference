@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>Calculate the number of error types in an analysis — calculate_error_types • geneference</title>
+<title>Calculate error types — calculate_error_types • geneference</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -72,8 +72,9 @@
 
 
 
-<meta property="og:title" content="Calculate the number of error types in an analysis — calculate_error_types" />
-<meta property="og:description" content="description to be written." />
+<meta property="og:title" content="Calculate error types — calculate_error_types" />
+<meta property="og:description" content="Calculate the number of type 1 (false positive) and type 2 (false negative)
+errors in an analysis." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -156,37 +157,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate the number of error types in an analysis</h1>
+    <h1>Calculate error types</h1>
     <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/error_types.R'><code>R/error_types.R</code></a></small>
     <div class="hidden name"><code>calculate_error_types.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>description to be written.</p>
+    <p>Calculate the number of type 1 (false positive) and type 2 (false negative)
+errors in an analysis.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>calculate_error_types</span><span class='op'>(</span><span class='va'>dataset</span>, <span class='va'>alpha</span>, <span class='va'>analysis_name</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>calculate_error_types</span><span class='op'>(</span><span class='va'>causal</span>, <span class='va'>significant</span>, <span class='va'>bonferroni</span>, <span class='va'>analysis_name</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dataset</th>
-      <td><p>data loaded with <code><a href='load_assoc_results.html'>load_assoc_results()</a></code>.</p></td>
+      <th>causal</th>
+      <td><p>column in dataset denoting causal SNPs.</p></td>
     </tr>
     <tr>
-      <th>alpha</th>
-      <td><p>significance level used for hypothesis tests.</p></td>
+      <th>significant</th>
+      <td><p>column in dataset denoting which SNPs are significant.</p></td>
+    </tr>
+    <tr>
+      <th>bonferroni</th>
+      <td><p>column in dataset denoting which SNPs are significant with 
+Bonferroni correction.</p></td>
     </tr>
     <tr>
       <th>analysis_name</th>
-      <td><p>name of analysis.</p></td>
+      <td><p>name of the analysis.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A tibble with rows... columns...</p>
+    <p>A tibble containing the number of true positives, false positives,
+false negatives and true negatives with each of the significance levels
+having their own row.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>To use this function, the user must run any test with <code><a href='analysis_association.html'>analysis_association()</a></code>
+and use <code><a href='load_results.html'>load_results()</a></code> to merge this with <code>beta.txt</code> from the
+simulation. Then, <code><a href='augment_results.html'>augment_results()</a></code> needs to be run in order to obtain
+columns for information on which SNPs are causal, significant, and significant
+with Bonferroni correction.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

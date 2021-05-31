@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>Simulate genotypes in the R session without family history — sim_test • geneference</title>
+<title>Simulation directly in the R session without family history — sim_test • geneference</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -72,12 +72,9 @@
 
 
 
-<meta property="og:title" content="Simulate genotypes in the R session without family history — sim_test" />
-<meta property="og:description" content="A quick way of simulating a small amount of data to be stored
-in the R-session. Note that this function only simulates data for
-individuals without family history, i.e. they are not simulated as
-offspring. Hence, the simulation cannot be used in a study of family
-history." />
+<meta property="og:title" content="Simulation directly in the R session without family history — sim_test" />
+<meta property="og:description" content="Simulate genetic data in R, including genotypes,
+phenotype status and liabilities, for individuals." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -160,17 +157,14 @@ history." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Simulate genotypes in the R session without family history</h1>
+    <h1>Simulation directly in the R session without family history</h1>
     <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/sim_test.R'><code>R/sim_test.R</code></a></small>
     <div class="hidden name"><code>sim_test.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A quick way of simulating a small amount of data to be stored
-in the R-session. Note that this function only simulates data for
-individuals without family history, i.e. they are not simulated as
-offspring. Hence, the simulation cannot be used in a study of family
-history.</p>
+    <p>Simulate genetic data in R, including genotypes,
+phenotype status and liabilities, for individuals.</p>
     </div>
 
     <pre class="usage"><span class='fu'>sim_test</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>m</span>, <span class='va'>q</span>, <span class='va'>hsq</span>, <span class='va'>k</span>, to_ped <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span></pre>
@@ -201,17 +195,32 @@ the phenotype.</p></td>
     </tr>
     <tr>
       <th>to_ped</th>
-      <td><p>TRUE/FALSE indicating if the output should be in a
-PLINK-friendly format or not.</p></td>
+      <td><p>if `TRUE`, write the genotype output in PLINK's .ped format.
+Else, write the number of minor alleles for each genotype at each SNP.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a list of 5 entries, containing a matrix of genotypes, a
-vector specifying indexes of causal SNPs, a vector the liability of
-individual i, a vector specifying whether individual i has the
-phenotype and a phenotype for linear regression in plink.</p>
+    <p>Returns a list with 5 entries, containing a matrix of genotypes, a
+vector specifying indexes of causal SNPs, a vector with liability of
+individual i, a vector specifying phenotype  status of individual i, and the
+transformed phenotype status used for linear regression in PLINK.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>A quick way of simulating a small amount of data to be stored
+in the R-session. Note that this function only simulates data for
+individuals without family history, i.e. they are not simulated as
+offspring. Hence, the simulation cannot be used in a study of family
+history.</p>
+    <h2 class="hasAnchor" id="warning"><a class="anchor" href="#warning"></a>Warning</h2>
+
+    
+
+<p>Since this function saves the generated data directly in R (that is, on RAM),
+the function should not be used for large simulations, but rather to get an
+idea of the general framework.<br />
+The function does not run in parallel.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>sim_test</span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>15</span>, <span class='fl'>5</span>, <span class='fl'>0.5</span>, <span class='fl'>0.05</span>, <span class='cn'>TRUE</span><span class='op'>)</span>
@@ -286,8 +295,7 @@ phenotype and a phenotype for linear regression in plink.</p>
 #&gt; 
 #&gt; $PLINK_linear_phenotype
 #&gt;  [1] 2 2 2 2 2 2 2 2 2 2
-#&gt; </div><div class='input'>
-</div></pre>
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

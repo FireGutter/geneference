@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>Import phenotypes from simulation — load_phenotypes • geneference</title>
+<title>Import phenotype data — load_phenotypes • geneference</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -72,8 +72,8 @@
 
 
 
-<meta property="og:title" content="Import phenotypes from simulation — load_phenotypes" />
-<meta property="og:description" content="Import phenotypes from simulation" />
+<meta property="og:title" content="Import phenotype data — load_phenotypes" />
+<meta property="og:description" content="Import all phenotype-related data generated in simulations." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -156,13 +156,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Import phenotypes from simulation</h1>
+    <h1>Import phenotype data</h1>
     <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/load_data.R'><code>R/load_data.R</code></a></small>
     <div class="hidden name"><code>load_phenotypes.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Import phenotypes from simulation</p>
+    <p>Import all phenotype-related data generated in simulations.</p>
     </div>
 
     <pre class="usage"><span class='fu'>load_phenotypes</span><span class='op'>(</span><span class='va'>pheno_file</span><span class='op'>)</span></pre>
@@ -180,6 +180,10 @@ Simulation functions save this file as "phenotypes.txt".</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Returns a tibble with the data from <code>pheno_file</code>.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Note that this function only loads data about the liabilities and phenotype
+status of individuals and their family.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

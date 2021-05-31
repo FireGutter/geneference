@@ -73,12 +73,8 @@
 
 
 <meta property="og:title" content="Create covariance matrix for liabilities — covmatrix" />
-<meta property="og:description" content="Design the theoretical covariance matrix for the multivariate
-normal used to model the distribution of liabilities.
-The first entry in the vector of liabilities is the genetic liability, the
-next is the full liability and the two following are the liabilities of the
-parents. Liabilities of siblings constitute the remaining entries in the
-vector." />
+<meta property="og:description" content="Design the theoretical covariance matrix from the multivariate
+normal distribution used to model the liabilities." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -167,37 +163,36 @@ vector." />
     </div>
 
     <div class="ref-description">
-    <p>Design the theoretical covariance matrix for the multivariate
-normal used to model the distribution of liabilities.
-The first entry in the vector of liabilities is the genetic liability, the
-next is the full liability and the two following are the liabilities of the
-parents. Liabilities of siblings constitute the remaining entries in the
-vector.</p>
+    <p>Design the theoretical covariance matrix from the multivariate
+normal distribution used to model the liabilities.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>covmatrix</span><span class='op'>(</span>sib <span class='op'>=</span> <span class='fl'>0</span>, <span class='va'>hsq</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>covmatrix</span><span class='op'>(</span><span class='va'>hsq</span>, sib <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>sib</th>
-      <td><p>number of siblings.</p></td>
+      <th>hsq</th>
+      <td><p>heritability parameter.</p></td>
     </tr>
     <tr>
-      <th>hsq</th>
-      <td><p>squared heritability parameter.</p></td>
+      <th>sib</th>
+      <td><p>number of siblings.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A covariance matrix for an individual with sib number of siblings,
-such that the number of rows and columns are equal to 4 + number of
-siblings.</p>
+    <p>A covariance matrix for the liabilities of a family with <code>sib</code>
+number of siblings.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The covariance matrix is explained in detail in
+<code><a href='../articles/liability-distribution.html'>vignette("liability-distribution")</a></code>.<br /></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>covmatrix</span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>0.5</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='fu'>covmatrix</span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      [,1] [,2] [,3] [,4] [,5] [,6]
 #&gt; [1,] 0.50 0.50 0.25 0.25 0.25 0.25
 #&gt; [2,] 0.50 1.00 0.25 0.25 0.25 0.25

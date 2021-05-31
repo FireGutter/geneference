@@ -73,13 +73,9 @@
 
 
 <meta property="og:title" content="Simulation with random family sizes — sim_random_family" />
-<meta property="og:description" content="Simulate genotypes for individuals with family history, where
-each individual is given a random number of siblings. Parents' genotypes are
-simulated and used for simulating the genotypes of individuals and their
-siblings. This function call the family_dist_simulaiton with the randomized
-input.
-family_dist_simulaiton makes use of parallel computation in order to
-decrease the running time." />
+<meta property="og:description" content="Simulate genetic data, including genotypes,
+phenotype status and liabilities, for individuals with family history, where
+each individual is given a random number of siblings." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -168,13 +164,9 @@ decrease the running time." />
     </div>
 
     <div class="ref-description">
-    <p>Simulate genotypes for individuals with family history, where
-each individual is given a random number of siblings. Parents' genotypes are
-simulated and used for simulating the genotypes of individuals and their
-siblings. This function call the family_dist_simulaiton with the randomized
-input.
-<code>family_dist_simulaiton</code> makes use of parallel computation in order to
-decrease the running time.</p>
+    <p>Simulate genetic data, including genotypes,
+phenotype status and liabilities, for individuals with family history, where
+each individual is given a random number of siblings.</p>
     </div>
 
     <pre class="usage"><span class='fu'>sim_random_family</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>m</span>, <span class='va'>q</span>, <span class='va'>hsq</span>, <span class='va'>k</span>, <span class='va'>sib_fert</span>, dist <span class='op'>=</span> <span class='fl'>0</span>, path <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></pre>
@@ -205,67 +197,81 @@ the phenotype.</p></td>
     </tr>
     <tr>
       <th>sib_fert</th>
-      <td><p>either the distribution-vector of siblings-fertility rate.
-See meaning below.</p></td>
+      <td><p>either the distribution vector or a fertility rate. See
+details section.</p></td>
     </tr>
     <tr>
       <th>dist</th>
-      <td><p>if sib_fert is a distribution-vector then dist can be used to
-specify how many siblings the different individuals get.</p></td>
+      <td><p>if <code>sib_fert</code> is a distribution vector, then <code>dist</code> is used to
+specify how many siblings the probabilities in <code>sib_fert</code> correspond to.</p></td>
     </tr>
     <tr>
       <th>path</th>
       <td><p>directory where the files will be stored. If nothing is
-specified, <code>family_simulation</code> writes its files in the current
+specified, <code>sim_random_family</code> writes its files in the current
 working directory.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list where first entry is the distribution of the simulated individuals
-and the second entry is the number of siblings (dist) for these individuals.
-the function also call family_dist_simulaiton that prints the following five files to
-the <code>path</code> parameter specified in the function call:</p><ul>
+    <p>A list where first entry is the number of individuals, i.e. the <code>n</code>
+parameter supplied to <code><a href='sim_varied_family.html'>sim_varied_family()</a></code>, and the second entry is the
+number of siblings those individuals have, i.e. the  <code>dist</code> parameter
+supplied to <code><a href='sim_varied_family.html'>sim_varied_family()</a></code>.<br />
+This is returned once the simulation is done printing the following five
+files to the <code>path</code> parameter specified in the function call:</p><ul>
 <li><p>Three text files:</p><ul>
 <li><p>beta.txt - a file of <code>m</code> rows with one column. The i'th row is
 the true effect of the i'th SNP.</p></li>
 <li><p>MAFs.txt - a file of <code>m</code> rows with one column. The i'th row is
-the true Minor Allelle Frequence of the i'th SNP.</p></li>
+the true Minor Allelle Frequency of the i'th SNP.</p></li>
 <li><p>phenotypes.txt - a file of <code>n</code> rows, number of columns depend on
-number of siblings. Note that some individuals has fewer siblings as
-others. Thus we fill the empty value-slots with "-9". The file
-contains the phenotype and liability of
-each individual as well as information on the liabilities and phenotype
-status of their parents and siblings.</p></li>
+number of siblings. The file contains the phenotype status and liability
+of each individual as well as information on the liabilities and
+phenotype status of their parents and siblings.</p></li>
 </ul></li>
 <li><p>genotypes.map - a file created such that PLINK will work with the genotype
 data.</p></li>
-<li><p>genotypes.ped - the simulated genotypes in a PLINK-readable format.</p></li>
+<li><p>genotypes.ped - the simulated genotypes in a PLINK-readable format.
+Note: The function only saves genotype data for the target individual.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Note that there are two types of input to sib_fert:
-distribution-vector or siblings-fertility. If a distribution-vector is used
-a dist vector must also be specified. E.g. sib_fert = c(1/6, 1/6, 2/3)
-and dist = c(0, 1, 2). In this case the function is asked to randomly choose
-1/6 individuals to have 0 siblings and 2/3 to have 2 siblings. The other case
-a value is given to sib_fert. E.g. sib_fert = 2. Here the function use the
-poisson distribution to randomly select how many siblings the different
-individuals has. Note that in this case, no dist has to be specified, since
-the function overwrites it with the range of the simulated siblings.</p>
+    <p>Parents' genotypes are simulated and used for creating the genotypes of
+the individuals and their siblings. For the methodology behind the
+simulation, see <code><a href='../articles/liability-distribution.html'>vignette("liability-distribution")</a></code>.<br />
+The number of siblings generated by either a multinomial distribution or
+a Poisson distribution. The function then calls <code><a href='sim_varied_family.html'>sim_varied_family()</a></code>
+with the appropriate <code>n</code> and <code>dist</code> parameters.<br />
+The choice of distribution depends on the input given to <code>sib_fert</code>. If a
+a single number is given, the function uses the Poisson distribution to
+randomly select how many siblings the different individuals have. In this
+case, <code>dist</code> should not be specified.<br />
+If a vector is given, then the function uses <code>sib_fert</code> as probabilities
+of a multinomial distribution to select how many individuals have the number
+of siblings specified in each entry of <code>dist</code>.<br />
+E.g., <code>sib_fert = c(1/6, 1/6, 2/3)</code> and <code>dist = c(0, 2, 3)</code> means that the
+probability of having 0 siblings is 1/6, the probability of having 2
+siblings is 1/6 and the probability of having 3 siblings is 2/3.<br />
+Since individuals have a different number of siblings, some entries in
+<code>phenotypes.txt</code> will be missing, denoted by -9.<br />
+E.g., an individual with 1 sibling in a dataset where the maximum number of
+siblings is 3, would have -9 in all columns relating to sibling 2 and
+sibling 3.<br />
+<code>sim_random_family</code> makes use of parallel computation in order to
+decrease the running time. As one CPU core is left unused, the user
+should be able to do other work while the simulation is running.</p>
     <h2 class="hasAnchor" id="warning"><a class="anchor" href="#warning"></a>Warning</h2>
 
     
 
-<p>Simulating large datasets lead to very large files (eg. in the order of 100k
-genotypes with 100k SNPs takes up approximately 40GB of space).
-Please ensure that you have sufficient disk space at the disk where
-<code>path</code> resides prior to running the simulation.
-See FUNCTION-NAME DOCUMENTATION REFERENCE(this is a placeholder until
-function is implemented) in order to convert the generated .ped to the
-smaller .bed format.</p>
+<p>Simulating large datasets takes time and generates large files. For details
+on time complexity and required disk space, see
+<code><a href='../articles/sim-benchmarks.html'>vignette("sim-benchmarks")</a></code>.<br />
+The largest file generated is <code>genotypes.ped</code>. See <code><a href='convert_geno_file.html'>convert_geno_file()</a></code> to convert it
+to another file format, thereby reducing its size significantly.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

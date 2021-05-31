@@ -73,9 +73,7 @@
 
 
 <meta property="og:title" content="Plot a histogram of p-values — plot_pval_hist" />
-<meta property="og:description" content="write something
-vignette(&quot;ggplot2-specs&quot;, package = &quot;ggplot2&quot;) details the usage of
-aesthetic parameters in ggplot2." />
+<meta property="og:description" content="Creates a histogram of the specified p-values." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -164,20 +162,18 @@ aesthetic parameters in ggplot2." />
     </div>
 
     <div class="ref-description">
-    <p>write something
-<code>vignette("ggplot2-specs", package = "ggplot2")</code> details the usage of
-aesthetic parameters in ggplot2.</p>
+    <p>Creates a histogram of the specified p-values.</p>
     </div>
 
     <pre class="usage"><span class='fu'>plot_pval_hist</span><span class='op'>(</span>
   <span class='va'>dataset</span>,
+  <span class='va'>P</span>,
   bins <span class='op'>=</span> <span class='fl'>20</span>,
   line_color <span class='op'>=</span> <span class='st'>"black"</span>,
   fill_color <span class='op'>=</span> <span class='st'>"cornflowerblue"</span>,
   mean_color <span class='op'>=</span> <span class='st'>"red"</span>,
   save_plot_path <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  plot_filename <span class='op'>=</span> <span class='st'>"pvalue_histogram.png"</span>,
-  P <span class='op'>=</span> <span class='va'>P</span>
+  plot_filename <span class='op'>=</span> <span class='st'>"pvalue_histogram.png"</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -185,7 +181,12 @@ aesthetic parameters in ggplot2.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataset</th>
-      <td><p>data imported to R by <code><a href='load_assoc_results.html'>load_assoc_results()</a></code>.</p></td>
+      <td><p>data imported to R by <code><a href='load_results.html'>load_results()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>P</th>
+      <td><p>column containing p-values to be plotted. State in the format
+dataset$P_value.</p></td>
     </tr>
     <tr>
       <th>bins</th>
@@ -210,12 +211,8 @@ object. Else a path of the directory to save the plot to.</p></td>
     </tr>
     <tr>
       <th>plot_filename</th>
-      <td><p>name of the file to be saved, including file extension.</p></td>
-    </tr>
-    <tr>
-      <th>P</th>
-      <td><p>the dataset$P_value-column. If the file like assoc contain a P
-column then we do not need to specify P.</p></td>
+      <td><p>name of the file to be saved, including file extension.
+Must be either .pdf, .png or .jpeg</p></td>
     </tr>
     </table>
 
@@ -223,6 +220,14 @@ column then we do not need to specify P.</p></td>
 
     <p>Either returns a <code>ggplot</code> object or saves the plot to
 <code>save_plot_path</code> and returns NULL.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Use <code><a href='analysis_association.html'>analysis_association()</a></code> to obtain p-values for an analysis and
+import these with <code><a href='load_results.html'>load_results()</a></code>.<br />
+The function also draws a line on the y-axis showing the mean of the
+p-values.<br />
+<code>vignette("ggplot2-specs", package = "ggplot2")</code> details the usage of
+aesthetic parameters in ggplot2.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

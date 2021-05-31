@@ -73,12 +73,9 @@
 
 
 <meta property="og:title" content="Simulation with varying family sizes — sim_varied_family" />
-<meta property="og:description" content="Simulate genotypes for individuals with family history, where
-each individual has an arbitrary number of siblings. Parents' genotypes are
-simulated and used for simulating the genotypes of individuals and their
-siblings.
-family_dist_simulaiton makes use of parallel computation in order to
-decrease the running time." />
+<meta property="og:description" content="Simulate genetic data, including genotypes,
+phenotype status and liabilities, for individuals and their family,
+where each individual has a specified number of siblings." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -167,12 +164,9 @@ decrease the running time." />
     </div>
 
     <div class="ref-description">
-    <p>Simulate genotypes for individuals with family history, where
-each individual has an arbitrary number of siblings. Parents' genotypes are
-simulated and used for simulating the genotypes of individuals and their
-siblings.
-<code>family_dist_simulaiton</code> makes use of parallel computation in order to
-decrease the running time.</p>
+    <p>Simulate genetic data, including genotypes,
+phenotype status and liabilities, for individuals and their family,
+where each individual has a specified number of siblings.</p>
     </div>
 
     <pre class="usage"><span class='fu'>sim_varied_family</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>m</span>, <span class='va'>q</span>, <span class='va'>hsq</span>, <span class='va'>k</span>, <span class='va'>dist</span>, path <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></pre>
@@ -182,12 +176,12 @@ decrease the running time.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>n</th>
-      <td><p>number of genotypes (individuals). Given as a vector that match the
-dist vector (see discribtion below).</p></td>
+      <td><p>number of genotypes (individuals), given as a vector of same length
+as <code>dist</code>.</p></td>
     </tr>
     <tr>
       <th>m</th>
-      <td><p>number of SNPS per genotype.</p></td>
+      <td><p>number of SNPs per genotype.</p></td>
     </tr>
     <tr>
       <th>q</th>
@@ -204,13 +198,13 @@ the phenotype.</p></td>
     </tr>
     <tr>
       <th>dist</th>
-      <td><p>the distribution of siblings. Given as a vector with the same length
-as the "n"-vector.</p></td>
+      <td><p>the distribution of siblings. Given as a vector with the same
+length as <code>n</code>.</p></td>
     </tr>
     <tr>
       <th>path</th>
       <td><p>directory where the files will be stored. If nothing is
-specified, <code>family_simulation</code> writes its files in the current
+specified, <code>sim_varied_family</code> writes its files in the current
 working directory.</p></td>
     </tr>
     </table>
@@ -223,36 +217,46 @@ the <code>path</code> parameter specified in the function call:</p><ul>
 <li><p>beta.txt - a file of <code>m</code> rows with one column. The i'th row is
 the true effect of the i'th SNP.</p></li>
 <li><p>MAFs.txt - a file of <code>m</code> rows with one column. The i'th row is
-the true Minor Allelle Frequence of the i'th SNP.</p></li>
+the true Minor Allelle Frequency of the i'th SNP.</p></li>
 <li><p>phenotypes.txt - a file of <code>n</code> rows, number of columns depend on
-number of siblings. Note that some individuals has fewer siblings as
-others. Thus we fill the empty value-slots with "-9". The file
-contains the phenotype and liability of
-each individual as well as information on the liabilities and phenotype
-status of their parents and siblings.</p></li>
+number of siblings. The file contains the phenotype status and liability
+of each individual as well as information on the liabilities and
+phenotype status of their parents and siblings.</p></li>
 </ul></li>
 <li><p>genotypes.map - a file created such that PLINK will work with the genotype
 data.</p></li>
-<li><p>genotypes.ped - the simulated genotypes in a PLINK-readable format.</p></li>
+<li><p>genotypes.ped - the simulated genotypes in a PLINK-readable format.
+Note: The function only saves genotype data for the target individual.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Note that dist denotes the amount of siblings matched with the amount of
-individuals n. E.g. n = c(100, 200, 300, 400) and dist = c(0, 1, 2, 3) would mean
-that we want a total of 100 + 200 + 300 + 400 = 1000 individuals. Here 100
-individuals have 0 siblings, 200 has 1 sibling and so on...</p>
+    <p>Parents' genotypes are simulated and used for creating the genotypes of
+the individuals and their siblings. For the methodology behind the
+simulation, see <code><a href='../articles/liability-distribution.html'>vignette("liability-distribution")</a></code>.<br />
+Note: Each entry in <code>dist</code> denotes a number of siblings. Each entry in
+<code>n</code> then denotes how many individuals have the corresponding number of
+siblings.<br />
+E.g., <code>n = c(100, 200, 300, 400)</code> and <code>dist = c(0, 2, 3, 5)</code> would
+give a total of 100 + 200 + 300 + 400 = 1000 individuals, where 100
+individuals have 0 siblings, 200 have 2 siblings, and so on.<br />
+Since individuals have a different number of siblings, some entries in
+<code>phenotypes.txt</code> will be missing, denoted by -9.<br />
+E.g., an individual with 1 sibling in a dataset where the maximum number of
+siblings is 3, would have -9 in all columns relating to sibling 2 and
+sibling 3.<br />
+<code>sim_varied_family</code> makes use of parallel computation in order to
+decrease the running time. As one CPU core is left unused, the user
+should be able to do other work while the simulation is running.</p>
     <h2 class="hasAnchor" id="warning"><a class="anchor" href="#warning"></a>Warning</h2>
 
     
 
-<p>Simulating large datasets lead to very large files (eg. in the order of 100k
-genotypes with 100k SNPs takes up approximately 40GB of space).
-Please ensure that you have sufficient disk space at the disk where
-<code>path</code> resides prior to running the simulation.
-See FUNCTION-NAME DOCUMENTATION REFERENCE(this is a placeholder until
-function is implemented) in order to convert the generated .ped to the
-smaller .bed format.</p>
+<p>Simulating large datasets takes time and generates large files. For details
+on time complexity and required disk space, see
+<code><a href='../articles/sim-benchmarks.html'>vignette("sim-benchmarks")</a></code>.<br />
+The largest file generated is <code>genotypes.ped</code>. See <code><a href='convert_geno_file.html'>convert_geno_file()</a></code> to convert it
+to another file format, thereby reducing its size significantly.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

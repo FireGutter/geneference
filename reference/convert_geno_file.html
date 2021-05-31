@@ -22,7 +22,7 @@
   }
 </script>
 
-<title>Manhattan plot of p-values — plot_manhattan • geneference</title>
+<title>Convert files to .bed — convert_geno_file • geneference</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -72,9 +72,9 @@
 
 
 
-<meta property="og:title" content="Manhattan plot of p-values — plot_manhattan" />
-<meta property="og:description" content="Plots a Manhattan plot with only the
-SNPs that have a p-value of at most 0.1." />
+<meta property="og:title" content="Convert files to .bed — convert_geno_file" />
+<meta property="og:description" content="Calls PLINK to convert .ped and .map files to the .bed format, reducing
+file size significantly." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -157,85 +157,56 @@ SNPs that have a p-value of at most 0.1." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Manhattan plot of p-values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/visualisations.R'><code>R/visualisations.R</code></a></small>
-    <div class="hidden name"><code>plot_manhattan.Rd</code></div>
+    <h1>Convert files to .bed</h1>
+    <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/plink_calls.R'><code>R/plink_calls.R</code></a></small>
+    <div class="hidden name"><code>convert_geno_file.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plots a Manhattan plot with only the
-SNPs that have a p-value of at most 0.1.</p>
+    <p>Calls PLINK to convert .ped and .map files to the .bed format, reducing
+file size significantly.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_manhattan</span><span class='op'>(</span>
-  <span class='va'>dataset</span>,
-  <span class='va'>P</span>,
-  SNP <span class='op'>=</span> <span class='va'>SNP</span>,
-  causal <span class='op'>=</span> <span class='va'>causal</span>,
-  line_color <span class='op'>=</span> <span class='st'>"cornflowerblue"</span>,
-  line_type <span class='op'>=</span> <span class='st'>"dashed"</span>,
-  save_plot_path <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  plot_filename <span class='op'>=</span> <span class='st'>"manhattan_plot.png"</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>convert_geno_file</span><span class='op'>(</span><span class='va'>ped_file</span>, bed_file <span class='op'>=</span> <span class='va'>ped_file</span>, del <span class='op'>=</span> <span class='cn'>TRUE</span>, plink_path <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dataset</th>
-      <td><p>data imported to R by <code><a href='load_results.html'>load_results()</a></code>.</p></td>
+      <th>ped_file</th>
+      <td><p>path and name of the file to be converted, excluding file
+extension.</p></td>
     </tr>
     <tr>
-      <th>P</th>
-      <td><p>column containing p-values to be plotted. State in the format
-dataset$P_value.</p></td>
+      <th>bed_file</th>
+      <td><p>path of the .bed file to be written, excluding file
+extension.</p></td>
     </tr>
     <tr>
-      <th>SNP</th>
-      <td><p>column containing the SNP values. If loaded with <code><a href='load_results.html'>load_results()</a></code>
-can be left default otherwise state in the format dataset$SNP.</p></td>
+      <th>del</th>
+      <td><p>if <code>TRUE</code>, deletes the <code>ped_file</code> after conversion.</p></td>
     </tr>
     <tr>
-      <th>causal</th>
-      <td><p>column containing the causal values. If created created with
-<code><a href='augment_results.html'>augment_results()</a></code> can be left default, otherwise state in the format
-dataset$causal.</p></td>
-    </tr>
-    <tr>
-      <th>line_color</th>
-      <td><p>color of the lines.</p></td>
-    </tr>
-    <tr>
-      <th>line_type</th>
-      <td><p>the type of the lines.</p></td>
-    </tr>
-    <tr>
-      <th>save_plot_path</th>
-      <td><p>if <code>FALSE</code>, return the function returns a ggplot
-object. Else a path of the directory to save the plot to.</p></td>
-    </tr>
-    <tr>
-      <th>plot_filename</th>
-      <td><p>name of the file to be saved, including file extension.
-Must be either .pdf, .png or .jpeg</p></td>
+      <th>plink_path</th>
+      <td><p><code>TRUE</code> if user has added PLINK to the system
+variable "PATH". Otherwise a string specifying the path to the folder
+containing plink.exe.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Either returns a <code>ggplot</code> object or saves the plot to
-<code>save_plot_path</code> and returns NULL.</p>
+    <p>Does not return anything, but writes the converted <code>ped_file</code>
+to disk at the path <code>bed_file</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>All points above the upper dashed line show SNPs that are significant at
-0.05 significance level with Bonferroni-correction. Points above the lower
-dashed line show SNPs that are significant at a 0.05 significance level.<br />
-The color of the point show whether or not they are truly causal for the
-phenotype.<br />
-The user must run some analysis with <code><a href='analysis_association.html'>analysis_association()</a></code> 
-and load the data with <code><a href='load_results.html'>load_results()</a></code>. Furthermore, <code><a href='augment_results.html'>augment_results()</a></code>
-must be run where the user should create a 'causal' column
-from the true effect sizes.</p>
+    <p>Both the .map and .ped files generated by the simulation need to be present
+with the same name in the same directory. The conversion combines the .ped
+and .map into three new files, being of format .bed, .bim and .fam. The .bed
+file is the one actually holding genotypes, but all three files are used by
+PLINK in regressions.<br />
+Be aware that while .ped files can be viewed in most text editors
+(as long as their size allows it), .bed files can not.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

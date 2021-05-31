@@ -73,12 +73,7 @@
 
 
 <meta property="og:title" content="Run association analysis — analysis_association" />
-<meta property="og:description" content="to be written. calls PLINK.
-(include specifying pheno_names from simulation:
-GWAS use pheno, for LTFH use LTFH_pheno, GWAX use GWAX_pheno)
-NOTE: creates a temporary .bed file if bed is FALSE. This
-takes some additional time.
-Also: File extension will be .assoc or .qassoc depending on the used model." />
+<meta property="og:description" content="Calls PLINK to run an association analysis on specified data." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -167,19 +162,14 @@ Also: File extension will be .assoc or .qassoc depending on the used model." />
     </div>
 
     <div class="ref-description">
-    <p>to be written. calls PLINK.
-(include specifying pheno_names from simulation:
-GWAS use pheno, for LTFH use LTFH_pheno, GWAX use GWAX_pheno)
-NOTE: creates a temporary .bed file if <code>bed</code> is <code>FALSE</code>. This
-takes some additional time.
-Also: File extension will be .assoc or .qassoc depending on the used model.</p>
+    <p>Calls PLINK to run an association analysis on specified data.</p>
     </div>
 
     <pre class="usage"><span class='fu'>analysis_association</span><span class='op'>(</span>
   <span class='va'>geno_file</span>,
   <span class='va'>pheno_file</span>,
   <span class='va'>pheno_name</span>,
-  <span class='va'>out_file</span>,
+  <span class='va'>out_dir</span>,
   bed <span class='op'>=</span> <span class='cn'>TRUE</span>,
   plink_path <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
@@ -202,9 +192,9 @@ extension.</p></td>
       <td><p>column name of phenotype to be used in analysis.</p></td>
     </tr>
     <tr>
-      <th>out_file</th>
-      <td><p>string specifying path and name of the resulting output
-file, excluding file extension.</p></td>
+      <th>out_dir</th>
+      <td><p>directory to save results in, including "/" or "\\" at the
+end.</p></td>
     </tr>
     <tr>
       <th>bed</th>
@@ -221,9 +211,30 @@ containing plink.exe.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Does not return anything, but PLINK writes <code>out_file</code> to disk,
-containing results of the performed analysis. The columns in the printed
-dataset depends on which phenotype is used for the analysis.</p>
+    <p>Does not return anything, but PLINK writes its results to disk in
+<code>out_dir</code>. The name of the written file depends on <code>pheno_name</code>:</p><ul>
+<li><p>pheno: output filename is "GWAS".</p></li>
+<li><p>line_pheno: output filename is "linear".</p></li>
+<li><p>LTFH_pheno: output filename is "LTFH".</p></li>
+<li><p>GWAX_pheno: output filename is "GWAX".</p></li>
+</ul>
+
+<p>The file format of the written file and the columns contained in it depends
+on which phenotype is used for the analysis.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>PLINK uses the <code>pheno_name</code> column to determine which kind of analysis
+to run on the data.</p><ul>
+<li><p>Use "pheno" for a 1 degree of freedom chi-square test with the case-control
+representation of the phenotype.</p></li>
+<li><p>Use "line_pheno" for a linear regression using the case-control
+representation of the phenotype.</p></li>
+<li><p>Use "LTFH_pheno" for a linear regression using the LTFH phenotype. Requires
+that <code>pheno_file</code> was created/edited by <code><a href='assign_ltfh_phenotype.html'>assign_ltfh_phenotype()</a></code>.</p></li>
+<li><p>Use "GWAX_pheno" for a linear regression using the LTFH phenotype. Requires
+that <code>pheno_file</code> was created/edited by <code><a href='assign_GWAX_phenotype.html'>assign_GWAX_phenotype()</a></code>.</p></li>
+</ul>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
