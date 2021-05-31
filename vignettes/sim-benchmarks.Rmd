@@ -33,7 +33,7 @@ run_times <- tibble(id = c(1, 2, 3, 4, 5, 6, 7),
                     hsq = c(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5),
                     k = c(0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05),
                     sibs = c(2, 2, 4, 0, 3, 4, 2),
-                    "run time" = c(2974.25, 2936.11, 3355.88, 4540.06, 9551.67, 11207.75, 11581.89),
+                    "run time (s)" = c(2974.25, 2936.11, 3355.88, 4540.06, 9551.67, 11207.75, 11581.89),
                     cores = c(7, 7, 7, 3, 3, 3, 3)
                     )
 ```
@@ -42,11 +42,13 @@ run_times <- tibble(id = c(1, 2, 3, 4, 5, 6, 7),
 
 ```{r, echo=FALSE}
 run_times %>%
-  kable(caption =  '<b>Run times</b>',
+  kable(caption =  '<b>Run times of sim_fixed_family</b>',
         format = "html",
         align = "c") %>%
   kable_styling(full_width = T)
 ```
+
+The parameters that have the biggest impact on the run times of the simulations is n, m and sibs with and the rest of the parameters not really affecting the running times.
 
 Bear in mind that these run times doesn't take into account, the amount of memory available, the frequency of the memory, the frequency of the CPU or the write speed of the disk. Write speed probably being the most important of these factors, because the most time consuming element in the simulation is the writing of data to the disk. The simulations done by the 7 core system is better in all the prior mentioned factors the 3 core system.
 
