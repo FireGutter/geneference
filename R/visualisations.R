@@ -14,6 +14,8 @@
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
 #' ÆNDRES: Must be either pdf, png or jpeg
+#' @param P the dataset$P_value-column. If the file like assoc contain a P
+#' column then we do not need to specify P.
 #'
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
@@ -25,11 +27,12 @@ plot_pval_QQ <- function(dataset,
                          line_color="black",
                          line_size = 1,
                          qq_color = "cornflowerblue",
-                         qq_shape = 19,
+                         qq_shape = 20,
                          save_plot_path = FALSE,
-                         plot_filename = "QQ-pvals.png") {
+                         plot_filename = "QQ-pvals.png",
+                         P = P) {
   
-  stopifnot("dataset must have a column named 'P'" = "P" %in% colnames(dataset),
+  stopifnot("dataset must have a column named 'P'" = sub(".*\\$", "", deparse(substitute(P))) %in% colnames(dataset),
             "line_size needs to be a positive number" =
               (is.numeric(line_size) && line_size > 0 &&
                  length(line_size) == 1),
@@ -78,12 +81,15 @@ plot_pval_QQ <- function(dataset,
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
-#'
+#' @param P the dataset$P_value-column. If the file like assoc contain a P
+#' column then we do not need to specify P.
+#' 
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
 #'
 #' @export
 plot_pval_hist <- function(dataset,
+                           P,
                            bins = 20,
                            line_color = "black",
                            fill_color = "cornflowerblue",
@@ -91,7 +97,7 @@ plot_pval_hist <- function(dataset,
                            save_plot_path = FALSE,
                            plot_filename = "pvalue_histogram.png") {
   
-  stopifnot("dataset must have a column named 'P'" = "P" %in% colnames(dataset),
+  stopifnot("'P' must be a column in 'dataset'" = sub(".*\\$", "", deparse(substitute(P))) %in% colnames(dataset),
             "bins needs to be a positive integer" =
               (is.numeric(bins) && bins > 0 && bins == round(bins) &&
                  length(bins) == 1),
@@ -136,6 +142,14 @@ plot_pval_hist <- function(dataset,
 #' (linkage disequilibrium)
 #'
 #' @param dataset data imported to R by \code{load_assoc_results()}.
+#' @param SNP the SNP column: dataset$SNP (range from 1 to m). This can be found
+#' in the assoc file.
+#' @param P the dataset$P_value-column. If the file like assoc contain a P
+#' column then we do not need to specify P.
+#' @param causal the dataset$causal_value-column. This column can be calculated
+#' with the beta-values.
+#' @param line_color color of the lines.
+#' @param line_type the type of the lines.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
@@ -145,11 +159,19 @@ plot_pval_hist <- function(dataset,
 #'
 #' @export
 plot_manhattan <- function(dataset,
+                           P,
+                           SNP = SNP,
+                           causal = causal,
+                           line_color = "cornflowerblue",
+                           line_type = "dashed",
                            save_plot_path = FALSE,
                            plot_filename = "manhattan_plot.png") {
   
-  stopifnot("dataset must have a column named 'P', 'SNP' and 'causal'" =
-              all(c("SNP", "P", "causal") %in% colnames(dataset)),
+  stopifnot("'P', 'SNP' and 'causal' must be columns in 'dataset'" =
+              all(c(sub(".*\\$", "", deparse(substitute(SNP))), 
+                    sub(".*\\$", "", deparse(substitute(P))), 
+                    sub(".*\\$", "", deparse(substitute(causal)))) 
+                  %in% colnames(dataset)),
             "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
@@ -159,27 +181,40 @@ plot_manhattan <- function(dataset,
   
   data_plt <- dataset %>%
     dplyr::filter(P < 0.05)
+  
+  if(deparse(substitute(SNP)) != "SNP"){
+    SNP <- SNP[P < 0.05]
+  }
+  
+  if(deparse(substitute(causal)) != "causal"){
+    causal <- causal[P < 0.05]
+  }
+  
+  if(deparse(substitute(P)) != "P"){
+    P <- P[P < 0.05]
+  }
+  
   m <- nrow(dataset)
   plt <- ggplot2::ggplot(data_plt) +
     ggplot2::geom_point(mapping = ggplot2::aes(SNP,
                                                -log10(P),
                                                colour = causal)) +
-    ggplot2::theme_light() +
     ggplot2::geom_segment(ggplot2::aes(x = 1, xend = m, y = -log10(0.05),
                                        yend = -log10(0.05)),
-                          colour = "cornflowerblue",
-                          linetype = "dashed",
+                          colour = line_color,
+                          linetype = line_type,
                           size = 1.25) +
     ggplot2::geom_segment(ggplot2::aes(x = 1,
                                        xend = m,
                                        y = -log10(0.05 / m),
                                        yend = -log10(0.05 / m)),
-                          colour = "cornflowerblue",
-                          linetype = "dashed", size = 1) +
+                          colour = line_color,
+                          linetype = line_type, size = 1) +
+    ggplot2::theme_light() +
     ggplot2::labs(title = "Manhattan plot",
                   subtitle = deparse(substitute(dataset)),
                   colour = "SNP is causal")
-
+  
   if (save_plot_path != FALSE) {
     ggplot2::ggsave(filename = plot_filename,
                     plot = plt,
@@ -194,6 +229,10 @@ plot_manhattan <- function(dataset,
 #' @description description to be written.
 #'
 #' @param dataset data imported to R by \code{load_assoc_results()}.
+#' @param BETA the beta value from the analysis.
+#' @param true_effect the true beta values.
+#' @param bonferroni the bonferroni values.
+#' @param P the P value.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
@@ -203,21 +242,41 @@ plot_manhattan <- function(dataset,
 #'
 #' @export
 plot_estimates_vs_true <- function(dataset,
+                                   BETA,
+                                   P,
+                                   bonferroni,
+                                   true_effect = beta,
                                    save_plot_path = FALSE,
                                    plot_filename = "beta_comparison.png") {
   
-  stopifnot("dataset must have a column named 'BETA', 'true_effect' and 'bonferroni'" =
-              all(c("BETA", "true_effect", "bonferroni") %in% colnames(dataset)),
-            "save_plot_path needs to be default or a valid path" =
+  stopifnot("'BETA', 'P', 'true_effect' and 'bonferroni' must be columns in 'dataset'" =               
+          all(c(sub(".*\\$", "", deparse(substitute(BETA))), 
+                    sub(".*\\$", "", deparse(substitute(true_effect))), 
+                    sub(".*\\$", "", deparse(substitute(bonferroni))),
+                    sub(".*\\$", "", deparse(substitute(P)))) 
+                  %in% colnames(dataset)),
+    "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
               (file_ext(plot_filename) == "png" ||
-               file_ext(plot_filename) == "pdf" ||
-               file_ext(plot_filename) == "jpeg"))
+                 file_ext(plot_filename) == "pdf" ||
+                 file_ext(plot_filename) == "jpeg"))
   
   tmpdataacc <- dataset %>%
-    dplyr::filter(significant)
-
+    dplyr::filter(P < 0.05)
+  
+  if(deparse(substitute(BETA)) != "BETA"){
+    BETA <- BETA[P < 0.05]
+  }
+  
+  if(deparse(substitute(true_effect)) != "true_effect"){
+    true_effect <- true_effect[P < 0.05]
+  }
+  
+  if(deparse(substitute(bonferroni)) != "bonferroni"){
+    bonferroni <- bonferroni[P < 0.05]
+  }
+  
   plt <- ggplot2::ggplot(tmpdataacc) +
     ggplot2::geom_point(mapping = ggplot2::aes(BETA,
                                                true_effect,
@@ -233,7 +292,7 @@ plot_estimates_vs_true <- function(dataset,
                                                       hjust = 0.5),
                    plot.subtitle = ggplot2::element_text(face = "bold",
                                                          hjust = 0.5))
-
+  
   if (save_plot_path != FALSE) {
     ggplot2::ggsave(filename = plot_filename,
                     plot = plt,
@@ -252,6 +311,8 @@ plot_estimates_vs_true <- function(dataset,
 #'
 #' @param dataset data imported to R by \code{load_assoc_results()}.
 #' @param line_color color of identity line.
+#' @param line_type type of identity line.
+#' @param label_size the size of the boxes.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
@@ -262,11 +323,13 @@ plot_estimates_vs_true <- function(dataset,
 #' @export
 plot_pmgl_vs_true <- function(dataset,
                               line_color = "black",
+                              line_type = "dashed",
+                              label_size = 3,
                               save_plot_path = FALSE,
                               plot_filename = "posterior_liabilities.png") {
   
-  stopifnot("dataset must have a column named 'LTFH_pheno' and 'child_lg'" =
-              all(c("LTFH_pheno", "child_lg") %in% colnames(dataset)),
+  stopifnot("dataset must have a columns named 'LTFH_pheno', 'child_lg' and 'conf_class'" =
+              all(c("LTFH_pheno", "child_lg", "conf_class") %in% colnames(dataset)),
             "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
@@ -280,7 +343,7 @@ plot_pmgl_vs_true <- function(dataset,
     ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg, color = conf_class),
                         size = 0.6,
                         show.legend = FALSE) +
-    ggplot2::geom_abline(color = line_color, linetype = "dashed") +
+    ggplot2::geom_abline(color = line_color, linetype = line_type) +
     ggplot2::theme_light() +
     ggplot2::labs(x = "Posterior mean genetic liability",
                   y = "True genetic liability",
@@ -297,8 +360,9 @@ plot_pmgl_vs_true <- function(dataset,
                               nudge_y = -3 - repel_data$child_lg,
                               box.padding = 0.4,
                               label.padding = 0.1,
-                              show.legend = FALSE)
-
+                              show.legend = FALSE,
+                              size = label_size)
+  
   if (save_plot_path != FALSE) {
     ggplot2::ggsave(filename = plot_filename,
                     plot = plt,
@@ -319,6 +383,8 @@ plot_pmgl_vs_true <- function(dataset,
 #' @param beta_y beta-values to be displayed on the y-axis. E.g. the linear GWAS
 #' beta values.
 #' @param bonferroni corrected significant values from LTFH.
+#' @param line_color the color of the identity line.
+#' @param line_type the type of the identity line.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
@@ -327,7 +393,8 @@ plot_pmgl_vs_true <- function(dataset,
 #' \code{save_plot_path} and returns NULL.
 #'
 #' @export
-Compare_beta <- function(dataset, beta_x, beta_y, bonferroni, 
+Compare_beta <- function(dataset, beta_x, beta_y, bonferroni,
+                         line_color = "green", line_type = "dashed",
                          save_plot_path = FALSE, 
                          plot_filename = "Compare_beta.png") {
   
@@ -342,11 +409,9 @@ Compare_beta <- function(dataset, beta_x, beta_y, bonferroni,
                                                y = beta_y)) +
     ggplot2::geom_point(mapping = ggplot2::aes(color = bonferroni)) +
     ggplot2::geom_smooth(se = FALSE, method = "lm")+
-    ggplot2::geom_abline(intercept = 0, slope = 1, color="green", 
-                         linetype="dashed", size = 1) +
-    ggplot2::labs(x = "LTFH beta",
-                  y = "GWAS beta",
-                  title = "Comparing LTFH beta to GWAS beta",
+    ggplot2::geom_abline(intercept = 0, slope = 1, color=line_color, 
+                         linetype=line_type, size = 1) +
+    ggplot2::labs(title = "Comparing beta values",
                   subtitle = deparse(substitute(dataset)),
                   colour = "Significant with\n Bonferroni-correction") +
     ggplot2::theme_light() +

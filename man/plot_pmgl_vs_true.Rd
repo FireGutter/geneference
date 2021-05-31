@@ -7,7 +7,11 @@ liabilities}
 \usage{
 plot_pmgl_vs_true(
   dataset,
+  LTFH_pheno = LTFH_pheno,
+  child_lg = child_lg,
   line_color = "black",
+  line_type = "dashed",
+  label_size = 3,
   save_plot_path = FALSE,
   plot_filename = "posterior_liabilities.png"
 )
@@ -15,7 +19,15 @@ plot_pmgl_vs_true(
 \arguments{
 \item{dataset}{data imported to R by \code{load_assoc_results()}.}
 
+\item{LTFH_pheno}{the phenotypes calculted for LT-FH.}
+
+\item{child_lg}{the genetic liability of the individual.}
+
 \item{line_color}{color of identity line.}
+
+\item{line_type}{type of identity line.}
+
+\item{label_size}{the size of the boxes.}
 
 \item{save_plot_path}{if \code{FALSE}, return the function returns a ggplot
 object. Else a path of the directory to save the plot to.}

@@ -11,7 +11,8 @@ plot_pval_hist(
   fill_color = "cornflowerblue",
   mean_color = "red",
   save_plot_path = FALSE,
-  plot_filename = "pvalue_histogram.png"
+  plot_filename = "pvalue_histogram.png",
+  P = P
 )
 }
 \arguments{
@@ -29,6 +30,9 @@ plot_pval_hist(
 object. Else a path of the directory to save the plot to.}
 
 \item{plot_filename}{name of the file to be saved, including file extension.}
+
+\item{P}{the dataset$P_value-column. If the file like assoc contain a P
+column then we do not need to specify P.}
 }
 \value{
 Either returns a \code{ggplot} object or saves the plot to

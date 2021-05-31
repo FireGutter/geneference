@@ -9,9 +9,10 @@ plot_pval_QQ(
   line_color = "black",
   line_size = 1,
   qq_color = "cornflowerblue",
-  qq_shape = 19,
+  qq_shape = 20,
   save_plot_path = FALSE,
-  plot_filename = "QQ-pvals.png"
+  plot_filename = "QQ-pvals.png",
+  P = P
 )
 }
 \arguments{
@@ -30,6 +31,9 @@ object. Else a path of the directory to save the plot to.}
 
 \item{plot_filename}{name of the file to be saved, including file extension.
 ÆNDRES: Must be either pdf, png or jpeg}
+
+\item{P}{the dataset$P_value-column. If the file like assoc contain a P
+column then we do not need to specify P.}
 }
 \value{
 Either returns a \code{ggplot} object or saves the plot to
