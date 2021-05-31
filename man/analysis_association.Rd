@@ -34,14 +34,22 @@ containing plink.exe.}
 }
 \value{
 Does not return anything, but PLINK writes \code{out_file} to disk,
-containing results of the performed analysis. The columns in the printed
-dataset depends on which phenotype is used for the analysis.
+containing results of the performed analysis. The file format of
+\code{out_file} and the columns contained in it depends on which phenotype
+is used for the analysis.
 }
 \description{
-to be written. calls PLINK.
-(include specifying pheno_names from simulation:
-GWAS use pheno, for LTFH use LTFH_pheno, GWAX use GWAX_pheno)
-NOTE: creates a temporary .bed file if \code{bed} is \code{FALSE}. This
-takes some additional time.
-Also: File extension will be .assoc or .qassoc depending on the used model.
+Calls PLINK to run an association analysis on specified data.
+}
+\details{
+PLINK uses the \code{pheno_name} column to determine which kind of analysis
+to run on the data.\cr
+Use "pheno" for a 1 degree of freedom chi-square test with the case-control
+representation of the phenotype.\cr
+Use "line_pheno" for a linear regression using the case-control
+representation of the phenotype.\cr
+Use "LTFH_pheno" for a linear regression using the LTFH phenotype. Requires
+that \code{pheno_file} was created/edited by \code{assign_ltfh_phenotype()}.
+Use "GWAX_pheno" for a linear regression using the LTFH phenotype. Requires
+that \code{pheno_file} was created/edited by \code{assign_GWAX_phenotype()}.
 }
