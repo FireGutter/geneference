@@ -14,6 +14,8 @@
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
 #' ÆNDRES: Must be either pdf, png or jpeg
+#' @param P the dataset$P_value-column. If the file like assoc contain a P
+#' column then we do not need to specify P.
 #'
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
@@ -27,9 +29,10 @@ plot_pval_QQ <- function(dataset,
                          qq_color = "cornflowerblue",
                          qq_shape = 19,
                          save_plot_path = FALSE,
-                         plot_filename = "QQ-pvals.png") {
+                         plot_filename = "QQ-pvals.png",
+                         P = P) {
   
-  stopifnot("dataset must have a column named 'P'" = "P" %in% colnames(dataset),
+  stopifnot("dataset must have a column named 'P'" = sub(".*\\$", "", deparse(substitute(P))) %in% colnames(dataset),
             "line_size needs to be a positive number" =
               (is.numeric(line_size) && line_size > 0 &&
                  length(line_size) == 1),
@@ -78,7 +81,9 @@ plot_pval_QQ <- function(dataset,
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
-#'
+#' @param P the dataset$P_value-column. If the file like assoc contain a P
+#' column then we do not need to specify P.
+#' 
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
 #'
@@ -89,9 +94,10 @@ plot_pval_hist <- function(dataset,
                            fill_color = "cornflowerblue",
                            mean_color = "red",
                            save_plot_path = FALSE,
-                           plot_filename = "pvalue_histogram.png") {
+                           plot_filename = "pvalue_histogram.png",
+                           P = P) {
   
-  stopifnot("dataset must have a column named 'P'" = "P" %in% colnames(dataset),
+  stopifnot("dataset must have a column named 'P'" = sub(".*\\$", "", deparse(substitute(P))) %in% colnames(dataset),
             "bins needs to be a positive integer" =
               (is.numeric(bins) && bins > 0 && bins == round(bins) &&
                  length(bins) == 1),
@@ -136,6 +142,12 @@ plot_pval_hist <- function(dataset,
 #' (linkage disequilibrium)
 #'
 #' @param dataset data imported to R by \code{load_assoc_results()}.
+#' @param SNP the SNP column: dataset$SNP (range from 1 to m). This can be found
+#' in the assoc file.
+#' @param P the dataset$P_value-column. If the file like assoc contain a P
+#' column then we do not need to specify P.
+#' @param causal the dataset$causal_value-column. This column can be calculated
+#' with the beta-values.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
@@ -145,11 +157,17 @@ plot_pval_hist <- function(dataset,
 #'
 #' @export
 plot_manhattan <- function(dataset,
+                           SNP = SNP,
+                           P = P,
+                           causal = causal,
                            save_plot_path = FALSE,
                            plot_filename = "manhattan_plot.png") {
   
   stopifnot("dataset must have a column named 'P', 'SNP' and 'causal'" =
-              all(c("SNP", "P", "causal") %in% colnames(dataset)),
+              all(c(sub(".*\\$", "", deparse(substitute(SNP))), 
+                    sub(".*\\$", "", deparse(substitute(P))), 
+                    sub(".*\\$", "", deparse(substitute(causal)))) 
+                  %in% colnames(dataset)),
             "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
@@ -159,12 +177,24 @@ plot_manhattan <- function(dataset,
   
   data_plt <- dataset %>%
     dplyr::filter(P < 0.05)
+  
+  if(deparse(substitute(SNP)) != "SNP"){
+    SNP <- SNP[P < 0.05]
+  }
+  
+  if(deparse(substitute(causal)) != "causal"){
+    causal <- causal[P < 0.05]
+  }
+  
+  if(deparse(substitute(P)) != "P"){
+    P <- P[P < 0.05]
+  }
+  
   m <- nrow(dataset)
   plt <- ggplot2::ggplot(data_plt) +
     ggplot2::geom_point(mapping = ggplot2::aes(SNP,
                                                -log10(P),
                                                colour = causal)) +
-    ggplot2::theme_light() +
     ggplot2::geom_segment(ggplot2::aes(x = 1, xend = m, y = -log10(0.05),
                                        yend = -log10(0.05)),
                           colour = "cornflowerblue",
@@ -176,10 +206,11 @@ plot_manhattan <- function(dataset,
                                        yend = -log10(0.05 / m)),
                           colour = "cornflowerblue",
                           linetype = "dashed", size = 1) +
+    ggplot2::theme_light() +
     ggplot2::labs(title = "Manhattan plot",
                   subtitle = deparse(substitute(dataset)),
                   colour = "SNP is causal")
-
+  
   if (save_plot_path != FALSE) {
     ggplot2::ggsave(filename = plot_filename,
                     plot = plt,
