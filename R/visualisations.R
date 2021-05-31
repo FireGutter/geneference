@@ -89,15 +89,15 @@ plot_pval_QQ <- function(dataset,
 #'
 #' @export
 plot_pval_hist <- function(dataset,
+                           P,
                            bins = 20,
                            line_color = "black",
                            fill_color = "cornflowerblue",
                            mean_color = "red",
                            save_plot_path = FALSE,
-                           plot_filename = "pvalue_histogram.png",
-                           P = P) {
+                           plot_filename = "pvalue_histogram.png") {
   
-  stopifnot("dataset must have a column named 'P'" = sub(".*\\$", "", deparse(substitute(P))) %in% colnames(dataset),
+  stopifnot("'P' must be a column in 'dataset'" = sub(".*\\$", "", deparse(substitute(P))) %in% colnames(dataset),
             "bins needs to be a positive integer" =
               (is.numeric(bins) && bins > 0 && bins == round(bins) &&
                  length(bins) == 1),
@@ -159,15 +159,15 @@ plot_pval_hist <- function(dataset,
 #'
 #' @export
 plot_manhattan <- function(dataset,
+                           P,
                            SNP = SNP,
-                           P = P,
                            causal = causal,
                            line_color = "cornflowerblue",
                            line_type = "dashed",
                            save_plot_path = FALSE,
                            plot_filename = "manhattan_plot.png") {
   
-  stopifnot("dataset must have a column named 'P', 'SNP' and 'causal'" =
+  stopifnot("'P', 'SNP' and 'causal' must be columns in 'dataset'" =
               all(c(sub(".*\\$", "", deparse(substitute(SNP))), 
                     sub(".*\\$", "", deparse(substitute(P))), 
                     sub(".*\\$", "", deparse(substitute(causal)))) 
@@ -242,14 +242,14 @@ plot_manhattan <- function(dataset,
 #'
 #' @export
 plot_estimates_vs_true <- function(dataset,
-                                   BETA = BETA,
-                                   true_effect = true_effect,
-                                   bonferroni = bonferroni,
-                                   P = P,
+                                   BETA,
+                                   P,
+                                   bonferroni,
+                                   true_effect = beta,
                                    save_plot_path = FALSE,
                                    plot_filename = "beta_comparison.png") {
   
-  stopifnot("dataset must have a column named 'BETA', 'true_effect' and 'bonferroni'" =               
+  stopifnot("'BETA', 'P', 'true_effect' and 'bonferroni' must be columns in 'dataset'" =               
           all(c(sub(".*\\$", "", deparse(substitute(BETA))), 
                     sub(".*\\$", "", deparse(substitute(true_effect))), 
                     sub(".*\\$", "", deparse(substitute(bonferroni))),
@@ -310,8 +310,6 @@ plot_estimates_vs_true <- function(dataset,
 #' aesthetic parameters in ggplot2.
 #'
 #' @param dataset data imported to R by \code{load_assoc_results()}.
-#' @param LTFH_pheno the phenotypes calculted for LT-FH.
-#' @param child_lg the genetic liability of the individual.
 #' @param line_color color of identity line.
 #' @param line_type type of identity line.
 #' @param label_size the size of the boxes.
@@ -324,18 +322,14 @@ plot_estimates_vs_true <- function(dataset,
 #'
 #' @export
 plot_pmgl_vs_true <- function(dataset,
-                              LTFH_pheno = LTFH_pheno,
-                              child_lg = child_lg,
                               line_color = "black",
                               line_type = "dashed",
                               label_size = 3,
                               save_plot_path = FALSE,
                               plot_filename = "posterior_liabilities.png") {
   
-  stopifnot("dataset must have a column named 'LTFH_pheno' and 'child_lg'" =
-              all(c(sub(".*\\$", "", deparse(substitute(LTFH_pheno))), 
-                    sub(".*\\$", "", deparse(substitute(child_lg)))) 
-                  %in% colnames(dataset)),
+  stopifnot("dataset must have a columns named 'LTFH_pheno', 'child_lg' and 'conf_class'" =
+              all(c("LTFH_pheno", "child_lg", "conf_class") %in% colnames(dataset)),
             "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
