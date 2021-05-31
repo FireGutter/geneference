@@ -112,12 +112,96 @@
 
     
     
-<p>This vignette shows how we model the liability distributions based on the work by Hujoel et al (2020).</p>
+<p>This vignette explains the assumptions made during both individual and family simulations, and how we model the liability distributions based on the work by Hujoel et al (2020). We detail both the liability threshold model used for simulation and the idea behind liability threshold conditional on family history (LT-FH).</p>
+<div id="simulation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#simulation" class="anchor"></a>Simulation</h2>
+<p>geneference enables simulation of genetic data for either an individual or including its family. Each simulation will have <span class="math inline">\(n\)</span> (rows) individuals or families with <span class="math inline">\(m\)</span> (columns) independent Single-Nucleotide Polymorphisms (SNPs), where <span class="math inline">\(q\)</span> of them are causal for the phenotype. Each column represents the number of minor alleles for the given position in the genome of an individual. We note that this ranges from 0 to 2, as an individual could have the minor allele on none, one, or both of the chromosomes in a pair. Only the simulated genotypes of the target individual will be saved in <code>genotypes.ped</code>, but the liabilities and case/control status of each of the individual’s family members will be saved in <code>phenotypes.txt</code>. The method of determining the liability and phenotype status will be explained in the next section.<br>
+In the simulation with no family history, each SNP is sampled from a binomial distribution <span class="math inline">\(SNP_j \sim binom(2,\,MAF_j)\)</span>, where the probability of having the minor allele (i.e. the minor allele frequence, MAF) is sampled from a uniform distribution <span class="math inline">\(MAF_j \sim unif(0.01,\,0.49)\)</span>. MAFs are saved in <code>MAFs.txt</code>. Furthermore, the effect size of each causal SNP is sampled from a normal distribution <span class="math inline">\(\beta_j \sim N(0,\,\frac{h^2}{q})\)</span>, where <span class="math inline">\(h^2\)</span> is the heritability of trait, and <span class="math inline">\(q\)</span> is the number of causal SNPs. The non-causal SNPs will have an effect size of 0. The effect sizes are saved in <code>beta.txt</code>.<br>
+When we expand the simulation to include family members, the parents’ genotypes are simulated in the aforementioned manner, but to get the target’s genotypes as well as the siblings’ genotypes, we combine the parents’ SNPs through Punnett squares.</p>
+</div>
+<div id="liability-threshold-model" class="section level2">
+<h2 class="hasAnchor">
+<a href="#liability-threshold-model" class="anchor"></a>Liability threshold model</h2>
+<p>The liability threshold model assigns a phenotype status, case or control, to each person based on their full liability <span class="math inline">\(\epsilon\)</span>, which can be divided into two parts, namely the genetic liability, <span class="math inline">\(\epsilon_{g}\)</span>, and the environmental liability, <span class="math inline">\(\epsilon_{e}\)</span>. As the SNPs are simulated independently, no linkage disequilibrium will be taken into consideration. The genetic liability is assumed to have a linear relationship with the number of minor alleles, meaning that the effect size of a given SNP is constant. The genetic liability is therefore calculated by multiplying the SNPs by their effect size and summing them <span class="math inline">\(\epsilon_g = X_i \beta\)</span>, where <span class="math inline">\(X_i\)</span> is the i’th person’s SNPs and <span class="math inline">\(\beta\)</span> is the effect sizes. It is assumed that <span class="math inline">\(\epsilon_g \sim N(0,\,h^2)\)</span>, where <span class="math inline">\(h^2\)</span> is the heritability. The liability from the environment is sampled and is assumed to follow a normal distribution, <span class="math inline">\(\epsilon_e \sim N(0,\,1-h^2)\)</span>, which makes the full liability <span class="math inline">\(\epsilon_g+\epsilon_e=\epsilon \sim N(0,\,1)\)</span>. The liability theshold model assigns a case to an individual if <span class="math inline">\(\epsilon\geq T\)</span> and control otherwise. Here, <span class="math inline">\(T\)</span> is the threshold of disease liability, and is chosen such that <span class="math inline">\(P(\epsilon\geq T) = k\)</span>, where <span class="math inline">\(k\)</span> is the prevalence of trait, e.g <span class="math inline">\(5\%\)</span>.</p>
+</div>
+<div id="lt-fh-model" class="section level2">
+<h2 class="hasAnchor">
+<a href="#lt-fh-model" class="anchor"></a>LT-FH model</h2>
+<p>The LT-FH method relies on the liability threshold model, but expands it to be able to take case/control status and/or family history into consideration. Specifically, this is done by conditioning the genetic liability on phenotype status of the family when calculating posterior mean genetic liabilities for each target person. The advantage of doing this is that we incorporate prior knowledge about the family history to make a accurate estimate of the true genetic liability. In addition, it leads to a non-binary representation of an otherwise binary phenotype status. This is important as, it allows us to distinguish between having a liability just above and having a liability far greater than the threshold <span class="math inline">\(T\)</span>.</p>
+<p>To model a family and their liabilities, it is assumed that they follow a multivariate normal distribution, with, for two family members, the <span class="math inline">\(cov(\epsilon_1, \epsilon_2) = K_{12}h^2\)</span>, where <span class="math inline">\(K_{12}\)</span> is the coefficient of the relationship, for example <span class="math inline">\(1/2\)</span> for a parent-offspring pair. Therefore, we have <span class="math display">\[
+\begin{pmatrix}
+\epsilon_{o,e} \\ \epsilon_{o,g} \\ \epsilon_{p1} \\ \epsilon_{p2} \\ \epsilon_{s}
+\end{pmatrix} \sim
+MVN_5 \begin{pmatrix}
+\begin{pmatrix}
+0 \\ 0 \\ 0 \\ 0 \\ 0
+\end{pmatrix},\,
+\begin{pmatrix}
+1-h^2 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; h^2 &amp; 0.5h^2 &amp; 0.5h^2 &amp; 0.5h^2 \\
+0 &amp; 0.5h^2 &amp; 1 &amp; 0 &amp; 0.5h^2 \\
+0 &amp; 0.5h^2 &amp; 0 &amp; 1 &amp; 0.5h^2 \\
+0 &amp; 0.5h^2 &amp; 0.5h^2 &amp; 0.5h^2 &amp; 1
+\end{pmatrix}
+\end{pmatrix},
+\]</span> where <span class="math inline">\(\epsilon_{o,e}\)</span> and <span class="math inline">\(\epsilon_{o,g}\)</span> is the environmental and genetic liability of the target, <span class="math inline">\(\epsilon_{p1}\)</span> and <span class="math inline">\(\epsilon_{p2}\)</span> are the full liabilities of the parents, and <span class="math inline">\(\epsilon_s\)</span> is the full liability of the sibling. In this distribution, we only have one sibling, but it can be expanded to an arbitrary number of siblings.</p>
+<p>To be able to include the case/control status for the family, each target individual is assigned a configuration. The configuration is created based on the case/control status of the target, the parents and siblings, such that each individual with the same family history is in the same configuration. We use the configuration to create the posterior mean genetic liability <span class="math inline">\(E(\epsilon_{o,g}|z_o,z_{p1},z_{p2},\overrightarrow{z_s})\)</span>, where <span class="math inline">\((z_o)\)</span> is the case-control status of the target individual, <span class="math inline">\((z_{p1}, z_{p2})\)</span> is case-control of the parents, and <span class="math inline">\((\overrightarrow{z_s})\)</span> is the case-control status of the siblings.<br>
+The case/control status of the family members informs us about what range the full liabilities lie in, since they have to be greater than <span class="math inline">\(T\)</span> if case and less than <span class="math inline">\(T\)</span> if control. The multivariate normal distribution above, does not include the target’s own full liability, which will be affected by the targets own case/control status. We know from the assumptions in the liability threshold model that the targets full liability <span class="math inline">\(\epsilon_{o,f} = \epsilon_{o,g}+\epsilon_{o,e}\)</span>. Including this changes the distribution, such that we instead have <span class="math display">\[
+\begin{pmatrix}
+    \epsilon_{o,g} \\
+    \epsilon_{o,f} \\
+    \epsilon_{p1} \\
+    \epsilon_{p2} \\
+    \epsilon_{s}
+\end{pmatrix}
+\sim
+MVN_5\left( \begin{pmatrix}
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+    0
+\end{pmatrix}, \begin{pmatrix}
+    h^2 &amp; h^2 &amp; 0.5h^2 &amp; 0.5h^2 &amp; 0.5h^2 \\
+    h^2 &amp; 1 &amp; 0.5h^2 &amp; 0.5h^2 &amp; 0.5h^2 \\
+    0.5h^2 &amp; 0.5h^2 &amp; 1 &amp; 0  &amp; 0.5h^2\\
+    0.5h^2 &amp; 0.5h^2 &amp; 0 &amp; 1  &amp; 0.5h^2\\
+    0.5h^2 &amp; 0.5h^2 &amp; 0.5h^2 &amp; 0.5h^2 &amp; 1
+\end{pmatrix}\right).
+\]</span> This is again with only one sibling, but can be expanded to an arbitrary number of siblings. Based on this distribution the marginal distribution of a liability conditioned on the other liabilities can be found as shown in the example below. The helper function <code><a href="../reference/covmatrix.html">covmatrix()</a></code> can be used to create theoretical covariance matrices with a specified number of siblings and value of <span class="math inline">\(h^2\)</span>. Furthermore, <code><a href="../reference/calculate_cov.html">calculate_cov()</a></code> can be used to estimate the covariance matrix of simulated data. The covariance matrices generated by these functions follow the same order as described in this vignette.</p>
+<div id="example" class="section level4">
+<h4 class="hasAnchor">
+<a href="#example" class="anchor"></a>Example</h4>
+<p>For a family with no siblings we have:</p>
+<p><span class="math display">\[
+\epsilon_{o,g}|\epsilon_{o,f},\epsilon_{p1},\epsilon_{p2} \sim N\left(\frac{(h^2-\frac{1}{2}h^4)\cdot \epsilon_{o,f} + (\frac{1}{2}h^2 - \frac{1}{2}h^4)\cdot (\epsilon_{p1}+\epsilon_{p2})}{1-\frac{1}{2}h^4}, \,\frac{h^2 - \frac{3}{2}h^4 + \frac{1}{2}h^6}{1-\frac{1}{2}h^4}\right).
+\]</span> By including the knowledge about the configuration, we can sample the genetic liability from a normal distribution when the full liabilities have values that correspond to having the correct case/control status. For a more detailed explanation of this procedure, see <code><a href="../articles/gibbs.html">vignette("gibbs")</a></code>.</p>
+</div>
+<div id="implementing-configurations" class="section level3">
+<h3 class="hasAnchor">
+<a href="#implementing-configurations" class="anchor"></a>Implementing configurations</h3>
+<p>The configuration that each individual is assigned to, is based on the phenotype status of the individual itself and its family. The function <code><a href="../reference/assign_ltfh_phenotype.html">assign_ltfh_phenotype()</a></code> appends the following columns to <code>phenotypes.txt</code>:</p>
+<ul>
+<li>
+<code>conf</code>: Configuration of a family</li>
+<li>
+<code>conf_class</code>: Equivalence class of a configuration</li>
+<li>
+<code>ltfh_pheno</code>: Estimated posterior mean genetic liability for the given equivalence class</li>
+</ul>
+<p>The column <code>conf</code> represents the configuration where each number is the phenotype status of a family member. The numbers are written in the following order: own, parent 1, parent 2, sibling 1, …, sibling n. Each number is “1” if control, and “2” if case. E.g., a configuration of “1212”, means that the individual itself is control, while parent 1 is case, parent 2 is control and sibling 1 is case. This is just with one sibling, but can be expanded to an arbitrary number of siblings.<br>
+Different configurations can be equivalent from a theoretical standpoint, since it does not matter which of the parents is a case, or which of the siblings is a case. We therefore use the column <code>conf_class</code> to group configurations. This column consists of four numbers separated by “x”. The first is the individual’s own case-control status, the second is the sum of the parents’ case-control status, the third is the number of siblings and the fourth is the sum of the siblings case-control status. For instance, the configurations “12121” and “11212” will both be assigned the configuration class “1x3x2x3”.<br>
+The column <code>ltfh_pheno</code> contains posterior mean genetic liabilities of an individual. Individuals with the same configuration class are assigned the same posterior mean genetic liability.</p>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
