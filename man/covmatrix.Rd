@@ -4,27 +4,26 @@
 \alias{covmatrix}
 \title{Create covariance matrix for liabilities}
 \usage{
-covmatrix(sib = 0, hsq)
+covmatrix(hsq, sib = 0)
 }
 \arguments{
-\item{sib}{number of siblings.}
+\item{hsq}{heritability parameter.}
 
-\item{hsq}{squared heritability parameter.}
+\item{sib}{number of siblings.}
 }
 \value{
-A covariance matrix for an individual with sib number of siblings,
-such that the number of rows and columns are equal to 4 + number of
-siblings.
+A covariance matrix for the liabilities of a family with \code{sib}
+number of siblings.
 }
 \description{
-Design the theoretical covariance matrix for the multivariate
-normal used to model the distribution of liabilities.
-The first entry in the vector of liabilities is the genetic liability, the
-next is the full liability and the two following are the liabilities of the
-parents. Liabilities of siblings constitute the remaining entries in the
-vector.
+Design the theoretical covariance matrix from the multivariate
+normal distribution used to model the liabilities.
+}
+\details{
+The covariance matrix is explained in detail in
+\code{vignette("liability-distribution")}.\cr
 }
 \examples{
-covmatrix(2, 0.5)
+covmatrix(0.5, 2)
 
 }

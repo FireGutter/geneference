@@ -39,7 +39,7 @@ generate_pmgl <- function(conf, burn_in, start_value, alpha) {
   liabs <-  matrix(rep(start_value, n), nrow = n, ncol = 1)
   genliabs <- matrix(NA, nrow = 10000, ncol = 1)
   
-  S <- covmatrix(n - 4, 0.5)
+  S <- covmatrix(0.5, n - 4)
   
   crit <- qnorm(1 - alpha)
   

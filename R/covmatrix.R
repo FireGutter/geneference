@@ -1,28 +1,24 @@
-#'
 #' @title Create covariance matrix for liabilities
 #'
-#' @description Design the theoretical covariance matrix for the multivariate
-#' normal used to model the distribution of liabilities.
-#' The first entry in the vector of liabilities is the genetic liability, the
-#' next is the full liability and the two following are the liabilities of the
-#' parents. Liabilities of siblings constitute the remaining entries in the
-#' vector.
+#' @description Design the theoretical covariance matrix from the multivariate
+#' normal distribution used to model the liabilities.
 #'
+#' @details
+#' The covariance matrix is explained in detail in
+#' \code{vignette("liability-distribution")}.\cr
 #'
-#' @param hsq squared heritability parameter.
+#' @param hsq heritability parameter.
 #' @param sib number of siblings.
 #'
-#' @return A covariance matrix for an individual with sib number of siblings,
-#' such that the number of rows and columns are equal to 4 + number of
-#' siblings.
-#'
+#' @return A covariance matrix for the liabilities of a family with \code{sib}
+#' number of siblings. 
 #'
 #' @examples
-#' covmatrix(2, 0.5)
+#' covmatrix(0.5, 2)
 #'
 #' @export
 
-covmatrix <- function(sib = 0, hsq) {
+covmatrix <- function(hsq, sib = 0) {
   stopifnot("sib needs to be a non-negative integer" =
               (sib >= 0 && is.numeric(sib) && round(sib) == sib &&
                  length(sib) == 1),

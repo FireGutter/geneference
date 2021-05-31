@@ -54,7 +54,7 @@ Gibbs <- function(conf, start_value, samples) {
 
   data <- matrix(start_value, nrow = samples, ncol = n)
 
-  S <- covmatrix(n - 4, 0.5)
+  S <- covmatrix(0.5, n - 4)
 
   crit <- qnorm(0.95)
 
