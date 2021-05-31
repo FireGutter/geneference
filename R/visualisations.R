@@ -274,10 +274,12 @@ plot_pmgl_vs_true <- function(dataset,
                  file_ext(plot_filename) == "pdf" ||
                  file_ext(plot_filename) == "jpeg"))
   
+  repel_data <- dataset[, .SD[which.min(child_lg)], by = conf_class]
+  
   plt <- ggplot2::ggplot(dataset) +
-    ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg),
-                        color = "cornflowerblue",
-                        size = 0.6) +
+    ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg, color = conf_class),
+                        size = 0.6,
+                        show.legend = FALSE) +
     ggplot2::geom_abline(color = line_color, linetype = "dashed") +
     ggplot2::theme_light() +
     ggplot2::labs(x = "Posterior mean genetic liability",
@@ -287,7 +289,15 @@ plot_pmgl_vs_true <- function(dataset,
     ggplot2::theme(plot.title = ggplot2::element_text(face = "bold",
                                                       hjust = 0.5),
                    plot.subtitle = ggplot2::element_text(face = "bold",
-                                                         hjust = 0.5))
+                                                         hjust = 0.5)) +
+    ggrepel::geom_label_repel(data = repel_data,
+                              ggplot2::aes(LTFH_pheno, child_lg, 
+                                           label = gsub("x", ".", conf_class),
+                                           color = as.factor(conf_class)),
+                              nudge_y = -3 - repel_data$child_lg,
+                              box.padding = 0.4,
+                              label.padding = 0.1,
+                              show.legend = FALSE)
 
   if (save_plot_path != FALSE) {
     ggplot2::ggsave(filename = plot_filename,
