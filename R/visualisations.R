@@ -225,6 +225,10 @@ plot_manhattan <- function(dataset,
 #' @description description to be written.
 #'
 #' @param dataset data imported to R by \code{load_assoc_results()}.
+#' @param BETA the beta value fram the analysis.
+#' @param true_effect the true beta values.
+#' @param bonferroni the bonferroni values.
+#' @param P the P value.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
@@ -234,21 +238,41 @@ plot_manhattan <- function(dataset,
 #'
 #' @export
 plot_estimates_vs_true <- function(dataset,
+                                   BETA = BETA,
+                                   true_effect = true_effect,
+                                   bonferroni = bonferroni,
+                                   P = P,
                                    save_plot_path = FALSE,
                                    plot_filename = "beta_comparison.png") {
   
-  stopifnot("dataset must have a column named 'BETA', 'true_effect' and 'bonferroni'" =
-              all(c("BETA", "true_effect", "bonferroni") %in% colnames(dataset)),
-            "save_plot_path needs to be default or a valid path" =
+  stopifnot("dataset must have a column named 'BETA', 'true_effect' and 'bonferroni'" =               
+          all(c(sub(".*\\$", "", deparse(substitute(BETA))), 
+                    sub(".*\\$", "", deparse(substitute(true_effect))), 
+                    sub(".*\\$", "", deparse(substitute(bonferroni))),
+                    sub(".*\\$", "", deparse(substitute(P)))) 
+                  %in% colnames(dataset)),
+    "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
               (file_ext(plot_filename) == "png" ||
-               file_ext(plot_filename) == "pdf" ||
-               file_ext(plot_filename) == "jpeg"))
+                 file_ext(plot_filename) == "pdf" ||
+                 file_ext(plot_filename) == "jpeg"))
   
   tmpdataacc <- dataset %>%
-    dplyr::filter(significant)
-
+    dplyr::filter(P < 0.05)
+  
+  if(deparse(substitute(BETA)) != "BETA"){
+    BETA <- BETA[P < 0.05]
+  }
+  
+  if(deparse(substitute(true_effect)) != "true_effect"){
+    true_effect <- true_effect[P < 0.05]
+  }
+  
+  if(deparse(substitute(bonferroni)) != "bonferroni"){
+    bonferroni <- bonferroni[P < 0.05]
+  }
+  
   plt <- ggplot2::ggplot(tmpdataacc) +
     ggplot2::geom_point(mapping = ggplot2::aes(BETA,
                                                true_effect,
@@ -264,7 +288,7 @@ plot_estimates_vs_true <- function(dataset,
                                                       hjust = 0.5),
                    plot.subtitle = ggplot2::element_text(face = "bold",
                                                          hjust = 0.5))
-
+  
   if (save_plot_path != FALSE) {
     ggplot2::ggsave(filename = plot_filename,
                     plot = plt,
@@ -282,6 +306,8 @@ plot_estimates_vs_true <- function(dataset,
 #' aesthetic parameters in ggplot2.
 #'
 #' @param dataset data imported to R by \code{load_assoc_results()}.
+#' @param LTFH_pheno the phenotypes calculted for LT-FH.
+#' @param child_lg the genetic liability of the individual.
 #' @param line_color color of identity line.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
@@ -292,12 +318,16 @@ plot_estimates_vs_true <- function(dataset,
 #'
 #' @export
 plot_pmgl_vs_true <- function(dataset,
+                              LTFH_pheno = LTFH_pheno,
+                              child_lg = child_lg,
                               line_color = "black",
                               save_plot_path = FALSE,
                               plot_filename = "posterior_liabilities.png") {
   
   stopifnot("dataset must have a column named 'LTFH_pheno' and 'child_lg'" =
-              all(c("LTFH_pheno", "child_lg") %in% colnames(dataset)),
+              all(c(sub(".*\\$", "", deparse(substitute(LTFH_pheno))), 
+                    sub(".*\\$", "", deparse(substitute(child_lg)))) 
+                  %in% colnames(dataset)),
             "save_plot_path needs to be default or a valid path" =
               (save_plot_path == FALSE || dir.exists(save_plot_path)),
             "plot_filename must have either '.png', '.pdf' or '.jpeg' as extension" =
@@ -328,8 +358,9 @@ plot_pmgl_vs_true <- function(dataset,
                               nudge_y = -3 - repel_data$child_lg,
                               box.padding = 0.4,
                               label.padding = 0.1,
-                              show.legend = FALSE)
-
+                              show.legend = FALSE,
+                              size = 3)
+  
   if (save_plot_path != FALSE) {
     ggplot2::ggsave(filename = plot_filename,
                     plot = plt,
