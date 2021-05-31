@@ -167,6 +167,10 @@
 
     <pre class="usage"><span class='fu'>plot_estimates_vs_true</span><span class='op'>(</span>
   <span class='va'>dataset</span>,
+  BETA <span class='op'>=</span> <span class='va'>BETA</span>,
+  true_effect <span class='op'>=</span> <span class='va'>true_effect</span>,
+  bonferroni <span class='op'>=</span> <span class='va'>bonferroni</span>,
+  P <span class='op'>=</span> <span class='va'>P</span>,
   save_plot_path <span class='op'>=</span> <span class='cn'>FALSE</span>,
   plot_filename <span class='op'>=</span> <span class='st'>"beta_comparison.png"</span>
 <span class='op'>)</span></pre>
@@ -177,6 +181,22 @@
     <tr>
       <th>dataset</th>
       <td><p>data imported to R by <code><a href='load_assoc_results.html'>load_assoc_results()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>BETA</th>
+      <td><p>the beta value from the analysis.</p></td>
+    </tr>
+    <tr>
+      <th>true_effect</th>
+      <td><p>the true beta values.</p></td>
+    </tr>
+    <tr>
+      <th>bonferroni</th>
+      <td><p>the bonferroni values.</p></td>
+    </tr>
+    <tr>
+      <th>P</th>
+      <td><p>the P value.</p></td>
     </tr>
     <tr>
       <th>save_plot_path</th>

@@ -173,6 +173,11 @@ Write a few sentences about why the plot is different from real world plots
 
     <pre class="usage"><span class='fu'>plot_manhattan</span><span class='op'>(</span>
   <span class='va'>dataset</span>,
+  SNP <span class='op'>=</span> <span class='va'>SNP</span>,
+  P <span class='op'>=</span> <span class='va'>P</span>,
+  causal <span class='op'>=</span> <span class='va'>causal</span>,
+  line_color <span class='op'>=</span> <span class='st'>"cornflowerblue"</span>,
+  line_type <span class='op'>=</span> <span class='st'>"dashed"</span>,
   save_plot_path <span class='op'>=</span> <span class='cn'>FALSE</span>,
   plot_filename <span class='op'>=</span> <span class='st'>"manhattan_plot.png"</span>
 <span class='op'>)</span></pre>
@@ -183,6 +188,29 @@ Write a few sentences about why the plot is different from real world plots
     <tr>
       <th>dataset</th>
       <td><p>data imported to R by <code><a href='load_assoc_results.html'>load_assoc_results()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>SNP</th>
+      <td><p>the SNP column: dataset$SNP (range from 1 to m). This can be found
+in the assoc file.</p></td>
+    </tr>
+    <tr>
+      <th>P</th>
+      <td><p>the dataset$P_value-column. If the file like assoc contain a P
+column then we do not need to specify P.</p></td>
+    </tr>
+    <tr>
+      <th>causal</th>
+      <td><p>the dataset$causal_value-column. This column can be calculated
+with the beta-values.</p></td>
+    </tr>
+    <tr>
+      <th>line_color</th>
+      <td><p>color of the lines.</p></td>
+    </tr>
+    <tr>
+      <th>line_type</th>
+      <td><p>the type of the lines.</p></td>
     </tr>
     <tr>
       <th>save_plot_path</th>

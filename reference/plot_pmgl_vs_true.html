@@ -174,7 +174,11 @@ aesthetic parameters in ggplot2.</p>
 
     <pre class="usage"><span class='fu'>plot_pmgl_vs_true</span><span class='op'>(</span>
   <span class='va'>dataset</span>,
+  LTFH_pheno <span class='op'>=</span> <span class='va'>LTFH_pheno</span>,
+  child_lg <span class='op'>=</span> <span class='va'>child_lg</span>,
   line_color <span class='op'>=</span> <span class='st'>"black"</span>,
+  line_type <span class='op'>=</span> <span class='st'>"dashed"</span>,
+  label_size <span class='op'>=</span> <span class='fl'>3</span>,
   save_plot_path <span class='op'>=</span> <span class='cn'>FALSE</span>,
   plot_filename <span class='op'>=</span> <span class='st'>"posterior_liabilities.png"</span>
 <span class='op'>)</span></pre>
@@ -187,8 +191,24 @@ aesthetic parameters in ggplot2.</p>
       <td><p>data imported to R by <code><a href='load_assoc_results.html'>load_assoc_results()</a></code>.</p></td>
     </tr>
     <tr>
+      <th>LTFH_pheno</th>
+      <td><p>the phenotypes calculted for LT-FH.</p></td>
+    </tr>
+    <tr>
+      <th>child_lg</th>
+      <td><p>the genetic liability of the individual.</p></td>
+    </tr>
+    <tr>
       <th>line_color</th>
       <td><p>color of identity line.</p></td>
+    </tr>
+    <tr>
+      <th>line_type</th>
+      <td><p>type of identity line.</p></td>
+    </tr>
+    <tr>
+      <th>label_size</th>
+      <td><p>the size of the boxes.</p></td>
     </tr>
     <tr>
       <th>save_plot_path</th>

@@ -176,7 +176,8 @@ aesthetic parameters in ggplot2.</p>
   fill_color <span class='op'>=</span> <span class='st'>"cornflowerblue"</span>,
   mean_color <span class='op'>=</span> <span class='st'>"red"</span>,
   save_plot_path <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  plot_filename <span class='op'>=</span> <span class='st'>"pvalue_histogram.png"</span>
+  plot_filename <span class='op'>=</span> <span class='st'>"pvalue_histogram.png"</span>,
+  P <span class='op'>=</span> <span class='va'>P</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -210,6 +211,11 @@ object. Else a path of the directory to save the plot to.</p></td>
     <tr>
       <th>plot_filename</th>
       <td><p>name of the file to be saved, including file extension.</p></td>
+    </tr>
+    <tr>
+      <th>P</th>
+      <td><p>the dataset$P_value-column. If the file like assoc contain a P
+column then we do not need to specify P.</p></td>
     </tr>
     </table>
 
