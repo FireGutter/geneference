@@ -7,8 +7,6 @@ liabilities}
 \usage{
 plot_pmgl_vs_true(
   dataset,
-  LTFH_pheno = LTFH_pheno,
-  child_lg = child_lg,
   line_color = "black",
   line_type = "dashed",
   label_size = 3,
@@ -17,11 +15,7 @@ plot_pmgl_vs_true(
 )
 }
 \arguments{
-\item{dataset}{data imported to R by \code{load_assoc_results()}.}
-
-\item{LTFH_pheno}{the phenotypes calculted for LT-FH.}
-
-\item{child_lg}{the genetic liability of the individual.}
+\item{dataset}{data imported to R by \code{load_phenotypes()}.}
 
 \item{line_color}{color of identity line.}
 
@@ -32,14 +26,25 @@ plot_pmgl_vs_true(
 \item{save_plot_path}{if \code{FALSE}, return the function returns a ggplot
 object. Else a path of the directory to save the plot to.}
 
-\item{plot_filename}{name of the file to be saved, including file extension.}
+\item{plot_filename}{name of the file to be saved, including file extension.
+Must be either .pdf, .png or .jpeg}
 }
 \value{
 Either returns a \code{ggplot} object or saves the plot to
 \code{save_plot_path} and returns NULL.
 }
 \description{
-write description.
+Creates a scatterplot of genetic liability against posterior mean genetic liability.
+}
+\details{
+Visualises how well the posterior mean genetic liabilities fit the genetic liabilities.
+An identity line is included to help see if the genetic liabilities are balanced above
+and below for each posterior mean genetic liability. Furthermore, the color and labels
+show each configuration class, which is detailed in
+\code{vignette("liability-distribution")}. \cr
+This function requires the user to run \code{assign_ltfh_phenotype()}, and then
+\code{association_analysis(pheno_name = "LTFH_pheno")}. Data is loaded with
+\code{load_phenotypes()}. \cr
 \code{vignette("ggplot2-specs", package = "ggplot2")} details the usage of
 aesthetic parameters in ggplot2.
 }

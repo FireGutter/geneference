@@ -1,11 +1,18 @@
 #' @title Plot a QQ-plot of p-values
 #'
-#' @description description to be written. Assumes p-values are uniformly
-#' distributed.
+#' @description Creates a QQ-plot of the p-values specified.
+#' 
+#' @details
+#' Use \code{analysis_association()} to obtain p-values for an analysis and
+#' import these with \code{load_results()}.\cr
+#' Assumes p-values are uniformly distributed, and hence uses the uniform
+#' distribution for the theoretical quantiles.\cr
 #' \code{vignette("ggplot2-specs", package = "ggplot2")} details the usage of
 #' aesthetic parameters in ggplot2.
 #'
-#' @param dataset data imported to R by \code{load_assoc_results()}.
+#' @param dataset data imported to R by \code{load_results()}.
+#' @param P column containing p-values to be plotted. State in the format
+#' dataset$P_value.
 #' @param line_color color of the identity line.
 #' @param line_size size of the identity line.
 #' @param qq_color color of the points showing the quantiles of the p-values.
@@ -13,9 +20,7 @@
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
-#' ÆNDRES: Must be either pdf, png or jpeg
-#' @param P the dataset$P_value-column. If the file like assoc contain a P
-#' column then we do not need to specify P.
+#' Must be either .pdf, .png or .jpeg
 #'
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
@@ -24,15 +29,15 @@
 #'
 #' @export
 plot_pval_QQ <- function(dataset,
+                         P,
                          line_color="black",
                          line_size = 1,
                          qq_color = "cornflowerblue",
                          qq_shape = 20,
                          save_plot_path = FALSE,
-                         plot_filename = "QQ-pvals.png",
-                         P = P) {
+                         plot_filename = "QQ-pvals.png") {
   
-  stopifnot("dataset must have a column named 'P'" = sub(".*\\$", "", deparse(substitute(P))) %in% colnames(dataset),
+  stopifnot("'P' must be a column in 'dataset'"  = sub(".*\\$", "", deparse(substitute(P))) %in% colnames(dataset),
             "line_size needs to be a positive number" =
               (is.numeric(line_size) && line_size > 0 &&
                  length(line_size) == 1),
@@ -69,11 +74,20 @@ plot_pval_QQ <- function(dataset,
 
 #' @title Plot a histogram of p-values
 #'
-#' @description write something
+#' @description
+#' Creates a histogram of the specified p-values.
+#'
+#' @details
+#' Use \code{analysis_association()} to obtain p-values for an analysis and
+#' import these with \code{load_results()}.\cr
+#' The function also draws a line on the y-axis showing the mean of the
+#' p-values.\cr
 #' \code{vignette("ggplot2-specs", package = "ggplot2")} details the usage of
 #' aesthetic parameters in ggplot2.
 #'
-#' @param dataset data imported to R by \code{load_assoc_results()}.
+#' @param dataset data imported to R by \code{load_results()}.
+#' @param P column containing p-values to be plotted. State in the format
+#' dataset$P_value.
 #' @param bins number of bins used.
 #' @param line_color outline color of bins.
 #' @param fill_color fill color of bins.
@@ -81,8 +95,7 @@ plot_pval_QQ <- function(dataset,
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
-#' @param P the dataset$P_value-column. If the file like assoc contain a P
-#' column then we do not need to specify P.
+#' Must be either .pdf, .png or .jpeg
 #' 
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
@@ -136,23 +149,34 @@ plot_pval_hist <- function(dataset,
 
 #' @title Manhattan plot of p-values
 #'
-#' @description description to be written. Plots a Manhattan plot with only the
-#' SNPs that are significant at a 5%-significance level.
-#' Write a few sentences about why the plot is different from real world plots
-#' (linkage disequilibrium)
+#' @description Plots a Manhattan plot with only the
+#' SNPs that have a p-value of at most 0.1.
+#' 
+#' @details
+#' All points above the upper dashed line show SNPs that are significant at
+#' 0.05 significance level with Bonferroni-correction. Points above the lower
+#' dashed line show SNPs that are significant at a 0.05 significance level.\cr
+#' The color of the point show whether or not they are truly causal for the
+#' phenotype.\cr
+#' The user must run some analysis with \code{analysis_association()} 
+#' and load the data with \code{load_results()}. Furthermore, \code{augment_results()}
+#' must be run where the user should create a 'causal' column
+#' from the true effect sizes. 
 #'
-#' @param dataset data imported to R by \code{load_assoc_results()}.
-#' @param SNP the SNP column: dataset$SNP (range from 1 to m). This can be found
-#' in the assoc file.
-#' @param P the dataset$P_value-column. If the file like assoc contain a P
-#' column then we do not need to specify P.
-#' @param causal the dataset$causal_value-column. This column can be calculated
-#' with the beta-values.
+#' @param dataset data imported to R by \code{load_results()}.
+#' @param P column containing p-values to be plotted. State in the format
+#' dataset$P_value.
+#' @param SNP column containing the SNP values. If loaded with \code{load_results()}
+#' can be left default otherwise state in the format dataset$SNP.
+#' @param causal column containing the causal values. If created created with
+#' \code{augment_results()} can be left default, otherwise state in the format
+#' dataset$causal.
 #' @param line_color color of the lines.
 #' @param line_type the type of the lines.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
+#' Must be either .pdf, .png or .jpeg
 #'
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
@@ -180,18 +204,18 @@ plot_manhattan <- function(dataset,
                  file_ext(plot_filename) == "jpeg"))
   
   data_plt <- dataset %>%
-    dplyr::filter(P < 0.05)
+    dplyr::filter(P < 0.1)
   
   if(deparse(substitute(SNP)) != "SNP"){
-    SNP <- SNP[P < 0.05]
+    SNP <- SNP[P < 0.1]
   }
   
   if(deparse(substitute(causal)) != "causal"){
-    causal <- causal[P < 0.05]
+    causal <- causal[P < 0.1]
   }
   
   if(deparse(substitute(P)) != "P"){
-    P <- P[P < 0.05]
+    P <- P[P < 0.1]
   }
   
   m <- nrow(dataset)
@@ -226,16 +250,31 @@ plot_manhattan <- function(dataset,
 
 #' @title Plot true effects against estimated effects of SNPs
 #'
-#' @description description to be written.
+#' @description Creates a scatterplot of true effect sizes against estimated effect sizes.
+#' 
+#' @details
+#' In the plot an identity line is included, which helps visualise how well
+#' the estimations compare to the true effect sizes. \cr
+#' Only SNPs with a p-value smaller than 0.05 are included in the plot. \cr
+#' The plot requires the user to run an analysis with
+#' \code{analysis_association()}, load the results and merge with
+#' \code{beta.txt} using \code{load_results()} and augment results with
+#' \code{augment_results()}.
 #'
-#' @param dataset data imported to R by \code{load_assoc_results()}.
-#' @param BETA the beta value from the analysis.
-#' @param true_effect the true beta values.
-#' @param bonferroni the bonferroni values.
-#' @param P the P value.
+#' @param dataset data imported to R by \code{load_results()}.
+#' @param BETA column containing the estimated effect sizes from the analysis.
+#' State in the format dataset$BETA.
+#' @param P column containing the p-values from the analysis. 
+#' State in the format dataset$P.
+#' @param bonferroni the column containing significance at bonferroni correction.
+#' State in the format dataset$bonferroni.
+#' @param true_effect the column containing the true effect sizes. Default can be used
+#' if loaded by \code{load_results()} together with \code{beta.txt}, else
+#' state in the format dataset$true_effect.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
+#' Must be either .pdf, .png or .jpeg
 #'
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
@@ -249,7 +288,7 @@ plot_estimates_vs_true <- function(dataset,
                                    save_plot_path = FALSE,
                                    plot_filename = "beta_comparison.png") {
   
-  stopifnot("'BETA', 'P', 'true_effect' and 'bonferroni' must be columns in 'dataset'" =               
+  stopifnot("'BETA', 'P', 'true_effect' and 'bonferroni' must be columns in 'dataset'" =
           all(c(sub(".*\\$", "", deparse(substitute(BETA))), 
                     sub(".*\\$", "", deparse(substitute(true_effect))), 
                     sub(".*\\$", "", deparse(substitute(bonferroni))),
@@ -305,17 +344,28 @@ plot_estimates_vs_true <- function(dataset,
 #' @title Plot true genetic liabilities against posterior mean genetic
 #' liabilities
 #'
-#' @description write description.
+#' @description Creates a scatterplot of genetic liability against posterior mean genetic liability.
+#' 
+#' @details
+#' Visualises how well the posterior mean genetic liabilities fit the genetic liabilities.
+#' An identity line is included to help see if the genetic liabilities are balanced above
+#' and below for each posterior mean genetic liability. Furthermore, the color and labels
+#' show each configuration class, which is detailed in
+#' \code{vignette("liability-distribution")}. \cr
+#' This function requires the user to run \code{assign_ltfh_phenotype()}, and then
+#' \code{association_analysis(pheno_name = "LTFH_pheno")}. Data is loaded with
+#' \code{load_phenotypes()}. \cr
 #' \code{vignette("ggplot2-specs", package = "ggplot2")} details the usage of
 #' aesthetic parameters in ggplot2.
 #'
-#' @param dataset data imported to R by \code{load_assoc_results()}.
+#' @param dataset data imported to R by \code{load_phenotypes()}.
 #' @param line_color color of identity line.
 #' @param line_type type of identity line.
 #' @param label_size the size of the boxes.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
+#' Must be either .pdf, .png or .jpeg
 #'
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
@@ -375,25 +425,38 @@ plot_pmgl_vs_true <- function(dataset,
 #' @title Plot transformed linear GWAS beta values against the LTFH_transformed
 #' values.
 #'
-#' @description description to be written.
+#' @description Creates a scatterplot of transformed linear GWAS beta values against the LTFH_transformed values.
+#' 
+#' @details 
+#' In the plot an identity line is included, which helps visualise how well
+#' the estimations compare to each other. \cr
+#' The plot requires the user to run an analysis with
+#' \code{analysis_association()}, load the results and merge with
+#' \code{beta.txt} using \code{load_results()} and augment results with
+#' \code{augment_results()} choosing to create the LTFH transformed column. \cr
+#' \code{vignette("ggplot2-specs", package = "ggplot2")} details the usage of
+#' aesthetic parameters in ggplot2.
+#' 
 #'
-#' @param dataset data imported to R.
-#' @param beta_x beta-values to be displayed on the x-axis. E.g. the transformed
-#' LTFH beta values.
-#' @param beta_y beta-values to be displayed on the y-axis. E.g. the linear GWAS
-#' beta values.
-#' @param bonferroni corrected significant values from LTFH.
+#' @param dataset data imported to R by \code{load_results()}.
+#' @param beta_x column containing beta-values to be displayed on the x-axis.
+#' E.g. the transformed LTFH beta values. State in the format dataset$beta_x.
+#' @param beta_y column containing beta-values to be displayed on the y-axis.
+#' E.g. the linear GWAS beta values. State in the format dataset$beta_y.
+#' @param bonferroni column containing the corrected significant values from LTFH.
+#' State in the format dataset$bonferroni.
 #' @param line_color the color of the identity line.
 #' @param line_type the type of the identity line.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
+#' Must be either .pdf, .png or .jpeg
 #'
 #' @return Either returns a \code{ggplot} object or saves the plot to
 #' \code{save_plot_path} and returns NULL.
 #'
 #' @export
-Compare_beta <- function(dataset, beta_x, beta_y, bonferroni,
+compare_beta <- function(dataset, beta_x, beta_y, bonferroni,
                          line_color = "green", line_type = "dashed",
                          save_plot_path = FALSE, 
                          plot_filename = "Compare_beta.png") {

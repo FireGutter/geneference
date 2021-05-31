@@ -6,17 +6,20 @@
 \usage{
 plot_pval_hist(
   dataset,
+  P,
   bins = 20,
   line_color = "black",
   fill_color = "cornflowerblue",
   mean_color = "red",
   save_plot_path = FALSE,
-  plot_filename = "pvalue_histogram.png",
-  P = P
+  plot_filename = "pvalue_histogram.png"
 )
 }
 \arguments{
-\item{dataset}{data imported to R by \code{load_assoc_results()}.}
+\item{dataset}{data imported to R by \code{load_results()}.}
+
+\item{P}{column containing p-values to be plotted. State in the format
+dataset$P_value.}
 
 \item{bins}{number of bins used.}
 
@@ -29,17 +32,21 @@ plot_pval_hist(
 \item{save_plot_path}{if \code{FALSE}, return the function returns a ggplot
 object. Else a path of the directory to save the plot to.}
 
-\item{plot_filename}{name of the file to be saved, including file extension.}
-
-\item{P}{the dataset$P_value-column. If the file like assoc contain a P
-column then we do not need to specify P.}
+\item{plot_filename}{name of the file to be saved, including file extension.
+Must be either .pdf, .png or .jpeg}
 }
 \value{
 Either returns a \code{ggplot} object or saves the plot to
 \code{save_plot_path} and returns NULL.
 }
 \description{
-write something
+Creates a histogram of the specified p-values.
+}
+\details{
+Use \code{analysis_association()} to obtain p-values for an analysis and
+import these with \code{load_results()}.\cr
+The function also draws a line on the y-axis showing the mean of the
+p-values.\cr
 \code{vignette("ggplot2-specs", package = "ggplot2")} details the usage of
 aesthetic parameters in ggplot2.
 }

@@ -6,17 +6,20 @@
 \usage{
 plot_pval_QQ(
   dataset,
+  P,
   line_color = "black",
   line_size = 1,
   qq_color = "cornflowerblue",
   qq_shape = 20,
   save_plot_path = FALSE,
-  plot_filename = "QQ-pvals.png",
-  P = P
+  plot_filename = "QQ-pvals.png"
 )
 }
 \arguments{
-\item{dataset}{data imported to R by \code{load_assoc_results()}.}
+\item{dataset}{data imported to R by \code{load_results()}.}
+
+\item{P}{column containing p-values to be plotted. State in the format
+dataset$P_value.}
 
 \item{line_color}{color of the identity line.}
 
@@ -30,18 +33,20 @@ plot_pval_QQ(
 object. Else a path of the directory to save the plot to.}
 
 \item{plot_filename}{name of the file to be saved, including file extension.
-ÆNDRES: Must be either pdf, png or jpeg}
-
-\item{P}{the dataset$P_value-column. If the file like assoc contain a P
-column then we do not need to specify P.}
+Must be either .pdf, .png or .jpeg}
 }
 \value{
 Either returns a \code{ggplot} object or saves the plot to
 \code{save_plot_path} and returns NULL.
 }
 \description{
-description to be written. Assumes p-values are uniformly
-distributed.
+Creates a QQ-plot of the p-values specified.
+}
+\details{
+Use \code{analysis_association()} to obtain p-values for an analysis and
+import these with \code{load_results()}.\cr
+Assumes p-values are uniformly distributed, and hence uses the uniform
+distribution for the theoretical quantiles.\cr
 \code{vignette("ggplot2-specs", package = "ggplot2")} details the usage of
 aesthetic parameters in ggplot2.
 }
