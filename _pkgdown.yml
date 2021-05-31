@@ -28,6 +28,7 @@ reference:
     contents:
     - starts_with("assign")
     - starts_with("analysis")
+    - augment_results
   - subtitle: Import, calculate (tmp subtitle)
     desc: >
       Functionalities for importing data to the R session and performing a few

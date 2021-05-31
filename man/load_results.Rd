@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_data.R
 \name{load_results}
 \alias{load_results}
-\title{Import, merge and augment results}
+\title{Import and merge results}
 \usage{
 load_results(path)
 }
@@ -26,6 +26,8 @@ same directory in order to be merged.\cr
 The names of the columns are created by adding the name of the file as
 suffix. E.g., the P-values from an analysis named \code{GWAS.assoc} will be
 in the column named "P_GWAS".\cr
+True effect sizes are stored in the column "beta". True MAFs of SNPs are
+stored in the column "MAFs".\cr
 Note that this function is not supposed to load phenotype information, but
 rather loads data relating directly to the SNPs. See
 \code{load_phenotypes()} for reading phenotype related data.\cr

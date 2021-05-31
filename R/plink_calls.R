@@ -31,7 +31,7 @@ convert_geno_file <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=
               (file.exists(paste0(ped_file, ".ped"))
               && file.exists(paste0(ped_file, ".map"))),
             "bed_file needs to be a valid file without extension" =
-              (file_ext(output_file) == ""),
+              (file_ext(bed_file) == ""),
             "del needs to be either TRUE or FALSE" = is.logical(del),
             "plink_path needs to be a valid path to plink" =
               (plink_path == TRUE || file.exists(paste0(plink_path,
@@ -52,19 +52,19 @@ convert_geno_file <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=
 }
 
 #' @title Run association analysis
-#'
+#' @md
 #' @description Calls PLINK to run an association analysis on specified data.
 #'
 #' @details
 #' PLINK uses the \code{pheno_name} column to determine which kind of analysis
-#' to run on the data.\cr
-#' Use "pheno" for a 1 degree of freedom chi-square test with the case-control
-#' representation of the phenotype.\cr
-#' Use "line_pheno" for a linear regression using the case-control
-#' representation of the phenotype.\cr
-#' Use "LTFH_pheno" for a linear regression using the LTFH phenotype. Requires
+#' to run on the data.
+#' * Use "pheno" for a 1 degree of freedom chi-square test with the case-control
+#' representation of the phenotype.
+#' * Use "line_pheno" for a linear regression using the case-control
+#' representation of the phenotype.
+#' * Use "LTFH_pheno" for a linear regression using the LTFH phenotype. Requires
 #' that \code{pheno_file} was created/edited by \code{assign_ltfh_phenotype()}.
-#' Use "GWAX_pheno" for a linear regression using the LTFH phenotype. Requires
+#' * Use "GWAX_pheno" for a linear regression using the LTFH phenotype. Requires
 #' that \code{pheno_file} was created/edited by \code{assign_GWAX_phenotype()}.
 #'
 #' @param geno_file string specifying path to genotypes file, including file
@@ -72,23 +72,28 @@ convert_geno_file <- function(ped_file, bed_file=ped_file, del=TRUE, plink_path=
 #' @param pheno_file string specifying path to phenotypes file, including file
 #' extension.
 #' @param pheno_name column name of phenotype to be used in analysis.
-#' @param out_file string specifying path and name of the resulting output
-#' file, excluding file extension.
+#' @param out_dir directory to save results in, including "/" or "\\\\" at the
+#' end.
 #' @param bed logical indicating whether or not the genotypes file is a .bed
 #' file. \code{FALSE} if the file is .ped.
 #' @param plink_path \code{TRUE} if user has added PLINK to the system
 #' variable "PATH". Otherwise a string specifying the path to the folder
 #' containing plink.exe.
 #'
-#' @return Does not return anything, but PLINK writes \code{out_file} to disk,
-#' containing results of the performed analysis. The file format of
-#' \code{out_file} and the columns contained in it depends on which phenotype
-#' is used for the analysis.
+#' @return Does not return anything, but PLINK writes its results to disk in
+#' \code{out_dir}. The name of the written file depends on \code{pheno_name}:
+#' * pheno: output filename is "GWAS".
+#' * line_pheno: output filename is "linear".
+#' * LTFH_pheno: output filename is "LTFH".
+#' * GWAX_pheno: output filename is "GWAX".
+#'
+#' The file format of the written file and the columns contained in it depends
+#' on which phenotype is used for the analysis.
 #'
 #' @import tools
 #'
 #' @export
-analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
+analysis_association <- function(geno_file, pheno_file, pheno_name, out_dir,
                                  bed=TRUE, plink_path=TRUE) {
   stopifnot("geno_file needs to be a valid file" =
               (file.exists(geno_file) &&
@@ -102,14 +107,26 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
                  file_ext(pheno_file) == "txt"),
             "pheno_name does not exist in 'pheno_file'" =
               (pheno_name %in% colnames(data.table::fread(pheno_file))),
-            "out_file needs to be a valid file path without file extension" =
-              file_ext(output_file) == "",
+            "out_dir needs to be a valid directory ending with '\\\\' or '/'" =
+              dir.exists(out_dir) && (substr(out_dir, nchar(out_dir), nchar(out_dir)) == "/" ||
+                                        substr(out_dir, nchar(out_dir), nchar(out_dir)) == "\\"),
             "bed needs to be either TRUE or FALSE" = is.logical(bed),
             "plink_path needs to be a valid path to plink" =
               (plink_path == TRUE ||
                  file.exists(paste0(plink_path, "/plink.exe"))))
 
-
+  if (pheno_name == "pheno") {
+    out_path <- paste0(out_dir, "GWAS")
+  } else if (pheno_name == "line_pheno") {
+    out_path <- paste0(out_dir, "linear")
+  } else if (pheno_name == "LTFH_pheno") {
+    out_path <- paste0(out_dir, "LTFH")
+  } else if (pheno_name == "GWAX_pheno") {
+    out_path <- paste0(out_dir, "GWAX")
+  } else {
+    stop("'pheno_name' didn't match expected input.")
+  }
+  
   if (plink_path != TRUE) {
     tmp_path <- paste0("SET PATH=", quote_path(plink_path), "; &&")
   } else{
@@ -125,7 +142,7 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_file,
                          "plink", file_type, quote_path(geno_file),
                          "--pheno", quote_path(pheno_file),
                          "--pheno-name", pheno_name,
-                         "--out", quote_path(out_file),
+                         "--out", quote_path(out_path),
                          "--assoc")
 
   shell(cmd = plink_command)
