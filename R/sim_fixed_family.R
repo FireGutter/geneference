@@ -1,21 +1,18 @@
 #'
-#' @title Simulation with a fixed family size
+#' @title Simulation with fixed family size
 #' @md
-#' @description Simulate genotypes for individuals with family history, where
-#' each individual has a fixed number of siblings. Parents' genotypes are
-#' simulated and used for simulating the genotypes of individuals and their
-#' siblings.
-#' \code{sim_fixed_family} makes use of parallel computation in order to
-#' decrease the running time.
+#' @description Simulate genetic data, including genotypes, phenotype status
+#' and liabilities, for individuals and their family, where each individual
+#' has a fixed number of siblings specified by the `sib` parameter.
+#' 
 #'
-#' @section Warning:
-#' Simulating large datasets lead to very large files (eg. in the order of 100k
-#' genotypes with 100k SNPs takes up approximately 40GB of space).
-#' Please ensure that you have sufficient disk space at the disk where
-#' \code{path} resides prior to running the simulation.
-#' See FUNCTION-NAME DOCUMENTATION REFERENCE(this is a placeholder until
-#' function is implemented) in order to convert the generated .ped to the
-#' smaller .bed format.
+#' @details
+#' Parents' genotypes are simulated and used for creating the genotypes of
+#' the individuals and their siblings. For the methodology behind the
+#' simulation, see `vignette("liability-distribution")`.\cr
+#' \code{sim_fixed_family} makes use of parallel computation in order to
+#' decrease the running time. As one CPU core is left unused, the user
+#' should be able to do other work while the simulation is running.
 #'
 #' @param n number of genotypes (individuals).
 #' @param m number of SNPS per genotype.
@@ -24,12 +21,9 @@
 #' @param hsq squared heritability parameter.
 #' @param k prevalence of phenotype.
 #' @param path directory where the files will be stored. If nothing is
-#' specified, \code{family_simulation} writes its files in the current
+#' specified, \code{sim_fixed_family} writes its files in the current
 #' working directory.
 #' @param sib number of siblings per individual.
-#'
-#' @importFrom data.table :=
-#' @import stats
 #'
 #' @return Does not return any value, but prints the following five files to
 #' the \code{path} parameter specified in the function call:
@@ -37,14 +31,25 @@
 #'     * beta.txt - a file of \code{m} rows with one column. The i'th row is
 #'     the true effect of the i'th SNP.
 #'     * MAFs.txt - a file of \code{m} rows with one column. The i'th row is
-#'     the true Minor Allelle Frequence of the i'th SNP.
+#'     the true Minor Allelle Frequency of the i'th SNP.
 #'     * phenotypes.txt - a file of \code{n} rows, number of columns depend on
-#'     number of siblings. The file contains the phenotype and liability of
-#'     each individual as well as information on the liabilities and phenotype
-#'     status of their parents and siblings.
+#'     number of siblings. The file contains the phenotype status and liability
+#'     of each individual as well as information on the liabilities and
+#'     phenotype status of their parents and siblings.
 #' * genotypes.map - a file created such that PLINK will work with the genotype
 #' data.
 #' * genotypes.ped - the simulated genotypes in a PLINK-readable format.
+#' Note: The function only saves genotype data for the target individual.
+#'
+#' @section Warning:
+#' Simulating large datasets takes time and generates large files. For details
+#' on time complexity and required disk space, see
+#' `vignette("sim-benchmarks")`.\cr
+#' The largest file generated is `genotypes.ped`. See `convert_geno_file()` to convert it
+#' to another file format, thereby reducing its size significantly.
+#'
+#' @importFrom data.table :=
+#' @import stats
 #'
 #' @export
 
@@ -70,7 +75,7 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
                && (substr(path, nchar(path), nchar(path)) == "/" ||
                      substr(path, nchar(path), nchar(path)) == "\\")))
 
-  path = path_validation(path)
+  path <- path_validation(path)
 
   # Set worker nodes:
   future::plan(future::multiprocess, workers = max(future::availableCores(logical = F) - 1, 1))

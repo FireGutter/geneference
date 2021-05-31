@@ -1,6 +1,11 @@
 #'
-#' @title Simulate genotypes in the R session without family history
-#' @description A quick way of simulating a small amount of data to be stored
+#' @title Simulation directly in the R session without family history
+#'
+#' @description Simulate genetic data in R, including genotypes,
+#' phenotype status and liabilities, for individuals.
+#' 
+#' @details
+#' A quick way of simulating a small amount of data to be stored
 #' in the R-session. Note that this function only simulates data for
 #' individuals without family history, i.e. they are not simulated as
 #' offspring. Hence, the simulation cannot be used in a study of family
@@ -12,21 +17,25 @@
 #' the phenotype.
 #' @param hsq squared heritability parameter.
 #' @param k prevalence of phenotype.
-#' @param to_ped TRUE/FALSE indicating if the output should be in a
-#' PLINK-friendly format or not.
+#' @param to_ped if `TRUE`, write the genotype output in PLINK's .ped format.
+#' Else, write the number of minor alleles for each genotype at each SNP.
 #'
-#' @return Returns a list of 5 entries, containing a matrix of genotypes, a
-#' vector specifying indexes of causal SNPs, a vector the liability of
-#' individual i, a vector specifying whether individual i has the
-#' phenotype and a phenotype for linear regression in plink.
+#' @return Returns a list with 5 entries, containing a matrix of genotypes, a
+#' vector specifying indexes of causal SNPs, a vector with liability of
+#' individual i, a vector specifying phenotype  status of individual i, and the
+#' transformed phenotype status used for linear regression in PLINK.
+#'
+#' @section Warning:
+#' Since this function saves the generated data directly in R (that is, on RAM),
+#' the function should not be used for large simulations, but rather to get an
+#' idea of the general framework.\cr
+#' The function does not run in parallel.
 #'
 #' @import stats
 #'
 #' @export
 #' @examples
 #' sim_test(10, 15, 5, 0.5, 0.05, TRUE)
-#'
-
 sim_test <- function(n, m, q, hsq, k, to_ped = T) {
   stopifnot("n needs to be an integer greater than 0" =
               (n > 0 && is.numeric(n) && n == round(n) && length(n) == 1),

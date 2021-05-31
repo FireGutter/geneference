@@ -8,7 +8,7 @@ analysis_association(
   geno_file,
   pheno_file,
   pheno_name,
-  out_file,
+  out_dir,
   bed = TRUE,
   plink_path = TRUE
 )
@@ -22,8 +22,8 @@ extension.}
 
 \item{pheno_name}{column name of phenotype to be used in analysis.}
 
-\item{out_file}{string specifying path and name of the resulting output
-file, excluding file extension.}
+\item{out_dir}{directory to save results in, including "/" or "\\\\" at the
+end.}
 
 \item{bed}{logical indicating whether or not the genotypes file is a .bed
 file. \code{FALSE} if the file is .ped.}
@@ -33,15 +33,32 @@ variable "PATH". Otherwise a string specifying the path to the folder
 containing plink.exe.}
 }
 \value{
-Does not return anything, but PLINK writes \code{out_file} to disk,
-containing results of the performed analysis. The columns in the printed
-dataset depends on which phenotype is used for the analysis.
+Does not return anything, but PLINK writes its results to disk in
+\code{out_dir}. The name of the written file depends on \code{pheno_name}:
+\itemize{
+\item pheno: output filename is "GWAS".
+\item line_pheno: output filename is "linear".
+\item LTFH_pheno: output filename is "LTFH".
+\item GWAX_pheno: output filename is "GWAX".
+}
+
+The file format of the written file and the columns contained in it depends
+on which phenotype is used for the analysis.
 }
 \description{
-to be written. calls PLINK.
-(include specifying pheno_names from simulation:
-GWAS use pheno, for LTFH use LTFH_pheno, GWAX use GWAX_pheno)
-NOTE: creates a temporary .bed file if \code{bed} is \code{FALSE}. This
-takes some additional time.
-Also: File extension will be .assoc or .qassoc depending on the used model.
+Calls PLINK to run an association analysis on specified data.
+}
+\details{
+PLINK uses the \code{pheno_name} column to determine which kind of analysis
+to run on the data.
+\itemize{
+\item Use "pheno" for a 1 degree of freedom chi-square test with the case-control
+representation of the phenotype.
+\item Use "line_pheno" for a linear regression using the case-control
+representation of the phenotype.
+\item Use "LTFH_pheno" for a linear regression using the LTFH phenotype. Requires
+that \code{pheno_file} was created/edited by \code{assign_ltfh_phenotype()}.
+\item Use "GWAX_pheno" for a linear regression using the LTFH phenotype. Requires
+that \code{pheno_file} was created/edited by \code{assign_GWAX_phenotype()}.
+}
 }

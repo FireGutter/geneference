@@ -1,38 +1,45 @@
-#' @title Calculate the number of error types in an analysis
+#' @title Calculate error types
 #'
-#' @description description to be written.
+#' @description
+#' Calculate the number of type 1 (false positive) and type 2 (false negative)
+#' errors in an analysis.
 #'
-#' @param dataset data loaded with \code{load_assoc_results()}.
-#' @param alpha significance level used for hypothesis tests.
-#' @param analysis_name name of analysis.
+#' @details
+#' To use this function, the user must run any test with \code{analysis_association()}
+#' and use \code{load_results()} to merge this with \code{beta.txt} from the
+#' simulation. Then, \code{augment_results()} needs to be run in order to obtain
+#' columns for information on which SNPs are causal, significant, and significant
+#' with Bonferroni correction.
 #'
-#' @return A tibble with rows... columns...
+#' @param causal column in dataset denoting causal SNPs.
+#' @param significant column in dataset denoting which SNPs are significant.
+#' @param bonferroni column in dataset denoting which SNPs are significant with 
+#' Bonferroni correction.
+#' @param analysis_name name of the analysis.
+#'
+#' @return A tibble containing the number of true positives, false positives,
+#' false negatives and true negatives with each of the significance levels
+#' having their own row.
 #'
 #' @export
-calculate_error_types <- function(dataset, alpha, analysis_name) {
-  stopifnot("dataset should have columns 'significant', 'causal' and 'bonferroni'" =
-              all(c("significant", "causal", "bonferroni") %in% colnames(dataset)),
-            "alpha needs to be a number between 0 and 1" =
-              (is.numeric(alpha) && 0 < alpha && alpha < 1 &&
-                 length(alpha) == 1),
-            "analysis_name needs to be a string" = is.character(analysis_name))
+calculate_error_types <- function(causal, significant, bonferroni, analysis_name) {
+  stopifnot("analysis_name needs to be a string" = is.character(analysis_name))
   
   # standard significance level
   errors_tbl <- tibble::tibble(
     Analysis = paste(analysis_name,
-                     "with significance",
-                     alpha),
-    true_positives = sum(dataset$significant & dataset$causal),
-    false_positives = sum(dataset$significant & !dataset$causal),
-    false_negatives = sum(!dataset$significant & dataset$causal),
-    true_negatives = sum(!dataset$significant & !dataset$causal)) %>%
+                     "with significance level used in augmentation of results"),
+    true_positives = sum(significant & causal),
+    false_positives = sum(significant & !causal),
+    false_negatives = sum(!significant & causal),
+    true_negatives = sum(!significant & !causal)) %>%
     tibble::add_row(
       Analysis = paste(analysis_name,
                        "with Bonferroni-correction"),
-      true_positives = sum(dataset$bonferroni & dataset$causal),
-      false_positives = sum(dataset$bonferroni & !dataset$causal),
-      false_negatives = sum(!dataset$bonferroni & dataset$causal),
-      true_negatives = sum(!dataset$bonferroni & !dataset$causal))
+      true_positives = sum(bonferroni & causal),
+      false_positives = sum(bonferroni & !causal),
+      false_negatives = sum(!bonferroni & causal),
+      true_negatives = sum(!bonferroni & !causal))
 
   return(errors_tbl)
 }

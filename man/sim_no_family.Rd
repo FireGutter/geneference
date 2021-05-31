@@ -2,27 +2,64 @@
 % Please edit documentation in R/sim_no_family.R
 \name{sim_no_family}
 \alias{sim_no_family}
-\title{sim_no_family}
+\title{Simulation without family history}
 \usage{
 sim_no_family(n, m, q, hsq, k, path)
 }
 \arguments{
-\item{n}{is the amount of enteties (humans)}
+\item{n}{number of genotypes (individuals).}
 
-\item{m}{is the amount of SNPS per entety}
+\item{m}{number of SNPS per genotype.}
 
-\item{q}{is the amount of causal SNPs}
+\item{q}{number of causal SNPs, i.e. SNPs that effect chances of having
+the phenotype.}
 
-\item{hsq}{heritability parameter that is squard}
+\item{hsq}{squared heritability parameter.}
 
-\item{k}{is the prevalence of trait parameter}
+\item{k}{prevalence of phenotype.}
 
-\item{path}{is the file path, where the files will be stored}
+\item{path}{directory where the files will be stored. If nothing is
+specified, \code{sim_no_family} writes its files in the current
+working directory.}
 }
 \value{
-This function returns five files: Three txt files: Beta, MAFs and phenotypes, a genotypes MAP file and a genotypes PED file.
+Does not return any value, but prints the following five files to
+the \code{path} parameter specified in the function call:
+\itemize{
+\item Three text files:
+\itemize{
+\item beta.txt - a file of \code{m} rows with one column. The i'th row is
+the true effect of the i'th SNP.
+\item MAFs.txt - a file of \code{m} rows with one column. The i'th row is
+the true Minor Allelle Frequency of the i'th SNP.
+\item phenotypes.txt - a file of \code{n} rows. The file contains the
+phenotype status and liability of each individual.
+}
+\item genotypes.map - a file created such that PLINK will work with the genotype
+data.
+\item genotypes.ped - the simulated genotypes in a PLINK-readable format.
+}
 }
 \description{
-This function simulate data for individual enteties (the data for the parents)
-is unknown.
+Simulate genetic data, including genotypes, phenotype status
+and liabilities, for individuals.
 }
+\details{
+As this function does not include family history, its resulting data cannot
+be used by \code{assign_ltfh_phenotype()} or
+\code{assign_GWAX_phenotype()}.\cr
+For the methodology behind the simulation, see
+\code{vignette("liability-distribution")}.\cr
+\code{sim_no_family()} makes use of parallel computation in order to
+decrease the running time. As at least one CPU core is left unused, the user
+should be able to do other work while the simulation is running.
+}
+\section{Warning}{
+
+Simulating large datasets takes time and generates large files. For details
+on time complexity and required disk space, see
+\code{vignette("sim-benchmarks")}.\cr
+The largest file generated is \code{genotypes.ped}. See \code{convert_geno_file()} to convert it
+to another file format, thereby reducing its size significantly.
+}
+

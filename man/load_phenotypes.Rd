@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_data.R
 \name{load_phenotypes}
 \alias{load_phenotypes}
-\title{Import phenotypes from simulation}
+\title{Import phenotype data}
 \usage{
 load_phenotypes(pheno_file)
 }
@@ -14,5 +14,9 @@ Simulation functions save this file as "phenotypes.txt".}
 Returns a tibble with the data from \code{pheno_file}.
 }
 \description{
-Import phenotypes from simulation
+Import all phenotype-related data generated in simulations.
+}
+\details{
+Note that this function only loads data about the liabilities and phenotype
+status of individuals and their family.
 }

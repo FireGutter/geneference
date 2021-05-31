@@ -19,5 +19,5 @@ the size of the specified covariance matrix.
 Simulate random values from a multivariate normal distribution.
 }
 \examples{
-rmnorm(n = 10, S = covmatrix(sib = 0, hsq = 0.5))
+rmnorm(n = 10, S = covmatrix(hsq = 0.5, sib = 0))
 }

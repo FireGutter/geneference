@@ -1,19 +1,51 @@
 #'
-#' @title sim_no_family
+#' @title Simulation without family history
+#' @md
+#' @description Simulate genetic data, including genotypes, phenotype status
+#' and liabilities, for individuals.
 #'
-#' @description This function simulate data for individual enteties (the data for the parents)
-#' is unknown.
+#' @details
+#' As this function does not include family history, its resulting data cannot
+#' be used by \code{assign_ltfh_phenotype()} or
+#' \code{assign_GWAX_phenotype()}.\cr
+#' For the methodology behind the simulation, see
+#' `vignette("liability-distribution")`.\cr
+#' \code{sim_no_family()} makes use of parallel computation in order to
+#' decrease the running time. As at least one CPU core is left unused, the user
+#' should be able to do other work while the simulation is running.
 #'
-#' @param n is the amount of enteties (humans)
-#' @param m is the amount of SNPS per entety
-#' @param q is the amount of causal SNPs
-#' @param hsq heritability parameter that is squard
-#' @param k is the prevalence of trait parameter
-#' @param path is the file path, where the files will be stored
+#'
+#' @param n number of genotypes (individuals).
+#' @param m number of SNPS per genotype.
+#' @param q number of causal SNPs, i.e. SNPs that effect chances of having
+#' the phenotype.
+#' @param hsq squared heritability parameter.
+#' @param k prevalence of phenotype.
+#' @param path directory where the files will be stored. If nothing is
+#' specified, \code{sim_no_family} writes its files in the current
+#' working directory.
+#'
+#' @return Does not return any value, but prints the following five files to
+#' the \code{path} parameter specified in the function call:
+#' * Three text files:
+#'     * beta.txt - a file of \code{m} rows with one column. The i'th row is
+#'     the true effect of the i'th SNP.
+#'     * MAFs.txt - a file of \code{m} rows with one column. The i'th row is
+#'     the true Minor Allelle Frequency of the i'th SNP.
+#'     * phenotypes.txt - a file of \code{n} rows. The file contains the
+#'     phenotype status and liability of each individual.
+#' * genotypes.map - a file created such that PLINK will work with the genotype
+#' data.
+#' * genotypes.ped - the simulated genotypes in a PLINK-readable format.
+#'
+#' @section Warning:
+#' Simulating large datasets takes time and generates large files. For details
+#' on time complexity and required disk space, see
+#' `vignette("sim-benchmarks")`.\cr
+#' The largest file generated is `genotypes.ped`. See `convert_geno_file()` to convert it
+#' to another file format, thereby reducing its size significantly.
 #'
 #' @import stats
-#'
-#' @return This function returns five files: Three txt files: Beta, MAFs and phenotypes, a genotypes MAP file and a genotypes PED file.
 #'
 #' @export
 
@@ -36,19 +68,7 @@ sim_no_family <- function(n, m, q, hsq, k, path){
                && (substr(path, nchar(path), nchar(path)) == "/" ||
                      substr(path, nchar(path), nchar(path)) == "\\")))
   
-  path = path_validation(path)
-
-  #Function that ties everything together (one function to rule them all)
-
-  #Look at function to determine how to best divide the overall simulation into chuncks
-
-  #library(tidyverse)
-  #library(parallel)
-  #library(data.table)
-  # there are many packages that allows for parallel processing in R. Future is a well implemented one in my opinion
-  #library(future)
-  #flock: short for file lock. Allows multiple R sessions to write to the same file. (alternatively make separate files and merge later)
-  #library(flock)
+  path <- path_validation(path)
 
   future::plan(future::multisession(workers = 2))
 
@@ -57,7 +77,6 @@ sim_no_family <- function(n, m, q, hsq, k, path){
     #Returns a list of length n with entires m integers.
     return(lapply(1:n, function(y) rbinom(m, 2, MAFs)))
   }
-
 
   simulation <- function(n, m, MAFs){
     #Detecting the number of cores of ones computer and making one core available

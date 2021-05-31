@@ -12,7 +12,7 @@
 #'
 #' @export
 #' @examples
-#' rmnorm(n = 10, S = covmatrix(sib = 0, hsq = 0.5))
+#' rmnorm(n = 10, S = covmatrix(hsq = 0.5, sib = 0))
 
 rmnorm <- function(n, S) {
   stopifnot("n needs to be an integer greater than 0" =

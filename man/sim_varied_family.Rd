@@ -7,10 +7,10 @@
 sim_varied_family(n, m, q, hsq, k, dist, path = "")
 }
 \arguments{
-\item{n}{number of genotypes (individuals). Given as a vector that match the
-dist vector (see discribtion below).}
+\item{n}{number of genotypes (individuals), given as a vector of same length
+as \code{dist}.}
 
-\item{m}{number of SNPS per genotype.}
+\item{m}{number of SNPs per genotype.}
 
 \item{q}{number of causal SNPs, i.e. SNPs that effect chances of having
 the phenotype.}
@@ -19,11 +19,11 @@ the phenotype.}
 
 \item{k}{prevalence of phenotype.}
 
-\item{dist}{the distribution of siblings. Given as a vector with the same length
-as the "n"-vector.}
+\item{dist}{the distribution of siblings. Given as a vector with the same
+length as \code{n}.}
 
 \item{path}{directory where the files will be stored. If nothing is
-specified, \code{family_simulation} writes its files in the current
+specified, \code{sim_varied_family} writes its files in the current
 working directory.}
 }
 \value{
@@ -35,41 +35,48 @@ the \code{path} parameter specified in the function call:
 \item beta.txt - a file of \code{m} rows with one column. The i'th row is
 the true effect of the i'th SNP.
 \item MAFs.txt - a file of \code{m} rows with one column. The i'th row is
-the true Minor Allelle Frequence of the i'th SNP.
+the true Minor Allelle Frequency of the i'th SNP.
 \item phenotypes.txt - a file of \code{n} rows, number of columns depend on
-number of siblings. Note that some individuals has fewer siblings as
-others. Thus we fill the empty value-slots with "-9". The file
-contains the phenotype and liability of
-each individual as well as information on the liabilities and phenotype
-status of their parents and siblings.
+number of siblings. The file contains the phenotype status and liability
+of each individual as well as information on the liabilities and
+phenotype status of their parents and siblings.
 }
 \item genotypes.map - a file created such that PLINK will work with the genotype
 data.
 \item genotypes.ped - the simulated genotypes in a PLINK-readable format.
+Note: The function only saves genotype data for the target individual.
 }
 }
 \description{
-Simulate genotypes for individuals with family history, where
-each individual has an arbitrary number of siblings. Parents' genotypes are
-simulated and used for simulating the genotypes of individuals and their
-siblings.
-\code{family_dist_simulaiton} makes use of parallel computation in order to
-decrease the running time.
+Simulate genetic data, including genotypes,
+phenotype status and liabilities, for individuals and their family,
+where each individual has a specified number of siblings.
 }
 \details{
-Note that dist denotes the amount of siblings matched with the amount of
-individuals n. E.g. n = c(100, 200, 300, 400) and dist = c(0, 1, 2, 3) would mean
-that we want a total of 100 + 200 + 300 + 400 = 1000 individuals. Here 100
-individuals have 0 siblings, 200 has 1 sibling and so on...
+Parents' genotypes are simulated and used for creating the genotypes of
+the individuals and their siblings. For the methodology behind the
+simulation, see \code{vignette("liability-distribution")}.\cr
+Note: Each entry in \code{dist} denotes a number of siblings. Each entry in
+\code{n} then denotes how many individuals have the corresponding number of
+siblings.\cr
+E.g., \code{n = c(100, 200, 300, 400)} and \code{dist = c(0, 2, 3, 5)} would
+give a total of 100 + 200 + 300 + 400 = 1000 individuals, where 100
+individuals have 0 siblings, 200 have 2 siblings, and so on.\cr
+Since individuals have a different number of siblings, some entries in
+\code{phenotypes.txt} will be missing, denoted by -9.\cr
+E.g., an individual with 1 sibling in a dataset where the maximum number of
+siblings is 3, would have -9 in all columns relating to sibling 2 and
+sibling 3.\cr
+\code{sim_varied_family} makes use of parallel computation in order to
+decrease the running time. As one CPU core is left unused, the user
+should be able to do other work while the simulation is running.
 }
 \section{Warning}{
 
-Simulating large datasets lead to very large files (eg. in the order of 100k
-genotypes with 100k SNPs takes up approximately 40GB of space).
-Please ensure that you have sufficient disk space at the disk where
-\code{path} resides prior to running the simulation.
-See FUNCTION-NAME DOCUMENTATION REFERENCE(this is a placeholder until
-function is implemented) in order to convert the generated .ped to the
-smaller .bed format.
+Simulating large datasets takes time and generates large files. For details
+on time complexity and required disk space, see
+\code{vignette("sim-benchmarks")}.\cr
+The largest file generated is \code{genotypes.ped}. See \code{convert_geno_file()} to convert it
+to another file format, thereby reducing its size significantly.
 }
 

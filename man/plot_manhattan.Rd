@@ -6,8 +6,8 @@
 \usage{
 plot_manhattan(
   dataset,
+  P,
   SNP = SNP,
-  P = P,
   causal = causal,
   line_color = "cornflowerblue",
   line_type = "dashed",
@@ -16,16 +16,17 @@ plot_manhattan(
 )
 }
 \arguments{
-\item{dataset}{data imported to R by \code{load_assoc_results()}.}
+\item{dataset}{data imported to R by \code{load_results()}.}
 
-\item{SNP}{the SNP column: dataset$SNP (range from 1 to m). This can be found
-in the assoc file.}
+\item{P}{column containing p-values to be plotted. State in the format
+dataset$P_value.}
 
-\item{P}{the dataset$P_value-column. If the file like assoc contain a P
-column then we do not need to specify P.}
+\item{SNP}{column containing the SNP values. If loaded with \code{load_results()}
+can be left default otherwise state in the format dataset$SNP.}
 
-\item{causal}{the dataset$causal_value-column. This column can be calculated
-with the beta-values.}
+\item{causal}{column containing the causal values. If created created with
+\code{augment_results()} can be left default, otherwise state in the format
+dataset$causal.}
 
 \item{line_color}{color of the lines.}
 
@@ -34,15 +35,25 @@ with the beta-values.}
 \item{save_plot_path}{if \code{FALSE}, return the function returns a ggplot
 object. Else a path of the directory to save the plot to.}
 
-\item{plot_filename}{name of the file to be saved, including file extension.}
+\item{plot_filename}{name of the file to be saved, including file extension.
+Must be either .pdf, .png or .jpeg}
 }
 \value{
 Either returns a \code{ggplot} object or saves the plot to
 \code{save_plot_path} and returns NULL.
 }
 \description{
-description to be written. Plots a Manhattan plot with only the
-SNPs that are significant at a 5%-significance level.
-Write a few sentences about why the plot is different from real world plots
-(linkage disequilibrium)
+Plots a Manhattan plot with only the
+SNPs that have a p-value of at most 0.1.
+}
+\details{
+All points above the upper dashed line show SNPs that are significant at
+0.05 significance level with Bonferroni-correction. Points above the lower
+dashed line show SNPs that are significant at a 0.05 significance level.\cr
+The color of the point show whether or not they are truly causal for the
+phenotype.\cr
+The user must run some analysis with \code{analysis_association()} 
+and load the data with \code{load_results()}. Furthermore, \code{augment_results()}
+must be run where the user should create a 'causal' column
+from the true effect sizes.
 }

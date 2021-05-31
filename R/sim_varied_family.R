@@ -1,41 +1,41 @@
 #'
 #' @title Simulation with varying family sizes
 #' @md
-#' @description Simulate genotypes for individuals with family history, where
-#' each individual has an arbitrary number of siblings. Parents' genotypes are
-#' simulated and used for simulating the genotypes of individuals and their
-#' siblings.
-#' \code{family_dist_simulaiton} makes use of parallel computation in order to
-#' decrease the running time.
+#' @description Simulate genetic data, including genotypes,
+#' phenotype status and liabilities, for individuals and their family,
+#' where each individual has a specified number of siblings.
 #'
-#' @section Warning:
-#' Simulating large datasets lead to very large files (eg. in the order of 100k
-#' genotypes with 100k SNPs takes up approximately 40GB of space).
-#' Please ensure that you have sufficient disk space at the disk where
-#' \code{path} resides prior to running the simulation.
-#' See FUNCTION-NAME DOCUMENTATION REFERENCE(this is a placeholder until
-#' function is implemented) in order to convert the generated .ped to the
-#' smaller .bed format.
+#' @details
+#' Parents' genotypes are simulated and used for creating the genotypes of
+#' the individuals and their siblings. For the methodology behind the
+#' simulation, see `vignette("liability-distribution")`.\cr
+#' Note: Each entry in `dist` denotes a number of siblings. Each entry in
+#' `n` then denotes how many individuals have the corresponding number of
+#' siblings.\cr
+#' E.g., `n = c(100, 200, 300, 400)` and `dist = c(0, 2, 3, 5)` would
+#' give a total of 100 + 200 + 300 + 400 = 1000 individuals, where 100
+#' individuals have 0 siblings, 200 have 2 siblings, and so on.\cr
+#' Since individuals have a different number of siblings, some entries in
+#' `phenotypes.txt` will be missing, denoted by -9.\cr
+#' E.g., an individual with 1 sibling in a dataset where the maximum number of
+#' siblings is 3, would have -9 in all columns relating to sibling 2 and
+#' sibling 3.\cr
+#' \code{sim_varied_family} makes use of parallel computation in order to
+#' decrease the running time. As one CPU core is left unused, the user
+#' should be able to do other work while the simulation is running.
 #'
-#' @param n number of genotypes (individuals). Given as a vector that match the
-#' dist vector (see discribtion below).
-#' @param m number of SNPS per genotype.
+#' @param n number of genotypes (individuals), given as a vector of same length
+#' as `dist`.
+#' @param m number of SNPs per genotype.
 #' @param q number of causal SNPs, i.e. SNPs that effect chances of having
 #' the phenotype.
 #' @param hsq squared heritability parameter.
 #' @param k prevalence of phenotype.
-#' @param dist the distribution of siblings. Given as a vector with the same length
-#' as the "n"-vector.
+#' @param dist the distribution of siblings. Given as a vector with the same
+#' length as `n`.
 #' @param path directory where the files will be stored. If nothing is
-#' specified, \code{family_simulation} writes its files in the current
+#' specified, \code{sim_varied_family} writes its files in the current
 #' working directory.
-#' @details Note that dist denotes the amount of siblings matched with the amount of
-#' individuals n. E.g. n = c(100, 200, 300, 400) and dist = c(0, 1, 2, 3) would mean
-#' that we want a total of 100 + 200 + 300 + 400 = 1000 individuals. Here 100
-#' individuals have 0 siblings, 200 has 1 sibling and so on...
-#'
-#' @importFrom data.table :=
-#' @import stats
 #'
 #' @return Does not return any value, but prints the following five files to
 #' the \code{path} parameter specified in the function call:
@@ -43,16 +43,25 @@
 #'     * beta.txt - a file of \code{m} rows with one column. The i'th row is
 #'     the true effect of the i'th SNP.
 #'     * MAFs.txt - a file of \code{m} rows with one column. The i'th row is
-#'     the true Minor Allelle Frequence of the i'th SNP.
+#'     the true Minor Allelle Frequency of the i'th SNP.
 #'     * phenotypes.txt - a file of \code{n} rows, number of columns depend on
-#'     number of siblings. Note that some individuals has fewer siblings as
-#'     others. Thus we fill the empty value-slots with "-9". The file
-#'     contains the phenotype and liability of
-#'     each individual as well as information on the liabilities and phenotype
-#'     status of their parents and siblings.
+#'     number of siblings. The file contains the phenotype status and liability
+#'     of each individual as well as information on the liabilities and
+#'     phenotype status of their parents and siblings.
 #' * genotypes.map - a file created such that PLINK will work with the genotype
 #' data.
 #' * genotypes.ped - the simulated genotypes in a PLINK-readable format.
+#' Note: The function only saves genotype data for the target individual.
+#'
+#' @section Warning:
+#' Simulating large datasets takes time and generates large files. For details
+#' on time complexity and required disk space, see
+#' `vignette("sim-benchmarks")`.\cr
+#' The largest file generated is `genotypes.ped`. See `convert_geno_file()` to convert it
+#' to another file format, thereby reducing its size significantly.
+#'
+#' @importFrom data.table :=
+#' @import stats
 #'
 #' @export
 
@@ -77,8 +86,7 @@ sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
                      substr(path, nchar(path), nchar(path)) == "\\")))
 
 
-
-  path = path_validation(path)
+  path <- path_validation(path)
 
   # Set worker nodes:
   future::plan(future::multiprocess, workers = max(future::availableCores(logical = F) - 1, 1))
