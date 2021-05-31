@@ -111,18 +111,35 @@
 
     
     
+<p>NOTE: this vignette will be finished around eftermiddag today.</p>
 <p>geneference aims to …</p>
 <p>In this vignette, we show an example of how one might go about conducting a simulation study relying solely on the functionalities implemented in geneference.</p>
-<div id="simulation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulation" class="anchor"></a>Simulation</h2>
-<p>We start out by simulating a dataset of x genotypes, each having y SNPs.</p>
-<p>As we will see in the next part, geneference relies on PLINK for efficient computation of … . This also means that we use their fileformats.</p>
+<p>geneference contains functions for .. blabla .. the idea being to do as much in R as possible with the user worrying as little as possible about PLINK ..<br>
+the general workflow is illustrated on the below diagram:</p>
+<div id="simulation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#simulation" class="anchor"></a>Simulation</h1>
+<p>geneference .. several simulation functions.. all of these assume model see vignette.</p>
+<p>We can … see the framework directly in our R session:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#this is sim_test</span></code></pre></div>
+<p>blabla simple and small.. blabla for larger, we need to work outside R(mention plink, write to disk)</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#this is sim_test with ped conversion</span></code></pre></div>
+<p>We use <code>sim_random_family</code> to blabla…</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#this is call to large dataset with random family size</span></code></pre></div>
+<p>.. we now have .. files in our directory .. (show this somehow? show header(phenotypes) and maybe some of the others) .. to save space we chose .bed, this means that if we try to open the file it is gibberish…</p>
 </div>
-<div id="analysis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#analysis" class="anchor"></a>Analysis</h2>
-<p>An overview of expected running times can be seen in INSERT VIGNETTE. #### Visualisation Examples of plots.</p>
+<div id="analysis" class="section level1">
+<h1 class="hasAnchor">
+<a href="#analysis" class="anchor"></a>Analysis</h1>
+<p>we want to assign gwax, ltfh pheno let’s say we want to investigate the benefit of having data on more siblings. instead of spending time and space simulating a completely new dataset, we can simply limit the assigners to only use certain number of siblings</p>
+<p>show that we don’t need to know max number of siblings</p>
+<p>loading marc and loading pheno from here on out… everything in R… standard plots, calculations…</p>
+<p>call calculate cov - it actually tells us how many families with at least x siblings</p>
+<p>Show pmgl plot, say something about assignment</p>
+<p>call calculate error types, use pipe to get more rows comment on general performance of different analyses ## Visualisation Examples of plots.</p>
 </div>
   </div>
 
