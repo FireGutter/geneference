@@ -6,12 +6,30 @@
 \usage{
 plot_manhattan(
   dataset,
+  SNP = SNP,
+  P = P,
+  causal = causal,
+  line_color = "cornflowerblue",
+  line_type = "dashed",
   save_plot_path = FALSE,
   plot_filename = "manhattan_plot.png"
 )
 }
 \arguments{
 \item{dataset}{data imported to R by \code{load_assoc_results()}.}
+
+\item{SNP}{the SNP column: dataset$SNP (range from 1 to m). This can be found
+in the assoc file.}
+
+\item{P}{the dataset$P_value-column. If the file like assoc contain a P
+column then we do not need to specify P.}
+
+\item{causal}{the dataset$causal_value-column. This column can be calculated
+with the beta-values.}
+
+\item{line_color}{color of the lines.}
+
+\item{line_type}{the type of the lines.}
 
 \item{save_plot_path}{if \code{FALSE}, return the function returns a ggplot
 object. Else a path of the directory to save the plot to.}

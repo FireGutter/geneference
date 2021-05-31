@@ -27,7 +27,7 @@ plot_pval_QQ <- function(dataset,
                          line_color="black",
                          line_size = 1,
                          qq_color = "cornflowerblue",
-                         qq_shape = 19,
+                         qq_shape = 20,
                          save_plot_path = FALSE,
                          plot_filename = "QQ-pvals.png",
                          P = P) {
@@ -229,7 +229,7 @@ plot_manhattan <- function(dataset,
 #' @description description to be written.
 #'
 #' @param dataset data imported to R by \code{load_assoc_results()}.
-#' @param BETA the beta value fram the analysis.
+#' @param BETA the beta value from the analysis.
 #' @param true_effect the true beta values.
 #' @param bonferroni the bonferroni values.
 #' @param P the P value.

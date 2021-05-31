@@ -10,6 +10,8 @@ Compare_beta(
   beta_x,
   beta_y,
   bonferroni,
+  line_color = "green",
+  line_type = "dashed",
   save_plot_path = FALSE,
   plot_filename = "Compare_beta.png"
 )
@@ -24,6 +26,10 @@ LTFH beta values.}
 beta values.}
 
 \item{bonferroni}{corrected significant values from LTFH.}
+
+\item{line_color}{the color of the identity line.}
+
+\item{line_type}{the type of the identity line.}
 
 \item{save_plot_path}{if \code{FALSE}, return the function returns a ggplot
 object. Else a path of the directory to save the plot to.}

@@ -6,12 +6,24 @@
 \usage{
 plot_estimates_vs_true(
   dataset,
+  BETA = BETA,
+  true_effect = true_effect,
+  bonferroni = bonferroni,
+  P = P,
   save_plot_path = FALSE,
   plot_filename = "beta_comparison.png"
 )
 }
 \arguments{
 \item{dataset}{data imported to R by \code{load_assoc_results()}.}
+
+\item{BETA}{the beta value from the analysis.}
+
+\item{true_effect}{the true beta values.}
+
+\item{bonferroni}{the bonferroni values.}
+
+\item{P}{the P value.}
 
 \item{save_plot_path}{if \code{FALSE}, return the function returns a ggplot
 object. Else a path of the directory to save the plot to.}
