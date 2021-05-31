@@ -148,6 +148,8 @@ plot_pval_hist <- function(dataset,
 #' column then we do not need to specify P.
 #' @param causal the dataset$causal_value-column. This column can be calculated
 #' with the beta-values.
+#' @param line_color color of the lines.
+#' @param line_type the type of the lines.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
@@ -160,6 +162,8 @@ plot_manhattan <- function(dataset,
                            SNP = SNP,
                            P = P,
                            causal = causal,
+                           line_color = "cornflowerblue",
+                           line_type = "dashed",
                            save_plot_path = FALSE,
                            plot_filename = "manhattan_plot.png") {
   
@@ -197,15 +201,15 @@ plot_manhattan <- function(dataset,
                                                colour = causal)) +
     ggplot2::geom_segment(ggplot2::aes(x = 1, xend = m, y = -log10(0.05),
                                        yend = -log10(0.05)),
-                          colour = "cornflowerblue",
-                          linetype = "dashed",
+                          colour = line_color,
+                          linetype = line_type,
                           size = 1.25) +
     ggplot2::geom_segment(ggplot2::aes(x = 1,
                                        xend = m,
                                        y = -log10(0.05 / m),
                                        yend = -log10(0.05 / m)),
-                          colour = "cornflowerblue",
-                          linetype = "dashed", size = 1) +
+                          colour = line_color,
+                          linetype = line_type, size = 1) +
     ggplot2::theme_light() +
     ggplot2::labs(title = "Manhattan plot",
                   subtitle = deparse(substitute(dataset)),
@@ -309,6 +313,8 @@ plot_estimates_vs_true <- function(dataset,
 #' @param LTFH_pheno the phenotypes calculted for LT-FH.
 #' @param child_lg the genetic liability of the individual.
 #' @param line_color color of identity line.
+#' @param line_type type of identity line.
+#' @param label_size the size of the boxes.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
@@ -321,6 +327,8 @@ plot_pmgl_vs_true <- function(dataset,
                               LTFH_pheno = LTFH_pheno,
                               child_lg = child_lg,
                               line_color = "black",
+                              line_type = "dashed",
+                              label_size = 3,
                               save_plot_path = FALSE,
                               plot_filename = "posterior_liabilities.png") {
   
@@ -341,7 +349,7 @@ plot_pmgl_vs_true <- function(dataset,
     ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg, color = conf_class),
                         size = 0.6,
                         show.legend = FALSE) +
-    ggplot2::geom_abline(color = line_color, linetype = "dashed") +
+    ggplot2::geom_abline(color = line_color, linetype = line_type) +
     ggplot2::theme_light() +
     ggplot2::labs(x = "Posterior mean genetic liability",
                   y = "True genetic liability",
@@ -359,7 +367,7 @@ plot_pmgl_vs_true <- function(dataset,
                               box.padding = 0.4,
                               label.padding = 0.1,
                               show.legend = FALSE,
-                              size = 3)
+                              size = label_size)
   
   if (save_plot_path != FALSE) {
     ggplot2::ggsave(filename = plot_filename,
@@ -381,6 +389,8 @@ plot_pmgl_vs_true <- function(dataset,
 #' @param beta_y beta-values to be displayed on the y-axis. E.g. the linear GWAS
 #' beta values.
 #' @param bonferroni corrected significant values from LTFH.
+#' @param line_color the color of the identity line.
+#' @param line_type the type of the identity line.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
@@ -389,7 +399,8 @@ plot_pmgl_vs_true <- function(dataset,
 #' \code{save_plot_path} and returns NULL.
 #'
 #' @export
-Compare_beta <- function(dataset, beta_x, beta_y, bonferroni, 
+Compare_beta <- function(dataset, beta_x, beta_y, bonferroni,
+                         line_color = "green", line_type = "dashed",
                          save_plot_path = FALSE, 
                          plot_filename = "Compare_beta.png") {
   
@@ -404,11 +415,9 @@ Compare_beta <- function(dataset, beta_x, beta_y, bonferroni,
                                                y = beta_y)) +
     ggplot2::geom_point(mapping = ggplot2::aes(color = bonferroni)) +
     ggplot2::geom_smooth(se = FALSE, method = "lm")+
-    ggplot2::geom_abline(intercept = 0, slope = 1, color="green", 
-                         linetype="dashed", size = 1) +
-    ggplot2::labs(x = "LTFH beta",
-                  y = "GWAS beta",
-                  title = "Comparing LTFH beta to GWAS beta",
+    ggplot2::geom_abline(intercept = 0, slope = 1, color=line_color, 
+                         linetype=line_type, size = 1) +
+    ggplot2::labs(title = "Comparing beta values",
                   subtitle = deparse(substitute(dataset)),
                   colour = "Significant with\n Bonferroni-correction") +
     ggplot2::theme_light() +
