@@ -89,7 +89,7 @@ should be able to do other work while the simulation is running.
 Simulating large datasets takes time and generates large files. For details
 on time complexity and required disk space, see
 \code{vignette("sim-benchmarks")}.\cr
-The largest file generated is \code{genotypes.ped}. See \code{p_2_b()} to convert it
+The largest file generated is \code{genotypes.ped}. See \code{convert_geno_file()} to convert it
 to another file format, thereby reducing its size significantly.
 }
 

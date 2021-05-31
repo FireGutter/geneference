@@ -50,7 +50,7 @@ reference:
       Write one line motivating their use.
     contents:
     - rmnorm
-    - p_2_b
+    - convert_geno_file
     - covmatrix
 
 articles:

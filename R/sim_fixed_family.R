@@ -45,7 +45,7 @@
 #' Simulating large datasets takes time and generates large files. For details
 #' on time complexity and required disk space, see
 #' `vignette("sim-benchmarks")`.\cr
-#' The largest file generated is `genotypes.ped`. See `p_2_b()` to convert it
+#' The largest file generated is `genotypes.ped`. See `convert_geno_file()` to convert it
 #' to another file format, thereby reducing its size significantly.
 #'
 #' @importFrom data.table :=
