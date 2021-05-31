@@ -13,19 +13,53 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+NOTE: this vignette will be finished around eftermiddag today.
 
 geneference aims to ...
 
 In this vignette, we show an example of how one might go about conducting a simulation study relying solely on the functionalities implemented in geneference.
 
-## Simulation
-We start out by simulating a dataset of x genotypes, each having y SNPs.
+geneference contains functions for .. blabla .. the idea being to do as much in R as possible with the user worrying as little as possible about PLINK ..  
+the general workflow is illustrated on the below diagram:
 
 
-As we will see in the next part, geneference relies on PLINK for efficient computation of  ... . This also means that we use their fileformats.
 
-## Analysis
+# Simulation
+geneference .. several simulation functions.. all of these assume model see vignette.
 
-An overview of expected running times can be seen in INSERT VIGNETTE.
-#### Visualisation
+We can ... see the framework directly in our R session:
+
+```{r}
+#this is sim_test
+```
+blabla simple and small.. blabla for larger, we need to work outside R(mention plink, write to disk)
+
+```{r}
+#this is sim_test with ped conversion
+```
+
+
+We use `sim_random_family` to blabla... 
+```{r, eval=FALSE}
+#this is call to large dataset with random family size
+```
+.. we now have .. files in our directory .. (show this somehow? show header(phenotypes) and maybe some of the others) .. to save space we chose .bed, this means that if we try to open the file it is gibberish...
+
+
+# Analysis
+we want to assign gwax, ltfh pheno
+let's say we want to investigate the benefit of having data on more siblings. instead of spending time and space simulating a completely new dataset, we can simply limit the assigners to only use certain number of siblings
+
+show that we don't need to know max number of siblings
+
+loading marc and loading pheno
+from here on out... everything in R... standard plots, calculations...
+
+call calculate cov - it actually tells us how many families with at least x siblings
+
+Show pmgl plot, say something about assignment
+
+call calculate error types, use pipe to get more rows
+comment on general performance of different analyses
+## Visualisation
 Examples of plots.
