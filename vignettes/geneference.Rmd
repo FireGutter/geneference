@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+NOTE: this vignette will be finished around eftermiddag today.
 
 geneference aims to ...
 
