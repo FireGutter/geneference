@@ -30,5 +30,7 @@ To use this function, the user must run any test with \code{analysis_association
 and use \code{load_results()} to merge this with \code{beta.txt} from the
 simulation. Then, \code{augment_results()} needs to be run in order to obtain
 columns for information on which SNPs are causal, significant, and significant
-with Bonferroni correction.
+with Bonferroni correction. \cr
+The standard significance level refers to the one used in 
+\code{augment_results()}.
 }

@@ -9,7 +9,7 @@ plot_estimates_vs_true(
   BETA,
   P,
   bonferroni,
-  true_effect = beta,
+  true_effect,
   save_plot_path = FALSE,
   plot_filename = "beta_comparison.png"
 )
@@ -26,9 +26,9 @@ State in the format dataset$P.}
 \item{bonferroni}{the column containing significance at bonferroni correction.
 State in the format dataset$bonferroni.}
 
-\item{true_effect}{the column containing the true effect sizes. Default can be used
-if loaded by \code{load_results()} together with \code{beta.txt}, else
-state in the format dataset$true_effect.}
+\item{true_effect}{the column containing the true effect sizes.
+State in the format dataset$true_effect. Note: standard called 'beta' if
+loaded by \code{load_results()}.}
 
 \item{save_plot_path}{if \code{FALSE}, return the function returns a ggplot
 object. Else a path of the directory to save the plot to.}

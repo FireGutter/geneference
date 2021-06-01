@@ -268,9 +268,9 @@ plot_manhattan <- function(dataset,
 #' State in the format dataset$P.
 #' @param bonferroni the column containing significance at bonferroni correction.
 #' State in the format dataset$bonferroni.
-#' @param true_effect the column containing the true effect sizes. Default can be used
-#' if loaded by \code{load_results()} together with \code{beta.txt}, else
-#' state in the format dataset$true_effect.
+#' @param true_effect the column containing the true effect sizes.
+#' State in the format dataset$true_effect. Note: standard called 'beta' if
+#' loaded by \code{load_results()}.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
@@ -284,7 +284,7 @@ plot_estimates_vs_true <- function(dataset,
                                    BETA,
                                    P,
                                    bonferroni,
-                                   true_effect = beta,
+                                   true_effect,
                                    save_plot_path = FALSE,
                                    plot_filename = "beta_comparison.png") {
   
@@ -387,7 +387,9 @@ plot_pmgl_vs_true <- function(dataset,
                  file_ext(plot_filename) == "pdf" ||
                  file_ext(plot_filename) == "jpeg"))
   
-  repel_data <- dataset[, .SD[which.min(child_lg)], by = conf_class]
+  tmp <- data.table::as.data.table(dataset)
+  
+  repel_data <- tmp[, .SD[which.min(child_lg)], by = conf_class]
   
   plt <- ggplot2::ggplot(dataset) +
     ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg, color = conf_class),
@@ -411,7 +413,8 @@ plot_pmgl_vs_true <- function(dataset,
                               box.padding = 0.4,
                               label.padding = 0.1,
                               show.legend = FALSE,
-                              size = label_size)
+                              size = label_size,
+                              max.overlaps = 1000)
   
   if (save_plot_path != FALSE) {
     ggplot2::ggsave(filename = plot_filename,
