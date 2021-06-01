@@ -268,9 +268,9 @@ plot_manhattan <- function(dataset,
 #' State in the format dataset$P.
 #' @param bonferroni the column containing significance at bonferroni correction.
 #' State in the format dataset$bonferroni.
-#' @param true_effect the column containing the true effect sizes. Default can be used
-#' if loaded by \code{load_results()} together with \code{beta.txt}, else
-#' state in the format dataset$true_effect.
+#' @param true_effect the column containing the true effect sizes.
+#' State in the format dataset$true_effect. Note: standard called 'beta' if
+#' loaded by \code{load_results()}.
 #' @param save_plot_path if \code{FALSE}, return the function returns a ggplot
 #' object. Else a path of the directory to save the plot to.
 #' @param plot_filename name of the file to be saved, including file extension.
@@ -284,7 +284,7 @@ plot_estimates_vs_true <- function(dataset,
                                    BETA,
                                    P,
                                    bonferroni,
-                                   true_effect = beta,
+                                   true_effect,
                                    save_plot_path = FALSE,
                                    plot_filename = "beta_comparison.png") {
   
