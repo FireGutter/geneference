@@ -36,6 +36,7 @@ Suggests:
     knitr,
     rmarkdown,
     markdown,
+    kableExtra,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends:
@@ -51,7 +52,6 @@ Imports:
     utils,
     future,
     ggplot2,
-    qpdf,
     cowplot,
     magrittr,
     tibble,

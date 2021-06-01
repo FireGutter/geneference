@@ -28,7 +28,6 @@ reference:
     contents:
     - starts_with("assign")
     - starts_with("analysis")
-    - augment_results
   - subtitle: Import, calculate (tmp subtitle)
     desc: >
       Functionalities for importing data to the R session and performing a few
@@ -36,6 +35,7 @@ reference:
     contents:
     - starts_with("load")
     - starts_with("calculate")
+    - augment_results
   - subtitle: Visualisations
     desc: >
       Once you have imported data to R, you can use these functions for
@@ -44,6 +44,7 @@ reference:
       ggplot2 package can manipulate the returned objects. (tmp desc)
     contents:
     - starts_with("plot")
+    - compare_beta
 
   - title: Helper functions
     desc: >
