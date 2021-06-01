@@ -16,9 +16,9 @@ knitr::opts_chunk$set(
 
 This vignette lists a few runs of different simulations to give an idea of the runtimes that are to be expected, as well as how much disk space is required for different sizes of simulations.
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
-library(tidyverse)
 library(knitr)
 library(kableExtra)
+library(tibble)
 ```
 
 ```{r, echo=FALSE}

@@ -36,6 +36,7 @@ Suggests:
     knitr,
     rmarkdown,
     markdown,
+    kableExtra,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends:
@@ -55,7 +56,5 @@ Imports:
     magrittr,
     tibble,
     tidyr,
-    ggrepel,
-    knitr,
-    kableExtra
+    ggrepel
 VignetteBuilder: knitr
