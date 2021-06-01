@@ -2,7 +2,7 @@
 title: "Liability distributions with LT-FH"
 output: rmarkdown::html_vignette
 description: >
-  An overview and explanation of the methodology used for drawing liabilities.
+  An overview and explanation of the methodology used for modeling liabilities.
 vignette: >
   %\VignetteIndexEntry{liability-distribution}
   %\VignetteEngine{knitr::rmarkdown}

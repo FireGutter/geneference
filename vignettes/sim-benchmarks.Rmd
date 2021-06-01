@@ -1,6 +1,8 @@
 ---
 title: "Expected runtimes and sizes of simulations"
 output: rmarkdown::html_vignette
+description: >
+  A few benchmarks on runtimes and sizes of simulations.
 vignette: >
   %\VignetteIndexEntry{Simulation benchmarks}
   %\VignetteEngine{knitr::rmarkdown}

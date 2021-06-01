@@ -13,8 +13,8 @@
 MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT/)
 <!-- badges: end -->
 
-geneference is an R package for simulating genetic data for genome wide
-association studies.  
+geneference is an R package for simulating and analysing genetic data
+for genome wide association studies.  
 The implementations are primarily based on the work by Hujoel et al
 (2020), in which the authors propose a method of including family
 history in a representation of a case-control phenotype. The authors
@@ -54,15 +54,21 @@ the calls to PLINK, meaning that besides installation the user will not
 need to interact directly with PLINK.
 
 If you are interested in seeing what geneference is capable of, you can
-read through the example analysis in `vignette("geneference")`. For a
+read through the introductory vignette, `vignette("geneference")`. For a
 complete overview of the functions in geneference, see our [package
-documentation](https://firegutter.github.io/geneference/reference/index.html).
+documentation](https://firegutter.github.io/geneference/reference/index.html),
+and for further details on the theoretical background of our
+implementations, see [our
+vignettes](https://firegutter.github.io/geneference/articles/index.html).
 
 ## References
 
--   Hujoel-citation
--   Cite the paper we used in rmnorm
+-   Hujoel, M.L.A., Gazal, S., Loh, PR. et al. Liability threshold
+    modeling of case–control status and family history of disease
+    increases association power. Nat Genet 52, 541–547 (2020).
+    <https://doi.org/10.1038/s41588-020-0613-6>
 
 Additionally, the open source software Inkscape was used together with
-the hexSticker package to create the logo for geneference. Check how/if
-to cite these.
+the hexSticker package to create the logo for geneference.  
+Finally, we want to thank our supervisor Emil Michael Pedersen for his
+patience in answering all our questions.

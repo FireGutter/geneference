@@ -16,32 +16,33 @@ navbar:
 reference:
   - title: Simulation
     desc: >
-      Simulate individuals and their genotypes, either including or excluding
-      family history.
+      Simulate the genetic data of individuals, with or without including
+      family members.
     contents:
     - starts_with("sim")
 
   - title: Analysis
     desc: >
-      Perform statistical analysis to discover what can be causally inferred
-      from data. (tmp desc)
+      Assign refined representations of phenotypes and run regressions to
+      infere which SNPs are causal.
     contents:
     - starts_with("assign")
     - starts_with("analysis")
-  - subtitle: Import, calculate (tmp subtitle)
+  - subtitle: Import, augment
     desc: >
-      Functionalities for importing data to the R session and performing a few
-      calculations in R. (write better desc)
+      Import simulations and analyses to R, perform augmentations and
+      calculations of results.
     contents:
     - starts_with("load")
-    - starts_with("calculate")
     - augment_results
+    - starts_with("calculate")
+
   - subtitle: Visualisations
     desc: >
-      Once you have imported data to R, you can use these functions for
-      visualising stuff. The functions listed here can either return a ggplot
-      object or save an image of the plot to disk. Users familiar with the
-      ggplot2 package can manipulate the returned objects. (tmp desc)
+      Once data has been imported to R and augmented to contain the necessary
+      columns, these functions can be used for visualising different aspects
+      of the results.
+      The plots can either be saved to disk or returned as ggplot2 objects.
     contents:
     - starts_with("plot")
     - compare_beta
@@ -49,16 +50,13 @@ reference:
   - title: Helper functions
     desc: >
       These are miscellaneous helper functions also exported by the package.
-      Write one line motivating their use.
     contents:
-    - rmnorm
     - convert_geno_file
     - covmatrix
 
 articles:
-  - title: Detailed background (tmp title)
-    desc: this is for nerds (write a desc)
+  - title: Theoretical background and details about implementation
     contents:
-      - gibbs
       - liability-distribution
+      - gibbs
       - sim-benchmarks

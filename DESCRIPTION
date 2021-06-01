@@ -1,7 +1,7 @@
 Package: geneference
 Type: Package
-Title: LT-FH analysis and data simulation
-Version: 0.1.0
+Title: Simulating and analysing genes with LT-FH
+Version: 1.0.0
 Authors@R: c(
     person(given = "FireGutter",
            role = "cre",
@@ -23,9 +23,11 @@ Authors@R: c(
             role = "aut", 
             email = "201907421@post.au.dk"))
 Description: This package has the purpose of opening the door to the world of GWAS
-    and the new tehnique of LT-FH. This package can be used to simulate data.
-    Some of the backbone of this package is PLINK, which is a hole other program.
-    Use four spaces when indenting paragraphs within the Description.
+    and the new technique of LT-FH. geneference can be used for simulating data,
+    and through calls to the software PLINK it is possible to analyse the
+    generated data. geneference comes shipped with functionalities for assigning
+    advanced representations, in particular the newly proposed LT-FH method.
+    geneference also enables visualisation of results from PLINK.
 URL: https://firegutter.github.io/geneference/
 BugReports: https://github.com/FireGutter/geneference/issues/
 License: MIT + file LICENSE
