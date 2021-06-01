@@ -23,7 +23,7 @@ Else, write the number of minor alleles for each genotype at each SNP.}
 }
 \value{
 Returns a list with 5 entries, containing a matrix of genotypes, a
-vector specifying indexes of causal SNPs, a vector with liability of
+vector specifying effect sizes of SNPs, a vector with liability of
 individual i, a vector specifying phenotype  status of individual i, and the
 transformed phenotype status used for linear regression in PLINK.
 }
