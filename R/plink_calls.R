@@ -98,10 +98,10 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_dir,
   stopifnot("geno_file needs to be a valid file" =
               (file.exists(geno_file) &&
                  ((file_ext(geno_file) == "ped"
-                   && file.exists(paste0(ped_file, ".map"))) ||
+                   && file.exists(paste0(geno_file, ".map"))) ||
                     (file_ext(geno_file) == "bed"
-                    && file.exists(paste0(ped_file, ".bim"))
-                    && file.exists(paste0(ped_file, ".fam"))))),
+                    && file.exists(paste0(geno_file, ".bim"))
+                    && file.exists(paste0(geno_file, ".fam"))))),
             "pheno_file needs to be a valid file" =
               (file.exists(pheno_file) &&
                  file_ext(pheno_file) == "txt"),
