@@ -55,7 +55,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">geneference</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -111,35 +111,162 @@
 
     
     
-<p>NOTE: this vignette will be finished around eftermiddag today.</p>
-<p>geneference aims to …</p>
-<p>In this vignette, we show an example of how one might go about conducting a simulation study relying solely on the functionalities implemented in geneference.</p>
-<p>geneference contains functions for .. blabla .. the idea being to do as much in R as possible with the user worrying as little as possible about PLINK ..<br>
-the general workflow is illustrated on the below diagram:</p>
+<p>In this vignette, we show a very brief example of how one might use the functionalities implemented in geneference to simulate, analyse and visualise genetic data.</p>
 <div id="simulation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#simulation" class="anchor"></a>Simulation</h1>
-<p>geneference .. several simulation functions.. all of these assume model see vignette.</p>
-<p>We can … see the framework directly in our R session:</p>
+<p>geneference comes shipped with several simulation functions relying on assumptions outlined in <code><a href="../articles/liability-distribution.html">vignette("liability-distribution")</a></code>. The general setup for all simulation functions except <code><a href="../reference/sim_test.html">sim_test()</a></code> is that they write to disk.<br>
+We can, however, use <code><a href="../reference/sim_test.html">sim_test()</a></code> to get an idea of how our framework of genotype data looks, directly in R:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#this is sim_test</span></code></pre></div>
-<p>blabla simple and small.. blabla for larger, we need to work outside R(mention plink, write to disk)</p>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://firegutter.github.io/geneference/">geneference</a></span><span class="op">)</span>
+<span class="va">test_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_test.html">sim_test</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, m <span class="op">=</span> <span class="fl">10</span>, q <span class="op">=</span> <span class="fl">2</span>, hsq <span class="op">=</span> <span class="fl">0.5</span>, k <span class="op">=</span> <span class="fl">0.05</span>, to_ped <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">test_data</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
+<span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span>
+<span class="co">#&gt;  [1,]    0    1    1    1    1    2    1    0    0     0</span>
+<span class="co">#&gt;  [2,]    1    0    0    2    0    1    2    0    1     0</span>
+<span class="co">#&gt;  [3,]    1    0    0    1    0    0    1    0    1     0</span>
+<span class="co">#&gt;  [4,]    1    0    1    0    0    2    2    0    0     1</span>
+<span class="co">#&gt;  [5,]    0    1    1    1    0    0    1    0    0     0</span>
+<span class="co">#&gt;  [6,]    1    1    1    1    0    0    1    2    1     0</span>
+<span class="co">#&gt;  [7,]    0    1    0    2    0    1    0    0    2     0</span>
+<span class="co">#&gt;  [8,]    1    1    0    1    0    1    1    0    1     0</span>
+<span class="co">#&gt;  [9,]    2    0    1    1    0    1    1    0    2     0</span>
+<span class="co">#&gt; [10,]    1    1    0    0    1    0    1    1    1     0</span></code></pre></div>
+<p>Each row denotes a genotype and each column a SNP, where the entries represent the number of minor alleles.<br><code><a href="../reference/sim_test.html">sim_test()</a></code> also allows the user to get a glimpse of liabilities, effect sizes, and phenotype status.<br>
+However, as the other simulation functions are implemented with intent to simulate larger datasets, we use another framework for representing some of the data, such that we can use the software PLINK to handle the data efficiently.<br>
+This can also be shown with <code><a href="../reference/sim_test.html">sim_test()</a></code>, setting <code>to_ped = TRUE</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#this is sim_test with ped conversion</span></code></pre></div>
-<p>We use <code>sim_random_family</code> to blabla…</p>
+<code class="sourceCode R"><span class="va">test_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_test.html">sim_test</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, m <span class="op">=</span> <span class="fl">10</span>, q <span class="op">=</span> <span class="fl">2</span>, hsq <span class="op">=</span> <span class="fl">0.5</span>, k <span class="op">=</span> <span class="fl">0.05</span>, to_ped <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">test_data</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
+<span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]</span>
+<span class="co">#&gt;  [1,] "1"  "1"  "1"  "1"  "1"  "1"  "c"  "a"  "a"  "a"   "a"   "a"   "a"  </span>
+<span class="co">#&gt;  [2,] "2"  "1"  "1"  "1"  "1"  "1"  "a"  "a"  "a"  "a"   "a"   "a"   "a"  </span>
+<span class="co">#&gt;  [3,] "3"  "1"  "1"  "1"  "1"  "1"  "a"  "a"  "a"  "a"   "a"   "a"   "a"  </span>
+<span class="co">#&gt;  [4,] "4"  "1"  "1"  "1"  "1"  "1"  "c"  "a"  "a"  "a"   "a"   "a"   "c"  </span>
+<span class="co">#&gt;  [5,] "5"  "1"  "1"  "1"  "1"  "1"  "a"  "a"  "a"  "a"   "a"   "a"   "a"  </span>
+<span class="co">#&gt;  [6,] "6"  "1"  "1"  "1"  "1"  "1"  "c"  "a"  "a"  "a"   "c"   "a"   "a"  </span>
+<span class="co">#&gt;  [7,] "7"  "1"  "1"  "1"  "1"  "1"  "c"  "a"  "a"  "a"   "c"   "a"   "c"  </span>
+<span class="co">#&gt;  [8,] "8"  "1"  "1"  "1"  "1"  "1"  "a"  "a"  "a"  "a"   "a"   "a"   "c"  </span>
+<span class="co">#&gt;  [9,] "9"  "1"  "1"  "1"  "1"  "1"  "c"  "a"  "a"  "a"   "a"   "a"   "a"  </span>
+<span class="co">#&gt; [10,] "10" "1"  "1"  "1"  "1"  "1"  "c"  "a"  "a"  "a"   "a"   "a"   "c"  </span>
+<span class="co">#&gt;       [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25]</span>
+<span class="co">#&gt;  [1,] "a"   "c"   "a"   "a"   "a"   "a"   "a"   "c"   "a"   "a"   "a"   "a"  </span>
+<span class="co">#&gt;  [2,] "a"   "a"   "a"   "a"   "a"   "a"   "a"   "c"   "a"   "c"   "a"   "c"  </span>
+<span class="co">#&gt;  [3,] "a"   "c"   "c"   "a"   "a"   "a"   "a"   "c"   "a"   "a"   "a"   "a"  </span>
+<span class="co">#&gt;  [4,] "a"   "c"   "a"   "a"   "a"   "a"   "a"   "c"   "a"   "c"   "a"   "a"  </span>
+<span class="co">#&gt;  [5,] "a"   "a"   "a"   "a"   "a"   "a"   "a"   "c"   "c"   "c"   "a"   "c"  </span>
+<span class="co">#&gt;  [6,] "a"   "a"   "a"   "a"   "a"   "a"   "a"   "a"   "a"   "c"   "c"   "a"  </span>
+<span class="co">#&gt;  [7,] "c"   "c"   "c"   "a"   "a"   "a"   "a"   "a"   "a"   "c"   "c"   "c"  </span>
+<span class="co">#&gt;  [8,] "a"   "a"   "a"   "a"   "a"   "a"   "a"   "c"   "a"   "c"   "c"   "c"  </span>
+<span class="co">#&gt;  [9,] "a"   "c"   "c"   "a"   "a"   "a"   "a"   "a"   "a"   "c"   "c"   "a"  </span>
+<span class="co">#&gt; [10,] "a"   "c"   "a"   "a"   "a"   "c"   "a"   "a"   "a"   "c"   "a"   "c"  </span>
+<span class="co">#&gt;       [,26]</span>
+<span class="co">#&gt;  [1,] "a"  </span>
+<span class="co">#&gt;  [2,] "a"  </span>
+<span class="co">#&gt;  [3,] "a"  </span>
+<span class="co">#&gt;  [4,] "a"  </span>
+<span class="co">#&gt;  [5,] "a"  </span>
+<span class="co">#&gt;  [6,] "a"  </span>
+<span class="co">#&gt;  [7,] "a"  </span>
+<span class="co">#&gt;  [8,] "a"  </span>
+<span class="co">#&gt;  [9,] "a"  </span>
+<span class="co">#&gt; [10,] "a"</span></code></pre></div>
+<p>The first 6 columns are to satisfy PLINK’s input, while the rest of the columns are still SNPs; instead denoted with allelic letters.</p>
+<p>In this vignette, we use <code><a href="../reference/sim_random_family.html">sim_random_family()</a></code> to generate a realistic dataset with varying family sizes. We decide on a distribution and a maximum of 3 siblings in a family:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#this is call to large dataset with random family size</span></code></pre></div>
-<p>.. we now have .. files in our directory .. (show this somehow? show header(phenotypes) and maybe some of the others) .. to save space we chose .bed, this means that if we try to open the file it is gibberish…</p>
+<code class="sourceCode R"><span class="va">dirpath</span> <span class="op">&lt;-</span> <span class="st">"C:\\Users\\Bruger\\OneDrive - Aarhus universitet\\GWAS\\Data\\IntroData\\"</span>
+<span class="fu"><a href="../reference/sim_random_family.html">sim_random_family</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100000</span>,
+                  m <span class="op">=</span> <span class="fl">100000</span>,
+                  q <span class="op">=</span> <span class="fl">500</span>,
+                  hsq <span class="op">=</span> <span class="fl">0.5</span>,
+                  k <span class="op">=</span> <span class="fl">0.05</span>,
+                  sib_fert <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="fl">0.3</span>,<span class="fl">0.3</span>,<span class="fl">0.2</span><span class="op">)</span>,
+                  dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,
+                  path <span class="op">=</span> <span class="va">dirpath</span><span class="op">)</span>
+
+<span class="co"># converting genotypes data in order to save storage space</span>
+<span class="va">pedfile</span> <span class="op">&lt;-</span> <span class="st">"C:\\Users\\Bruger\\OneDrive - Aarhus universitet\\GWAS\\Data\\IntroData\\genotypes"</span>
+<span class="fu"><a href="../reference/convert_geno_file.html">convert_geno_file</a></span><span class="op">(</span><span class="va">pedfile</span>, del <span class="op">=</span> <span class="cn">T</span>, plink_path <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<p>After running the simulation and converting genotypes.ped and genotypes.map, we now have 6 files in our directory. These consist of genotype data, phenotype data, effect sizes used in the simulation, minor allele frequencies used in the simulation and a few files to satisfy PLINK’s input conditions.</p>
 </div>
 <div id="analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#analysis" class="anchor"></a>Analysis</h1>
-<p>we want to assign gwax, ltfh pheno let’s say we want to investigate the benefit of having data on more siblings. instead of spending time and space simulating a completely new dataset, we can simply limit the assigners to only use certain number of siblings</p>
-<p>show that we don’t need to know max number of siblings</p>
-<p>loading marc and loading pheno from here on out… everything in R… standard plots, calculations…</p>
-<p>call calculate cov - it actually tells us how many families with at least x siblings</p>
-<p>Show pmgl plot, say something about assignment</p>
-<p>call calculate error types, use pipe to get more rows comment on general performance of different analyses ## Visualisation Examples of plots.</p>
+<p>The next step is to create some of the more refined phenotypes than the standard binary case-control representation in the simulation. We do this by two function calls:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">phenopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">dirpath</span>,<span class="st">"phenotypes.txt"</span><span class="op">)</span>
+<span class="va">outfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">dirpath</span>,<span class="st">"phenoRefined.txt"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/assign_ltfh_phenotype.html">assign_ltfh_phenotype</a></span><span class="op">(</span>pheno_file <span class="op">=</span> <span class="va">phenopath</span>,output_file <span class="op">=</span> <span class="va">outfile</span>, alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>
+<span class="fu"><a href="../reference/assign_GWAX_phenotype.html">assign_GWAX_phenotype</a></span><span class="op">(</span>pheno_file <span class="op">=</span> <span class="va">outfile</span><span class="op">)</span></code></pre></div>
+<p>The assigners work by appending new columns to the end of the phenotypes file. The assignment of the LT-FH phenotype results in three new columns, two of them detailing information about family configurations and the last one containing the posterior mean genetic liability of each configuration. For details about how we sample liabilities, see <code><a href="../articles/gibbs.html">vignette("gibbs")</a></code>.<br>
+The assignment of GWAX phenotype only yields one new column; namely GWAX_pheno.</p>
+<p>After having assigned the relevant phenotypes, we call PLINK to perform the analysis:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">genofile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">pedfile</span>,<span class="st">".bed"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/analysis_association.html">analysis_association</a></span><span class="op">(</span>geno_file <span class="op">=</span> <span class="va">genofile</span>, pheno_file <span class="op">=</span> <span class="va">outfile</span>, pheno_name <span class="op">=</span> <span class="st">"LTFH_pheno"</span>, out_dir <span class="op">=</span> <span class="va">dirpath</span><span class="op">)</span>
+<span class="fu"><a href="../reference/analysis_association.html">analysis_association</a></span><span class="op">(</span>geno_file <span class="op">=</span> <span class="va">genofile</span>, pheno_file <span class="op">=</span> <span class="va">outfile</span>, pheno_name <span class="op">=</span> <span class="st">"GWAX_pheno"</span>, out_dir <span class="op">=</span> <span class="va">dirpath</span><span class="op">)</span>
+<span class="fu"><a href="../reference/analysis_association.html">analysis_association</a></span><span class="op">(</span>geno_file <span class="op">=</span> <span class="va">genofile</span>, pheno_file <span class="op">=</span> <span class="va">outfile</span>, pheno_name <span class="op">=</span> <span class="st">"pheno"</span>, out_dir <span class="op">=</span> <span class="va">dirpath</span><span class="op">)</span></code></pre></div>
+<p>We now have results from three different association studies on the same dataset, but with different representations of the phenotype.<br>
+From here on out, we can load the data into R, such that we can begin investigating the results of the analyses.<br>
+geneference has two loading functions: One for loading phenotype data, and one for loading and merging everything else:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">phenodata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_phenotypes.html">load_phenotypes</a></span><span class="op">(</span><span class="va">outfile</span><span class="op">)</span>
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_results.html">load_results</a></span><span class="op">(</span><span class="va">dirpath</span><span class="op">)</span>
+<span class="va">results_new</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/augment_results.html">augment_results</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">results</span>, alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></code></pre></div>
+<p>We augment results to obtain columns denoting relevant information for plotting (logical columns specifying which tests were significant and which SNPs are truly causal).<br>
+For a start, let’s see if the distribution of the liabilities in the families seem to follow the theoretical model.<br>
+Firstly, we use <code><a href="../reference/covmatrix.html">covmatrix()</a></code> to get the theoretical covariance matrix:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/covmatrix.html">covmatrix</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>
+<span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7]</span>
+<span class="co">#&gt; [1,] 0.50 0.50 0.25 0.25 0.25 0.25 0.25</span>
+<span class="co">#&gt; [2,] 0.50 1.00 0.25 0.25 0.25 0.25 0.25</span>
+<span class="co">#&gt; [3,] 0.25 0.25 1.00 0.00 0.25 0.25 0.25</span>
+<span class="co">#&gt; [4,] 0.25 0.25 0.00 1.00 0.25 0.25 0.25</span>
+<span class="co">#&gt; [5,] 0.25 0.25 0.25 0.25 1.00 0.25 0.25</span>
+<span class="co">#&gt; [6,] 0.25 0.25 0.25 0.25 0.25 1.00 0.25</span>
+<span class="co">#&gt; [7,] 0.25 0.25 0.25 0.25 0.25 0.25 1.00</span></code></pre></div>
+<p>We compare this to the empirical covariance matrix of liabilities:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/calculate_cov.html">calculate_cov</a></span><span class="op">(</span>pheno <span class="op">=</span> <span class="va">phenodata</span><span class="op">)</span></code></pre></div>
+<p><img src="../man/figures/intro_calcov.png"> Some of the liabilities are a little lower than what we would expect, but most seem fine.<br>
+Let’s look at how the models performed with regards to error types of the tests, i.e. how well they found the truly causal SNPs:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Errortypes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calculate_error_types.html">calculate_error_types</a></span><span class="op">(</span>causal <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">causal</span>,
+                                    significant <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">P_GWAS_significant</span>,
+                                    bonferroni <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">P_GWAS_bonferroni</span>,
+                                    analysis_name <span class="op">=</span> <span class="st">"GWAS"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html">add_row</a></span><span class="op">(</span><span class="fu"><a href="../reference/calculate_error_types.html">calculate_error_types</a></span><span class="op">(</span>causal <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">causal</span>,
+                                        significant <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">P_GWAX_significant</span>,
+                                        bonferroni <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">P_GWAX_bonferroni</span>,
+                                        analysis_name <span class="op">=</span> <span class="st">"GWAX"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/add_row.html">add_row</a></span><span class="op">(</span><span class="fu"><a href="../reference/calculate_error_types.html">calculate_error_types</a></span><span class="op">(</span>causal <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">causal</span>,
+                                        significant <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">P_LTFH_significant</span>,
+                                        bonferroni <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">P_LTFH_bonferroni</span>,
+                                        analysis_name <span class="op">=</span> <span class="st">"LTFH"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">Errortypes</span></code></pre></div>
+<p><img src="../man/figures/intro_errtbl.png"> We see that GWAX is better than the standard representation, but that the LT-FH phenotype outperforms both by quite a bit.<br>
+This can be visualised by a Manhattan plot, where we see that we have no non-causal SNPs above the Bonferroni-corrected line, but unfortunately still have many causal SNPs below it.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plot_manhattan.html">plot_manhattan</a></span><span class="op">(</span><span class="va">results_new</span>, <span class="va">results_new</span><span class="op">$</span><span class="va">P_LTFH</span><span class="op">)</span></code></pre></div>
+<p><img src="../man/figures/intro_manhattan.png"></p>
+<p>Some of the p-values in the Manhattan plot looked quite extreme, however, so let’s do a sanity check and plot how they are distributed. We do this first with a histogram and next with a QQ-plot:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plot_pval_hist.html">plot_pval_hist</a></span><span class="op">(</span><span class="va">results_new</span>, <span class="va">results_new</span><span class="op">$</span><span class="va">P_LTFH</span><span class="op">)</span></code></pre></div>
+<p><img src="../man/figures/intro_phist.png"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plot_pval_QQ.html">plot_pval_QQ</a></span><span class="op">(</span><span class="va">results_new</span>, <span class="va">results_new</span><span class="op">$</span><span class="va">P_LTFH</span><span class="op">)</span></code></pre></div>
+<p><img src="../man/figures/intro_pqq.png"> As expected, both plots tell the same story: The p-values are fine.</p>
+<p>Instead, we can try to get a better idea of the intuition behind why the LT-FH method performs so well. Since we have varying family sizes in our data, we have a lot of equivalent family configurations. So, for clarity in the following plot, we instead use a dataset where the family size is fixed at 2 siblings.<br>
+We plot the true genetic liabilities against the posterior mean genetic liabilites:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plot_pmgl_vs_true.html">plot_pmgl_vs_true</a></span><span class="op">(</span><span class="va">phenodata</span><span class="op">)</span></code></pre></div>
+<p><img src="../man/figures/intro_pmgl.png"> From this, it seems clear that the mean of the true genetic liabilities are being estimated accurately by LT-FH, as the center of each configuration class is approximately at the identity line. So, in short, the LT-FH method enables us to come much closer to the true liability of an individual than simply using their own phenotype status.<br>
+The plot also makes it possible to compare different configuration classes to each other. For instance, we see that the configuration class 1.2.2.3 and the class 1.3.2.2 lie very close to each other, meaning that having only one sibling or only one parent who is case, has approximately the same influence on an individual’s estimated genetic liability. The final section of <code><a href="../articles/liability-distribution.html">vignette("liability-distribution")</a></code> further details how to read the configuration classes.</p>
+<p>Finally, we look at a scatterplot of true effect sizes against estimated effect sizes from the regression with LT-FH. Here, it is shown how well the LT-FH method estimates true effect sizes and whether or not there are any noticable patterns in its estimations.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plot_estimates_vs_true.html">plot_estimates_vs_true</a></span><span class="op">(</span>dataset <span class="op">=</span> <span class="va">results_new</span>, BETA <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">BETA_LTFH</span>, P <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">P_LTFH</span>, bonferroni <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">P_LTFH_bonferroni</span>, true_effect <span class="op">=</span> <span class="va">results_new</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span></code></pre></div>
+<p><img src="../man/figures/intro_beta-comp.png"> This was a showcase of some of the functionalities implemented in genference. For a full list of exported functions, see the <a href="https://firegutter.github.io/geneference/reference/index.html">package documentation</a>.</p>
 </div>
   </div>
 

@@ -108,7 +108,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">geneference</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -170,7 +170,7 @@
       <tr>
         <th colspan="2">
           <h2 id="section-simulation" class="hasAnchor"><a href="#section-simulation" class="anchor"></a>Simulation</h2>
-          <p class="section-desc"><p>Simulate individuals and their genotypes, either including or excluding family history.</p></p>
+          <p class="section-desc"><p>Simulate the genetic data of individuals, with or without including family members.</p></p>
         </th>
       </tr>
       
@@ -213,7 +213,7 @@
       <tr>
         <th colspan="2">
           <h2 id="section-analysis" class="hasAnchor"><a href="#section-analysis" class="anchor"></a>Analysis</h2>
-          <p class="section-desc"><p>Perform statistical analysis to discover what can be causally inferred from data. (tmp desc)</p></p>
+          <p class="section-desc"><p>Assign refined representations of phenotypes and run regressions to infere which SNPs are causal.</p></p>
         </th>
       </tr>
       
@@ -244,8 +244,8 @@
       
       <tr>
         <th colspan="2">
-          <h3 id="section-import-calculate-tmp-subtitle-" class="hasAnchor"><a href="#section-import-calculate-tmp-subtitle-" class="anchor"></a>Import, calculate (tmp subtitle)</h3>
-          <p class="section-desc"><p>Functionalities for importing data to the R session and performing a few calculations in R. (write better desc)</p></p>
+          <h3 id="section-import-augment" class="hasAnchor"><a href="#section-import-augment" class="anchor"></a>Import, augment</h3>
+          <p class="section-desc"><p>Import simulations and analyses to R, perform augmentations and calculations of results.</p></p>
         </th>
       </tr>
       
@@ -267,6 +267,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="augment_results.html">augment_results()</a></code> </p>
+        </td>
+        <td><p>Augment results for plotting</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="calculate_cov.html">calculate_cov()</a></code> </p>
         </td>
         <td><p>Calculate covariance matrix of liabilities</p></td>
@@ -276,19 +282,13 @@
           <p><code><a href="calculate_error_types.html">calculate_error_types()</a></code> </p>
         </td>
         <td><p>Calculate error types</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="augment_results.html">augment_results()</a></code> </p>
-        </td>
-        <td><p>Augment results for plotting</p></td>
       </tr>
     </tbody><tbody>
       
       <tr>
         <th colspan="2">
           <h3 id="section-visualisations" class="hasAnchor"><a href="#section-visualisations" class="anchor"></a>Visualisations</h3>
-          <p class="section-desc"><p>Once you have imported data to R, you can use these functions for visualising stuff. The functions listed here can either return a ggplot object or save an image of the plot to disk. Users familiar with the ggplot2 package can manipulate the returned objects. (tmp desc)</p></p>
+          <p class="section-desc"><p>Once data has been imported to R and augmented to contain the necessary columns, these functions can be used for visualising different aspects of the results. The plots can either be saved to disk or returned as ggplot2 objects.</p></p>
         </th>
       </tr>
       
@@ -338,7 +338,7 @@ values.</p></td>
       <tr>
         <th colspan="2">
           <h2 id="section-helper-functions" class="hasAnchor"><a href="#section-helper-functions" class="anchor"></a>Helper functions</h2>
-          <p class="section-desc"><p>These are miscellaneous helper functions also exported by the package. Write one line motivating their use.</p></p>
+          <p class="section-desc"><p>These are miscellaneous helper functions also exported by the package.</p></p>
         </th>
       </tr>
       
@@ -347,12 +347,6 @@ values.</p></td>
       
       
       <tr>
-        
-        <td>
-          <p><code><a href="rmnorm.html">rmnorm()</a></code> </p>
-        </td>
-        <td><p>Multivariate normal distributions</p></td>
-      </tr><tr>
         
         <td>
           <p><code><a href="convert_geno_file.html">convert_geno_file()</a></code> </p>

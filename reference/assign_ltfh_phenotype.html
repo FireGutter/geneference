@@ -111,7 +111,7 @@ individual." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">geneference</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -200,7 +200,9 @@ of an individual's siblings.</p></td>
 
     <p>Does not return anything, but writes an <code>output_file</code> to disk,
 where configuration, configuration class and posterior mean genetic
-liability is appended to the end of <code>pheno_file</code>.</p>
+liability is appended to the end of <code>pheno_file</code>.<br />
+For a more detailed guide of how to read the configuration and configuration
+class strings, see <code><a href='../articles/liability-distribution.html'>vignette("liability-distribution")</a></code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The posterior mean genetic liabilities (PMGL) are estimated using Gibbs
@@ -213,8 +215,7 @@ and will belong to the same configuration class, denoted by the `conf_class`
 column. Equivalent configurations are assigned the same PMGL.<br />
 <em>Note:</em> The `sibs` argument can be used for limiting how many siblings
 are taken into consideration when creating configurations. This allows for
-different analyses with the same simulation, see for instance
-<code><a href='../articles/geneference.html'>vignette("geneference")</a></code>.</p>
+different analyses with the same simulation.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

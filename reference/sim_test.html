@@ -110,7 +110,7 @@ phenotype status and liabilities, for individuals." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">geneference</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -203,7 +203,7 @@ Else, write the number of minor alleles for each genotype at each SNP.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Returns a list with 5 entries, containing a matrix of genotypes, a
-vector specifying indexes of causal SNPs, a vector with liability of
+vector specifying effect sizes of SNPs, a vector with liability of
 individual i, a vector specifying phenotype  status of individual i, and the
 transformed phenotype status used for linear regression in PLINK.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -259,7 +259,7 @@ The function does not run in parallel.</p>
 #&gt;  [9,] "a"   "c"   "c"   "a"   "a"   "c"   "a"   "c"   "a"   "c"   "c"  
 #&gt; [10,] "a"   "c"   "c"   "a"   "a"   "a"   "a"   "c"   "a"   "a"   "a"  
 #&gt; 
-#&gt; $`SNP-Turn`
+#&gt; $effect_sizes
 #&gt;               [,1]
 #&gt;  [1,]  0.000000000
 #&gt;  [2,]  0.000000000
