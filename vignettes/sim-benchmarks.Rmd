@@ -1,8 +1,8 @@
 ---
-title: "Expected running times and sizes of simulations"
+title: "Expected runtimes and sizes of simulations"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Expected running times and sizes of simulations}
+  %\VignetteIndexEntry{Simulation benchmarks}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,16 +14,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignette lists a few runs of different simulation functions to give an idea of what running times are to be expected and how much disk space is required for different sizes of simulations.
-
-
-
+This vignette lists a few runs of different simulations to give an idea of the runtimes that are to be expected, as well as how much disk space is required for different sizes of simulations.
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(knitr)
 library(kableExtra)
 ```
-
 
 ```{r, echo=FALSE}
 run_times <- tibble(id = c(1, 2, 3, 4, 5, 6, 7),
@@ -38,19 +34,16 @@ run_times <- tibble(id = c(1, 2, 3, 4, 5, 6, 7),
                     )
 ```
 
-
-
 ```{r, echo=FALSE}
 run_times %>%
-  kable(caption =  '<b>Run times of sim_fixed_family</b>',
+  kable(caption =  '<b>Runtimes of sim_fixed_family</b>',
         format = "html",
         align = "c") %>%
   kable_styling(full_width = T)
 ```
 
-The parameters that have the biggest impact on the run times of the simulations is n, m and sibs with and the rest of the parameters not really affecting the running times.
-
-Bear in mind that these run times doesn't take into account, the amount of memory available, the frequency of the memory, the frequency of the CPU or the write speed of the disk. Write speed probably being the most important of these factors, because the most time consuming element in the simulation is the writing of data to the disk. The simulations done by the 7 core system is better in all the prior mentioned factors the 3 core system.
+The parameters that have the biggest impact on the runtimes of the simulations are `n`, `m` and `sibs` with the rest of the parameters not really affecting the runtimes.  
+The 7 core system is better than the 3 core system in several other important aspects, so please bear in mind that the above table simplifies matters quite a bit. The clock frequency and amount of available memory, the clock frequency of the CPU and the write speed of the disk also plays a significant role. The latter may be the most important of these, as our tests have shown that the most time consuming part of the simulation is writing results to disk.
 
 ```{r, echo=FALSE}
 file_sizes <- tibble("n"= c("100000", "10000", "10000", "100000", "50000"),
@@ -60,8 +53,6 @@ file_sizes <- tibble("n"= c("100000", "10000", "10000", "100000", "50000"),
 
 ```
 
-
-
 ```{r, echo=FALSE}
 file_sizes %>%
   kable(caption =  '<b>File sizes</b>',
@@ -70,5 +61,5 @@ file_sizes %>%
   kable_styling(full_width = T)
 ```
 
-The size of the .ped and .map files pretty much follow the linear function $file\_size \approx n \cdot m \cdot 3.7 \cdot 10^{-9}$ the same goes for .bed, .bim and .fam with the function $file\_size \approx n \cdot m \cdot 2.3 \cdot 10^{-10}$.
-As seen in the table it is favorable to store the data in .bed/.bim/.fam format, since it only uses approximately $\frac{1}{17}$ of the space .ped/.map uses.
+The size of the .ped and .map files pretty much follow the linear function $file\_size \approx n \cdot m \cdot 3.7 \cdot 10^{-9}$. The same goes for .bed, .bim and .fam with the function $file\_size \approx n \cdot m \cdot 2.3 \cdot 10^{-10}$.  
+As seen in the table it is favorable to store the data in .bed/.bim/.fam format, since it only uses approximately $\frac{1}{17}$ of the space .ped/.map uses. `convert_geno_file()` can be used to convert from the .ped-format to the .bed-format.

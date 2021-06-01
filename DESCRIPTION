@@ -51,10 +51,11 @@ Imports:
     utils,
     future,
     ggplot2,
-    qpdf,
     cowplot,
     magrittr,
     tibble,
     tidyr,
-    ggrepel
+    ggrepel,
+    knitr,
+    kableExtra
 VignetteBuilder: knitr
