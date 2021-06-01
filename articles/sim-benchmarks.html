@@ -18,7 +18,7 @@
       "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/3/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
     );
   }
-</script><title>Expected running times and sizes of simulations • geneference</title>
+</script><title>Expected runtimes and sizes of simulations • geneference</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -34,7 +34,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Expected running times and sizes of simulations">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Expected runtimes and sizes of simulations">
 <meta property="og:description" content="geneference">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -98,10 +98,11 @@
 
       
 
-      </header><script src="sim-benchmarks_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="sim-benchmarks_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="sim-benchmarks_files/kePrint-0.0.1/kePrint.js"></script><link href="sim-benchmarks_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Expected running times and sizes of simulations</h1>
+      <h1 data-toc-skip>Expected runtimes and sizes of simulations</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/FireGutter/geneference/blob/master/vignettes/sim-benchmarks.Rmd"><code>vignettes/sim-benchmarks.Rmd</code></a></small>
@@ -111,8 +112,341 @@
 
     
     
-<p>This vignette lists a few runs of different simulation functions to give an idea of what running times are to be expected and how much disk space is required for different sizes of simulations.</p>
-<p>I suggest that we make a table, either with markdown formatting or some use of tibbles and kable.</p>
+<p>This vignette lists a few runs of different simulations to give an idea of the runtimes that are to be expected, as well as how much disk space is required for different sizes of simulations.</p>
+<table class="table table">
+<caption>
+<b>Runtimes of sim_fixed_family</b>
+</caption>
+<thead><tr>
+<th style="text-align:center;">
+id
+</th>
+<th style="text-align:center;">
+n
+</th>
+<th style="text-align:center;">
+m
+</th>
+<th style="text-align:center;">
+q
+</th>
+<th style="text-align:center;">
+hsq
+</th>
+<th style="text-align:center;">
+k
+</th>
+<th style="text-align:center;">
+sibs
+</th>
+<th style="text-align:center;">
+run time (s)
+</th>
+<th style="text-align:center;">
+cores
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+1000
+</td>
+<td style="text-align:center;">
+0.5
+</td>
+<td style="text-align:center;">
+0.05
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2974.25
+</td>
+<td style="text-align:center;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+500
+</td>
+<td style="text-align:center;">
+0.5
+</td>
+<td style="text-align:center;">
+0.05
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+2936.11
+</td>
+<td style="text-align:center;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+0.5
+</td>
+<td style="text-align:center;">
+0.05
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+3355.88
+</td>
+<td style="text-align:center;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+1000
+</td>
+<td style="text-align:center;">
+0.5
+</td>
+<td style="text-align:center;">
+0.05
+</td>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+4540.06
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+5000
+</td>
+<td style="text-align:center;">
+0.5
+</td>
+<td style="text-align:center;">
+0.05
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+9551.67
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+6
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+500
+</td>
+<td style="text-align:center;">
+0.5
+</td>
+<td style="text-align:center;">
+0.05
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+11207.75
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+25
+</td>
+<td style="text-align:center;">
+0.5
+</td>
+<td style="text-align:center;">
+0.05
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+11581.89
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+</tbody>
+</table>
+<p>The parameters that have the biggest impact on the runtimes of the simulations are <code>n</code>, <code>m</code> and <code>sibs</code> with the rest of the parameters not really affecting the runtimes.<br>
+The 7 core system is better than the 3 core system in several other important aspects, so please bear in mind that the above table simplifies matters quite a bit. The clock frequency and amount of available memory, the clock frequency of the CPU and the write speed of the disk also plays a significant role. The latter may be the most important of these, as our tests have shown that the most time consuming part of the simulation is writing results to disk.</p>
+<table class="table table">
+<caption>
+<b>File sizes</b>
+</caption>
+<thead><tr>
+<th style="text-align:center;">
+n
+</th>
+<th style="text-align:center;">
+m
+</th>
+<th style="text-align:center;">
+.ped/.map total file size (GB)
+</th>
+<th style="text-align:center;">
+.bed/.bim/.fam total file size (GB)
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+39.62
+</td>
+<td style="text-align:center;">
+2.33
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10000
+</td>
+<td style="text-align:center;">
+10000
+</td>
+<td style="text-align:center;">
+0.37
+</td>
+<td style="text-align:center;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10000
+</td>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+3.73
+</td>
+<td style="text-align:center;">
+0.23
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+100000
+</td>
+<td style="text-align:center;">
+10000
+</td>
+<td style="text-align:center;">
+3.73
+</td>
+<td style="text-align:center;">
+0.23
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+50000
+</td>
+<td style="text-align:center;">
+50000
+</td>
+<td style="text-align:center;">
+9.31
+</td>
+<td style="text-align:center;">
+0.58
+</td>
+</tr>
+</tbody>
+</table>
+<p>The size of the .ped and .map files pretty much follow the linear function <span class="math inline">\(file\_size \approx n \cdot m \cdot 3.7 \cdot 10^{-9}\)</span>. The same goes for .bed, .bim and .fam with the function <span class="math inline">\(file\_size \approx n \cdot m \cdot 2.3 \cdot 10^{-10}\)</span>.<br>
+As seen in the table it is favorable to store the data in .bed/.bim/.fam format, since it only uses approximately <span class="math inline">\(\frac{1}{17}\)</span> of the space .ped/.map uses. <code><a href="../reference/convert_geno_file.html">convert_geno_file()</a></code> can be used to convert from the .ped-format to the .bed-format.</p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

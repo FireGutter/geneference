@@ -23,7 +23,7 @@
 </script>
 
 <title>Plot transformed linear GWAS beta values against the LTFH_transformed
-values. — Compare_beta • geneference</title>
+values. — compare_beta • geneference</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -74,8 +74,8 @@ values. — Compare_beta • geneference</title>
 
 
 <meta property="og:title" content="Plot transformed linear GWAS beta values against the LTFH_transformed
-values. — Compare_beta" />
-<meta property="og:description" content="description to be written." />
+values. — compare_beta" />
+<meta property="og:description" content="Creates a scatterplot of transformed linear GWAS beta values against the LTFH_transformed values." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -161,14 +161,14 @@ values. — Compare_beta" />
     <h1>Plot transformed linear GWAS beta values against the LTFH_transformed
 values.</h1>
     <small class="dont-index">Source: <a href='https://github.com/FireGutter/geneference/blob/master/R/visualisations.R'><code>R/visualisations.R</code></a></small>
-    <div class="hidden name"><code>Compare_beta.Rd</code></div>
+    <div class="hidden name"><code>compare_beta.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>description to be written.</p>
+    <p>Creates a scatterplot of transformed linear GWAS beta values against the LTFH_transformed values.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>Compare_beta</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>compare_beta</span><span class='op'>(</span>
   <span class='va'>dataset</span>,
   <span class='va'>beta_x</span>,
   <span class='va'>beta_y</span>,
@@ -184,21 +184,22 @@ values.</h1>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dataset</th>
-      <td><p>data imported to R.</p></td>
+      <td><p>data imported to R by <code><a href='load_results.html'>load_results()</a></code>.</p></td>
     </tr>
     <tr>
       <th>beta_x</th>
-      <td><p>beta-values to be displayed on the x-axis. E.g. the transformed
-LTFH beta values.</p></td>
+      <td><p>column containing beta-values to be displayed on the x-axis.
+E.g. the transformed LTFH beta values. State in the format dataset$beta_x.</p></td>
     </tr>
     <tr>
       <th>beta_y</th>
-      <td><p>beta-values to be displayed on the y-axis. E.g. the linear GWAS
-beta values.</p></td>
+      <td><p>column containing beta-values to be displayed on the y-axis.
+E.g. the linear GWAS beta values. State in the format dataset$beta_y.</p></td>
     </tr>
     <tr>
       <th>bonferroni</th>
-      <td><p>corrected significant values from LTFH.</p></td>
+      <td><p>column containing the corrected significant values from LTFH.
+State in the format dataset$bonferroni.</p></td>
     </tr>
     <tr>
       <th>line_color</th>
@@ -215,7 +216,8 @@ object. Else a path of the directory to save the plot to.</p></td>
     </tr>
     <tr>
       <th>plot_filename</th>
-      <td><p>name of the file to be saved, including file extension.</p></td>
+      <td><p>name of the file to be saved, including file extension.
+Must be either .pdf, .png or .jpeg</p></td>
     </tr>
     </table>
 
@@ -223,6 +225,16 @@ object. Else a path of the directory to save the plot to.</p></td>
 
     <p>Either returns a <code>ggplot</code> object or saves the plot to
 <code>save_plot_path</code> and returns NULL.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>In the plot an identity line is included, which helps visualise how well
+the estimations compare to each other. <br />
+The plot requires the user to run an analysis with
+<code><a href='analysis_association.html'>analysis_association()</a></code>, load the results and merge with
+<code>beta.txt</code> using <code><a href='load_results.html'>load_results()</a></code> and augment results with
+<code><a href='augment_results.html'>augment_results()</a></code> choosing to create the LTFH transformed column. <br />
+<code>vignette("ggplot2-specs", package = "ggplot2")</code> details the usage of
+aesthetic parameters in ggplot2.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
