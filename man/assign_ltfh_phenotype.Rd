@@ -22,7 +22,9 @@ of an individual's siblings.}
 \value{
 Does not return anything, but writes an \code{output_file} to disk,
 where configuration, configuration class and posterior mean genetic
-liability is appended to the end of \code{pheno_file}.
+liability is appended to the end of \code{pheno_file}.\cr
+For a more detailed guide of how to read the configuration and configuration
+class strings, see \code{vignette("liability-distribution")}.
 }
 \description{
 Determines the configuration for each individuals based on the
@@ -40,6 +42,5 @@ and will belong to the same configuration class, denoted by the `conf_class`
 column. Equivalent configurations are assigned the same PMGL.\cr
 \emph{Note:} The `sibs` argument can be used for limiting how many siblings
 are taken into consideration when creating configurations. This allows for
-different analyses with the same simulation, see for instance
-\code{vignette("geneference")}.
+different analyses with the same simulation.
 }

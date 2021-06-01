@@ -21,7 +21,7 @@
 #' Else, write the number of minor alleles for each genotype at each SNP.
 #'
 #' @return Returns a list with 5 entries, containing a matrix of genotypes, a
-#' vector specifying indexes of causal SNPs, a vector with liability of
+#' vector specifying effect sizes of SNPs, a vector with liability of
 #' individual i, a vector specifying phenotype  status of individual i, and the
 #' transformed phenotype status used for linear regression in PLINK.
 #'
@@ -81,14 +81,14 @@ sim_test <- function(n, m, q, hsq, k, to_ped = T) {
 
   if (to_ped) {
     return(list("genotypes" = to_ped(persons, 0),
-                "SNP-Turn" = beta,
+                "effect_sizes" = beta,
                 "liability" = liability,
                 "Phenotype" = pheno,
                 "PLINK_linear_phenotype" = line_pheno))
   }
   else{
     return(list("genotypes" = persons,
-                "SNP-Turn" = beta,
+                "effect_sizes" = beta,
                 "liability" = liability,
                 "Phenotype" = pheno,
                 "PLINK_linear_phenotype" = line_pheno))
