@@ -387,7 +387,9 @@ plot_pmgl_vs_true <- function(dataset,
                  file_ext(plot_filename) == "pdf" ||
                  file_ext(plot_filename) == "jpeg"))
   
-  repel_data <- dataset[, data.table::.SD[which.min(child_lg)], by = conf_class]
+  tmp <- data.table::as.data.table(dataset)
+  
+  repel_data <- tmp[, .SD[which.min(child_lg)], by = conf_class]
   
   plt <- ggplot2::ggplot(dataset) +
     ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg, color = conf_class),
@@ -411,7 +413,8 @@ plot_pmgl_vs_true <- function(dataset,
                               box.padding = 0.4,
                               label.padding = 0.1,
                               show.legend = FALSE,
-                              size = label_size)
+                              size = label_size,
+                              max.overlaps = 1000)
   
   if (save_plot_path != FALSE) {
     ggplot2::ggsave(filename = plot_filename,
