@@ -387,7 +387,7 @@ plot_pmgl_vs_true <- function(dataset,
                  file_ext(plot_filename) == "pdf" ||
                  file_ext(plot_filename) == "jpeg"))
   
-  repel_data <- dataset[, .SD[which.min(child_lg)], by = conf_class]
+  repel_data <- dataset[, data.table::.SD[which.min(child_lg)], by = conf_class]
   
   plt <- ggplot2::ggplot(dataset) +
     ggplot2::geom_point(ggplot2::aes(LTFH_pheno, child_lg, color = conf_class),
