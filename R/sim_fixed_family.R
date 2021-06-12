@@ -156,11 +156,11 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
 
     # Using the parents' genotypes the genotypes can be calculated for children
     child <- t(vapply(seq(1, ncol(parentmatrix), 2), function(j){
-      child_mean <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
+      child_mean <- rowMeans(parentmatrix[,j:(j+1), drop = FALSE])
       round_vec <- rbinom(n = m, 1, 1/2)
       snps_for_child <- rbinom(n = m, 2, 1/2)
       vals <- ifelse(child_mean == 1, 1, 0)
-      child_mean[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_child, 1)
+      child_mean[vals] <- ifelse(parentmatrix[,j][vals] == 1, snps_for_child, 1)
       return(dplyr::if_else(round_vec == 1, ceiling(child_mean), floor(child_mean)))},
       FUN.VALUE = numeric(m)))
 
@@ -168,14 +168,14 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
 
       sibtable <- data.table::data.table("begin" = numeric(splits[i]))
 
-      for (j in seq_len(sib)) {
+      for (k in seq_len(sib)) {
         # We create genotypes for siblings in same way as for the individuals
         sibs <- t(vapply(seq(1, ncol(parentmatrix), 2), function(j){
-          sibs <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
+          sibs <- rowMeans(parentmatrix[,j:(j+1), drop = FALSE])
           round_vec <- rbinom(n = m, 1, 1/2)
           snps_for_sibs <- rbinom(n = m, 2, 1/2)
           vals <- ifelse(sibs == 1, 1, 0)
-          sibs[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_sibs, 1)
+          sibs[vals] <- ifelse(parentmatrix[,j][vals] == 1, snps_for_sibs, 1)
           return(dplyr::if_else(round_vec == 1, ceiling(sibs), floor(sibs)))},
           FUN.VALUE = numeric(m)))
 

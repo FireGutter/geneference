@@ -183,12 +183,12 @@ sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
 
     parentmatrix <- parent_maker(m = m, number = 2*splits[i], MAFs)
 
-    child <- t(vapply(seq(1, ncol(parentmatrix), 2), function(i) {
-      child_mean <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
+    child <- t(vapply(seq(1, ncol(parentmatrix), 2), function(j) {
+      child_mean <- rowMeans(parentmatrix[,j:(j+1), drop = FALSE])
       round_vec <- rbinom(n = m, 1, 1/2)
       snps_for_child <- rbinom(n = m, 2, 1/2)
       vals <- ifelse(child_mean == 1, 1, 0)
-      child_mean[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_child, 1)
+      child_mean[vals] <- ifelse(parentmatrix[,j][vals] == 1, snps_for_child, 1)
       return(dplyr::if_else(round_vec == 1, ceiling(child_mean), floor(child_mean)))},
       FUN.VALUE = numeric(m)))
 
@@ -199,13 +199,13 @@ sim_varied_family <- function(n, m, q, hsq, k, dist, path = ""){
       sibtable <- data.table::data.table("start" = numeric(splits[i]))
 
       if (amount_of_sibs[i] != 0) {
-        for(j in seq_len(amount_of_sibs[i])) {
-          sibs <- t(vapply(seq(1, ncol(parentmatrix), 2), function(i){
-            sibs <- rowMeans(parentmatrix[,i:(i+1), drop = FALSE])
+        for(k in seq_len(amount_of_sibs[i])) {
+          sibs <- t(vapply(seq(1, ncol(parentmatrix), 2), function(j){
+            sibs <- rowMeans(parentmatrix[,j:(j+1), drop = FALSE])
             round_vec <- rbinom(n = m, 1, 1/2)
             snps_for_sibs <- rbinom(n = m, 2, 1/2)
             vals <- ifelse(sibs == 1, 1, 0)
-            sibs[vals] <- ifelse(parentmatrix[,i][vals] == 1, snps_for_sibs, 1)
+            sibs[vals] <- ifelse(parentmatrix[,j][vals] == 1, snps_for_sibs, 1)
             return(dplyr::if_else(round_vec == 1, ceiling(sibs), floor(sibs)))},
             FUN.VALUE = numeric(m)))
 
