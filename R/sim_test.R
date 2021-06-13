@@ -75,7 +75,7 @@ sim_test <- function(n, m, q, hsq, k, to_ped = T) {
   critical <- qnorm(1 - k) # Find the threshold of disease liability
 
   # Turn the matrix into binary on the format 1 or 2.
-  pheno <- vapply(liability, function(x) ifelse(x > critical, 2, 1),
+  pheno <- vapply(liability, function(x) ifelse(x >= critical, 2, 1),
                   FUN.VALUE = matrix(n))
   line_pheno <- pheno + 1
 

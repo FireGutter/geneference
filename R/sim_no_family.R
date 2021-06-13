@@ -161,7 +161,7 @@ sim_no_family <- function(n, m, q, hsq, k, path){
 
     critical <- qnorm(1-k)
 
-    y <- sapply(liability, function(x) ifelse(x>critical, 2, 1))
+    y <- sapply(liability, function(x) ifelse(x >= critical, 2, 1))
     line_pheno <- y + 1
 
     id <- matrix(1:(batch_size))+(batch_size)*(i-1)

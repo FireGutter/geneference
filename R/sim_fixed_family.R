@@ -209,10 +209,10 @@ sim_fixed_family <- function(n, m, q, hsq, k, sib = 0, path = "") {
 
 
     # Make phenotypes:
-    c_pheno <- vapply(c_liab, function(x) ifelse(x > critical, 2, 1), 
+    c_pheno <- vapply(c_liab, function(x) ifelse(x >= critical, 2, 1), 
                       FUN.VALUE = matrix(splits[i]))
     
-    p_pheno <- vapply(parliab, function(x) ifelse(x > critical, 2, 1), 
+    p_pheno <- vapply(parliab, function(x) ifelse(x >= critical, 2, 1), 
                       FUN.VALUE = matrix(splits[i]))
 
     c_line_pheno <- c_pheno + 1
