@@ -123,6 +123,10 @@ analysis_association <- function(geno_file, pheno_file, pheno_name, out_dir,
     out_path <- paste0(out_dir, "LTFH")
   } else if (pheno_name == "GWAX_pheno") {
     out_path <- paste0(out_dir, "GWAX")
+  } else if (pheno_name == "child_liab") {
+    out_path <- paste0(out_dir, "LIAB")
+  } else if (pheno_name == "child_lg") {
+    out_path <- paste0(out_dir, "LG")
   } else {
     stop("'pheno_name' didn't match expected input.")
   }
